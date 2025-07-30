@@ -1,0 +1,35 @@
+
+<div class="w-[200px] bg-[#F3F4F6] shadow h-full p-2">
+  <img src="./assets/images/logo-sidebar.jpg" class="logo-center"
+  alt="PL8"/>
+  <ng-container *ngFor="let item of menu">
+    <!-- Separator -->
+    <div *ngIf="item.type === 'separator'" class="mt-10 mb-2 pl-4 text-[#4B5563] text-xs font-semibold">
+      {{ item.label }}
+    </div>
+    <!-- Simple Menu Item -->
+    <a *ngIf="item.type === 'item'" 
+     [routerLink]="item.route"
+     class="flex items-center gap-4 cursor-pointer pl-4 mb-2 hover:bg-[#E5E7EB] text-[#4B5563] transition-all duration-300 ease-in-out rounded-md py-2">
+      <img class="text-xl" [src]="'./assets/icons/' + item.icon + '.svg'" alt="PL8"/>
+      <span class="font-medium">{{ item.label }}</span>
+    </a>
+    <!-- Submenu with Expansion Panel -->
+    <mat-expansion-panel *ngIf="item.type === 'submenu' && item.children" class="!bg-transparent !shadow-none !border-none">
+      <mat-expansion-panel-header class="!p-0 !min-h-0">
+        <div class="flex items-center gap-3 p-2 w-full text-[#4B5563]">
+          <img class="text-xl" [src]='"./assets/icons/"+item.icon+".svg"' alt="PL8"/>
+          <span>{{ item.label }}</span>
+        </div>
+      </mat-expansion-panel-header>
+      <div class="pl-10">
+        <a *ngFor="let child of item.children"
+         [routerLink]="child.route"
+          class="flex items-center gap-4 mb-2 cursor-pointer pl-4 hover:bg-[#E5E7EB] text-[#4B5563] transition-all duration-300 ease-in-out rounded-md py-2">
+          {{ child.label }}
+        </a>
+      </div>
+    </mat-expansion-panel>
+
+  </ng-container>
+</div>

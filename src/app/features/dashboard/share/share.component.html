@@ -1,0 +1,108 @@
+<div class="font-poppins px-2">
+  <nav class="flex items-center border-b-2 border-gray-300 p-4">
+    <!-- Logo -->
+    <svg
+      width="23"
+      height="23"
+      viewBox="0 0 23 23"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="mr-2"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M22.5365 11.172C22.5365 17.3421 17.4915 22.344 11.2683 22.344H0V11.172C0 5.00187 5.04497 0 11.2683 0C17.4915 0 22.5365 5.00187 22.5365 11.172ZM16.2764 11.172C16.2764 13.9143 14.0342 16.1373 11.2682 16.1373H7.82517V22.344H6.26014V11.172C6.26014 8.42972 8.50235 6.20667 11.2682 6.20667C14.0342 6.20667 16.2764 8.42972 16.2764 11.172Z"
+        fill="#034B48"
+      />
+    </svg>
+
+    <!-- Title -->
+    <h2 class="mx-auto text-center text-[#111827] text-xl font-semibold">
+      Share PL8CHAT
+    </h2>
+
+    <!-- Close button -->
+    <div (click)="closeModal()" class="cursor-pointer">
+      <svg
+        width="20"
+        height="20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5.33317 15.8333L4.1665 14.6666L8.83317 9.99996L4.1665 5.33329L5.33317 4.16663L9.99984 8.83329L14.6665 4.16663L15.8332 5.33329L11.1665 9.99996L15.8332 14.6666L14.6665 15.8333L9.99984 11.1666L5.33317 15.8333Z"
+          fill="#1C1B1F"
+        />
+      </svg>
+    </div>
+  </nav>
+
+  <!-- Share with a business -->
+  <div class="mt-4">
+    <div class="ml-4 text-[#111827]">Share with a business</div>
+    <div class="flex flex-col px-4 py-2">
+      <div class="relative w-full">
+        <input
+          type="text"
+          [(ngModel)]="businessShareLink"
+          readonly
+          class="w-full px-2 py-4 pr-16 bg-gray-100 rounded border border-gray-300 text-sm text-[#111827]"
+        />
+        <svg
+          width="17"
+          height="20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer"
+          (click)="copyToClipboard(businessShareLink, 'business')"
+        >
+          <path
+            d="M6.05775 15.844C5.55258 15.844 5.125 15.669 4.775 15.319C4.425 14.969 4.25 14.5414 4.25 14.0362V2.65174C4.25 2.14658 4.425 1.71899 4.775 1.36899C5.125 1.01899 5.55258 0.843994 6.05775 0.843994H14.4423C14.9474 0.843994 15.375 1.01899 15.725 1.36899C16.075 1.71899 16.25 2.14658 16.25 2.65174V14.0362C16.25 14.5414 16.075 14.969 15.725 15.319C15.375 15.669 14.9474 15.844 14.4423 15.844H6.05775ZM6.05775 14.344H14.4423C14.5192 14.344 14.5898 14.3119 14.6538 14.2477C14.7179 14.1837 14.75 14.1132 14.75 14.0362V2.65174C14.75 2.57474 14.7179 2.50424 14.6538 2.44024C14.5898 2.37608 14.5192 2.34399 14.4423 2.34399H6.05775C5.98075 2.34399 5.91025 2.37608 5.84625 2.44024C5.78208 2.50424 5.75 2.57474 5.75 2.65174V14.0362C5.75 14.1132 5.78208 14.1837 5.84625 14.2477C5.91025 14.3119 5.98075 14.344 6.05775 14.344ZM2.55775 19.344C2.05258 19.344 1.625 19.169 1.275 18.819C0.925 18.469 0.75 18.0414 0.75 17.5362V4.65174H2.25V17.5362C2.25 17.6132 2.28208 17.6837 2.34625 17.7477C2.41025 17.8119 2.48075 17.844 2.55775 17.844H12.4423V19.344H2.55775Z"
+            fill="#034B48"
+          />
+        </svg>
+        <div
+          *ngIf="businessCopied"
+          class="absolute top-full right-2 text-green-500 text-xs mt-1"
+        >
+          Copied!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share with an individual -->
+  <div>
+    <div class="ml-4 mt-4 text-[#111827]">Share with an individual</div>
+    <div class="flex flex-col mt-2 px-4">
+      <div class="relative w-full">
+        <input
+          type="text"
+          [(ngModel)]="individualShareLink"
+          readonly
+          class="w-full px-2 py-4 pr-16 bg-gray-100 rounded border border-gray-300 text-sm text-[#111827]"
+        />
+        <svg
+          width="17"
+          height="20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer"
+          (click)="copyToClipboard(individualShareLink, 'individual')"
+        >
+          <path
+            d="M6.05775 15.844C5.55258 15.844 5.125 15.669 4.775 15.319C4.425 14.969 4.25 14.5414 4.25 14.0362V2.65174C4.25 2.14658 4.425 1.71899 4.775 1.36899C5.125 1.01899 5.55258 0.843994 6.05775 0.843994H14.4423C14.9474 0.843994 15.375 1.01899 15.725 1.36899C16.075 1.71899 16.25 2.14658 16.25 2.65174V14.0362C16.25 14.5414 16.075 14.969 15.725 15.319C15.375 15.669 14.9474 15.844 14.4423 15.844H6.05775ZM6.05775 14.344H14.4423C14.5192 14.344 14.5898 14.3119 14.6538 14.2477C14.7179 14.1837 14.75 14.1132 14.75 14.0362V2.65174C14.75 2.57474 14.7179 2.50424 14.6538 2.44024C14.5898 2.37608 14.5192 2.34399 14.4423 2.34399H6.05775C5.98075 2.34399 5.91025 2.37608 5.84625 2.44024C5.78208 2.50424 5.75 2.57474 5.75 2.65174V14.0362C5.75 14.1132 5.78208 14.1837 5.84625 14.2477C5.91025 14.3119 5.98075 14.344 6.05775 14.344ZM2.55775 19.344C2.05258 19.344 1.625 19.169 1.275 18.819C0.925 18.469 0.75 18.0414 0.75 17.5362V4.65174H2.25V17.5362C2.25 17.6132 2.28208 17.6837 2.34625 17.7477C2.41025 17.8119 2.48075 17.844 2.55775 17.844H12.4423V19.344H2.55775Z"
+            fill="#034B48"
+          />
+        </svg>
+        <div
+          *ngIf="individualCopied"
+          class="absolute top-full right-2 text-green-500 text-xs mt-1"
+        >
+          Copied!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

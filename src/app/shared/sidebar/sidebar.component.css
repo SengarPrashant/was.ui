@@ -1,0 +1,69 @@
+.group:hover .group-hover\:opacity-0 {
+  opacity: 0;
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 100;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.icon-path {
+  fill: transparent; /* Icon path remains transparent */
+  stroke: #374151; /* Default stroke color */
+}
+
+/* Hover effect: stroke turns white, text turns white */
+.flex:hover .icon-path {
+  stroke: white; /* Change stroke color to white on hover */
+}
+
+.flex:hover .text-hover-white {
+  fill: white; /* Change text color to white on hover */
+}
+
+
+.bg-pl8 {
+  background-color: #E5E7EB; 
+  color:#034B48;
+
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-hover-white:hover {
+  color: #ffffff;
+}
+
+.stroke-white {
+  stroke: white;
+}
+
+.stroke-gray {
+  stroke: #374151; /* Default gray color */
+}
+
+.fill-white {
+  fill: white;
+}
+
+.fill-gray {
+  fill: rgb(55, 65, 81); /* Default gray color */
+}
+
+
+.active{
+  background-color: gray;
+  color: #1a73e8;
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 #1a73e8;
+}
+
+.logo-center{
+  width: 93px;
+  margin: 0 auto 20px auto;
+}
