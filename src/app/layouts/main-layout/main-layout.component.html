@@ -1,0 +1,15 @@
+<!-- src/app/layouts/main-layout/main-layout.component.html -->
+<mat-sidenav-container class="sidenav-container h-screen">
+    <mat-sidenav #sidenav [mode]="isMobile? 'push': 'side'" [opened]="!isMobile">
+        <app-sidebar class="h-screen"></app-sidebar>
+    </mat-sidenav>
+  
+    <mat-sidenav-content class="bg-[#fff]">
+      <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+      <div class="main-content bg-[#fff]">
+        <app-loading-spinner></app-loading-spinner>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

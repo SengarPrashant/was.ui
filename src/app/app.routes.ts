@@ -1,0 +1,44 @@
+import { LoginComponent } from './features/auth/login/login.component';
+import { Routes } from '@angular/router';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { authGuard } from './shared/guards/auth.guard';
+import { UserListComponent } from './features/user/user-list/user-list.component';
+import { MyProfileComponent } from './features/user/my-profile/my-profile.component';
+
+// Replace with your component
+
+ export const routes: Routes = [
+  // Redirect root to login
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+ {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: 'login', component: LoginComponent },
+      //{ path: 'resetPassword', component: ResetPasswordComponent },
+      { path: 'signup', component: SignupComponent},
+
+    ]
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivateChild:[authGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      //{ path: 'users', component: UserListComponent },
+      { path:'my-profile', component:MyProfileComponent}
+    ]
+  },
+ 
+  { path: '**', redirectTo: 'dashboard' }
+];
+

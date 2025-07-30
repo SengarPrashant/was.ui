@@ -1,0 +1,172 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mat-form-field-container-height: 46px;
+  --mat-form-field-container-vertical-padding: 12px;
+  --mdc-outlined-text-field-container-shape:10px;
+  --mdc-outlined-text-field-label-text-size:14px;
+  --mdc-outlined-text-field-label-text-color:#9CA3AF;
+  --mdc-outlined-text-field-caret-color: #1A0F92;
+  --mdc-outlined-text-field-focus-outline-color: #1A0F92;
+  --mdc-outlined-text-field-focus-label-text-color: #1A0F92;
+  --mdc-outlined-text-field-focus-outline-width:1px;
+  --mat-form-field-container-text-size:14px;
+  --mat-form-field-subscript-text-line-height:10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+}
+
+* {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1{
+  font-size: 24px;
+}
+
+p{
+  font-size: 14px;
+}
+
+.custom-snackbar {
+
+  background: white;
+  /* Padding for content */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.custom-snackbar-title {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.custom-snackbar-success {
+  --mdc-snackbar-container-color: white !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-snack-bar-button-color: white !important;
+  color: #388e3c !important;
+  /* Green text */
+}
+
+.custom-snackbar-error {
+  color: #d32f2f !important;
+  /* Red text */
+}
+
+.custom-snackbar-message {
+  font-size: 14px;
+  color: #374151;
+  /* Gray text for the message */
+}
+
+.bg-green{
+  background:#1A0F92;
+}
+
+.color-green{
+  color:#1A0F92;
+}
+
+.mdc-notched-outline__notch
+{
+  border-right: none;
+}
+
+.custom-field .mat-mdc-form-field-hint-wrapper, .mat-mdc-form-field-error-wrapper{
+  padding:0px!important;
+}
+
+.custom-radio-group{
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+::ng-deep .mdc-floating-label--float-above{
+  color:#1A0F92!important;
+}
+
+.mat-mdc-form-field-bottom-align::before {
+  height: 5px!important; /* Changes the height of the space */
+}
+
+.mdc-radio__native-control:focus+.mdc-radio__background::before{
+  opacity: 0 !important;
+}
+/* Optional: remove background ripple glow */
+.mat-radio-button .mat-ripple-element {
+  background-color: transparent !important;
+}
+
+/* Optional: fully disable ripple for cleanliness */
+mat-radio-button {
+  --mat-radio-ripple-color: transparent !important;
+}
+
+.mat-mdc-radio-button .mdc-radio{
+  padding-left: 0!important;
+}
+
+/* .mat-mdc-text-field-wrapper{
+  margin-bottom: 10px;
+} */
+.mat-mdc-form-field-error{
+  padding-top: 5px;
+}
+/* Base styles */
+.scrollable::-webkit-scrollbar {
+  width: 2px;
+  transition: width 0.3s;
+  background-color: transparent;
+}
+
+/* Scrollbar track */ 
+.scrollable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Scrollbar thumb */
+.scrollable::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.mdc-button.mat-primary{
+  color: #fff !important;
+}
+
+.add-row-btn {
+  position: absolute;
+  right: 26px;
+  top: 28px;
+}
+
+/* On hover over the scrollbar container */
+/* .scrollable:hover::-webkit-scrollbar {
+  width: 6px;
+} */
+

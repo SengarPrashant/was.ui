@@ -1,0 +1,98 @@
+<div class="min-h-screen flex flex-col items-center justify-center">
+    <!-- Logo Section -->
+     <img src="./assets/images/full-logo.svg" class="absolute top-4 left-4 ml-4 mt-0 cursor-pointer ease-in-out hover:underline"
+      alt="PL8"/>
+  
+    <!-- Left Column -->
+    <div class="w-full max-w-md space-y-6 bg-transparent rounded-lg"  *ngIf="!isFormSubmitted">
+      <div class="min-h-screen flex items-center justify-center bg-white">
+        <div class="bg-white max-w-xs w-full" style="height: 375px;">
+          <!-- Header -->
+          <img src="./assets/images/half-logo.svg" class="mx-auto mb-4" alt="PL8"/>
+          <h1 class="text-3xl font-semibold mb-6 text-center">Sign up for <br/> a parking plan</h1>
+          <!-- Error Message -->
+
+  
+          <!-- Login Form -->
+          <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+            <mat-form-field class="custom-field" [hideRequiredMarker]="true" 
+            [ngStyle]="{'padding-bottom':signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched ? '14px':''}"
+             appearance="outline" class="w-full">
+              <mat-label>Email address</mat-label>
+              <input matInput 
+              formControlName="email"
+              type="text"
+              >
+               <mat-error *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.touched">
+              Email is required
+              </mat-error>
+
+              <mat-error *ngIf="signUpForm.get('email')?.hasError('pattern') && signUpForm.get('email')?.touched && !signUpForm.get('email')?.hasError('required')">
+              Valid email required
+              </mat-error>
+              <mat-error *ngIf="signUpForm.get('email')?.hasError('emailTaken')">
+              {{ errorMessage }}
+              </mat-error>
+            </mat-form-field>
+            <div class="text-xs">
+                By continuing you agree to our 
+                <span class="color-green underline">Terms of Service</span> and 
+                <span class="color-green underline">Privacy Policy</span>
+               </div>
+               <button
+               type="submit"
+               class="w-full mb-8 mt-5 p-3 bg-[#034B48] text-white font-400 rounded-full disabled:bg-gray-400 disabled:cursor-not-allowed"
+             >
+               Continue
+             </button>
+          <div class="text-sm text-center">
+            Already a customer? 
+            <a [routerLink]="['/login']" class="color-green underline">Sign in</a>
+           </div>     
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+    *ngIf="isFormSubmitted"
+    class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg"
+  >
+    <h2 class="text-3xl font-bold text-left">Check Your Email</h2>
+    <p class="text-sm text-[#111827]">
+      We’ve sent an email with a link to activate your account.
+    </p>
+
+    <!-- Icons and links below the text -->
+    <div class="flex flex-row justify-start space-x-4">
+      <!-- Gmail Icon and Link -->
+      <div class="flex items-center space-x-3">
+        <img src="./assets/icons/gmail.svg" alt="PL8"/>
+
+        <a href="" class="text-pl8 hover:underline cursor-pointer">
+          Open Gmail
+        </a>
+      </div>
+
+      <!-- Outlook Icon and Link -->
+      <div class="flex items-center space-x-3">
+        <img src="./assets/icons/outlook.svg" alt="PL8"/>
+
+        <a href="" class="text-pl8 hover:underline cursor-pointer">
+          Open Outlook
+        </a>
+      </div>
+    </div>
+
+    <p class="text-sm mt-4 text-black">
+      Didn&#39;t get an email? Check your spam folder!
+    </p>
+    <p class="text-sm mt-4">
+      <a (click)="backToSignup()"
+        class="text-pl8 hover:underline cursor-pointer"
+        >Re-enter your email and try again.</a
+      >
+    </p>
+  </div>
+  </div>
+  

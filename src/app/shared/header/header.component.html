@@ -1,0 +1,22 @@
+<nav
+class="flex items-center justify-between p-4 bg-white text-black border-b border-gray-300 sticky top-0 z-10"
+>
+<div class="flex items-center">
+  <button *ngIf="isMobile" mat-icon-button (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon> &nbsp;
+  </button>
+</div>
+<div class="flex items-center relative">
+<div class="profile-circle bg-green">
+<span>{{user?.firstName?.charAt(0) || ''}}</span>
+</div>
+<div [matMenuTriggerFor]="menu" class="flex ml-[10px] cursor-pointer">
+  <span>{{user?.roleName}}</span>
+  <mat-icon>keyboard_arrow_down</mat-icon>
+</div>
+<mat-menu #menu="matMenu">
+<button mat-menu-item (click)="userProfile()">My profile</button>
+<button mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>
+</div>
+</nav>
