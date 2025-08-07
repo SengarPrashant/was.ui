@@ -21,8 +21,7 @@ import {routes } from './app.routes';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     // Set global snack bar options
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 200, verticalPosition: 'bottom' } }
-
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 200, verticalPosition: 'bottom' }}
   ]
 })
 export class AppModule { }

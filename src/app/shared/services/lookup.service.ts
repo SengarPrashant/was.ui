@@ -1,7 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../models/user.model';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { allLookupModel, basicLookupModel } from '../models/looup.model';
 
@@ -47,6 +46,11 @@ export class LookupService {
       .map(opt => ({ id: opt.optionKey, name: opt.optionValue }));
   });
   
+  readonly getOptionsByType = (type: string) => computed(() =>
+  this.allOptions().filter(opt => opt.optionType === type)
+    .map(opt => ({ id: opt.optionKey, name: opt.optionValue }))
+);
+
   loadRoles() {
     const apiUrl = `${this.baseUrl}/Forms/options`;
         const payload = {

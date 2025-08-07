@@ -7,6 +7,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { authGuard } from './shared/guards/auth.guard';
 import { UserListComponent } from './features/user/user-list/user-list.component';
 import { MyProfileComponent } from './features/user/my-profile/my-profile.component';
+import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/add-work-permit.component';
 
 // Replace with your component
 
@@ -35,6 +36,7 @@ import { MyProfileComponent } from './features/user/my-profile/my-profile.compon
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'users', component: UserListComponent },
+      { path: 'add-work-permit', component: AddWorkPermitComponent },
       { path:'my-profile', component:MyProfileComponent}
     ]
   },

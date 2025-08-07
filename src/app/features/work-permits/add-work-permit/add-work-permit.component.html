@@ -1,0 +1,48 @@
+
+<div class="add-work-permit">
+    <h1>Create a work permit</h1>
+<div class="card" [formGroup]="userForm" style="margin-bottom: 15px;">
+    <div class="grid-layout">
+        <div class="grid-col col-3">
+            <mat-label>Location</mat-label>
+            <mat-select formControlName="facilityZoneLocation" class="custom-select" placeholder="Select location">
+                <mat-option *ngFor="let loc of lookupService.facilityZoneLocation()" [value]="loc.id">
+                    {{ loc.name }}
+                </mat-option>
+            </mat-select>
+        </div>
+        <div class="grid-col col-3">
+            <mat-label>Zone</mat-label>
+            <mat-select formControlName="zone" class="custom-select" placeholder="Select zone"
+                (selectionChange)="onZoneChange($event.value)">
+                <mat-option *ngFor="let zone of lookupService.zones()" [value]="zone.id">
+                    {{ zone.name }}
+                </mat-option>
+            </mat-select>
+        </div>
+
+        <div class="grid-col col-3">
+            <mat-label>Facility</mat-label>
+            <mat-select formControlName="facility" placeholder="Select facility" class="custom-select">
+                <mat-option *ngFor="let facility of lookupService.zoneFacility()" [value]="facility.id">
+                    {{ facility.name }}
+                </mat-option>
+            </mat-select>
+        </div>
+
+        <div class="grid-col col-3">
+            <mat-label>Work permit type</mat-label>
+            <mat-select formControlName="workPermit" placeholder="Select work permit type" class="custom-select"
+                (selectionChange)="onWorkPermitChange($event.value)">
+                <mat-option *ngFor="let permit of lookupService.workPermit()" [value]="permit.id">
+                    {{ permit.name }}
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+
+</div>
+<div class="card" *ngIf="formConfig" style="padding-top: 0px;">
+<app-dynamic-form [config]="formConfig"></app-dynamic-form>
+</div>
+</div>

@@ -3,6 +3,11 @@ export interface basicLookupModel {
   name:string
 }
 
+export interface generalOptionModel {
+  id: string | null
+  name:string
+}
+
 export interface allLookupModel {
   optionType: string | null
   optionKey: string | null

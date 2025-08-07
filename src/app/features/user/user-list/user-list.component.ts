@@ -11,7 +11,6 @@ import { UserStatusUpdateDilogComponent } from '../user-status-update-dilog/user
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ToastService } from '../../../shared/services/toast.service';
 
-
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',

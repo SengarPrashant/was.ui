@@ -14,7 +14,6 @@
   --mdc-outlined-text-field-focus-label-text-color: #1A0F92;
   --mdc-outlined-text-field-focus-outline-width:1px;
   --mat-form-field-container-text-size:14px;
-  --mat-form-field-subscript-text-line-height:10px;
 }
 
 html,
@@ -165,8 +164,120 @@ mat-radio-button {
   top: 28px;
 }
 
-/* On hover over the scrollbar container */
-/* .scrollable:hover::-webkit-scrollbar {
-  width: 6px;
-} */
+/* // grid-system */
+/* Reusable grid layout (flex-based) */
+.grid-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Each grid column (wrap your fields inside this) */
+/* Grid Layout */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); /* 12-column layout */
+  gap: 16px;
+}
+
+/* Grid Item Base Class */
+.grid-col {
+  box-sizing: border-box;
+}
+
+/* Column Widths */
+.col-12 { grid-column: span 12; }
+.col-10 { grid-column: span 10; }
+.col-8  { grid-column: span 8; }
+.col-6  { grid-column: span 6; }
+.col-4  { grid-column: span 4; }
+.col-3  { grid-column: span 3; }
+.col-2  { grid-column: span 2; }
+.col-1  { grid-column: span 1; }
+
+/* Responsive: Stack on smaller screens */
+@media (max-width: 768px) {
+  .col-12, .col-10, .col-8, .col-6, .col-4, .col-3, .col-2, .col-1 {
+    grid-column: span 12;
+  }
+}
+
+/* form element css */
+.control-wrapper .label{
+  padding-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color:#484848;
+}
+
+/* style-input in styles.scss or component SCSS */
+
+.custom-select,.custom-input {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+  background-color: white;
+  transition: border 0.3s, box-shadow 0.3s;
+  height: 42px;
+  width: 100%;
+}
+
+/* On focus */
+.custom-input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+/* Placeholder style */
+.custom-input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+
+
+.custom-textarea {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  background-color: #fff;
+  width: 100%;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-textarea:focus {
+  outline: none;
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+.custom-textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+
+.mat-mdc-radio-group{
+  display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Make selected radio button blue */
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #1976d2!important; /* Blue */
+}
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #1976d2;
+}
+
+
 

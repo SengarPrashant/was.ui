@@ -36,6 +36,7 @@ export class UserService {
   }
 
 
+
   updateUserStatus(payload:{id:number, status:number}): Observable<any> {
     const apiUrl = `${this.baseUrl}/User/updateStatus`
     return this.http.patch<any>(apiUrl, payload);
