@@ -51,7 +51,8 @@ export class GlobalService {
                         "order": 1,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 12,
+                        //change order here 12 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -69,7 +70,8 @@ export class GlobalService {
                         "order": 2,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -87,7 +89,8 @@ export class GlobalService {
                         "order": 3,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -105,7 +108,8 @@ export class GlobalService {
                         "order": 4,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -123,7 +127,8 @@ export class GlobalService {
                         "order": 5,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -141,7 +146,8 @@ export class GlobalService {
                         "order": 6,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -159,7 +165,8 @@ export class GlobalService {
                         "order": 7,
                         "optionType": null,
                         "cascadeField": null,
-                        "colSpan": 6,
+                        //change order here 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -487,7 +494,8 @@ export class GlobalService {
                         "id": 36,
                         "label": "Time",
                         "fieldKey": "air_monitoring_carbon_monoxide_time",
-                        "type": "text",
+                        //change here text to time
+                        "type": "time",
                         "placeholder": null,
                         "order": 5,
                         "optionType": null,
@@ -658,8 +666,8 @@ export class GlobalService {
                         "order": 2,
                         "optionType": "yes_no",
                         "cascadeField": null,
-                        // change here col 1 to 6
-                        "colSpan": 6,
+                        // change here col 1 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -677,8 +685,8 @@ export class GlobalService {
                         "order": 3,
                         "optionType": null,
                         "cascadeField": null,
-                         // change here col 6 to 3
-                        "colSpan": 3,
+                         // change here col 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -696,8 +704,8 @@ export class GlobalService {
                         "order": 4,
                         "optionType": null,
                         "cascadeField": null,
-                         // change here col 6 to 3
-                        "colSpan": 3,
+                         // change here col 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -722,8 +730,8 @@ export class GlobalService {
                         "order": 0,
                         "optionType": null,
                         "cascadeField": null,
-                        // change here col 1 to 6
-                        "colSpan": 6,
+                        // change here col 1 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -741,8 +749,8 @@ export class GlobalService {
                         "order": 1,
                         "optionType": null,
                         "cascadeField": null,
-                        // change here col 6 to 3
-                        "colSpan": 3,
+                        // change here col 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -760,8 +768,8 @@ export class GlobalService {
                         "order": 2,
                         "optionType": null,
                         "cascadeField": null,
-                        // change here col 6 to 3
-                        "colSpan": 3,
+                        // change here col 6 to 4
+                        "colSpan": 4,
                         "validations": [
                             {
                                 "type": "required",
@@ -769,6 +777,26 @@ export class GlobalService {
                                 "message": "This field is required."
                             }
                         ]
+                    }
+                ]
+            },
+             {
+                "sectionId": 12,
+                "sectionTitle": "Attachments",
+                "order": 9,
+                "fields": [
+                    {
+                        "id": 55,
+                        "label": "Upload supporting doucuments",
+                        "fieldKey": "Attachment",
+                        "type": "attach",
+                        "placeholder": null,
+                        "order": 0,
+                        "optionType": null,
+                        "cascadeField": null,
+                        // change here col 1 to 12
+                        "colSpan": 12,
+                        "validations": []
                     }
                 ]
             },
@@ -799,6 +827,11 @@ export class GlobalService {
       const apiUrl = `${this.baseUrl}/Forms/work_permit/1`
        //return this.http.get<any>(apiUrl);
         return of(this.formData)
+    }
+
+    workPermitFormSubmit(formData:any){
+       const apiUrl = `${this.baseUrl}/Forms/submit`
+      return this.http.post<any>(apiUrl, formData);
     }
   
     

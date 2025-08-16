@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { basicLookupModel } from '../../../shared/models/looup.model';
 import { UserService } from '../../../shared/services/user.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-user-status-update-dilog',
@@ -22,18 +23,18 @@ import { LoadingService } from '../../../shared/services/loading.service';
     MatInputModule,
     MatButtonModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatProgressSpinner
   ],
   templateUrl: './user-status-update-dilog.component.html',
   styleUrl: './user-status-update-dilog.component.css'
 })
 export class UserStatusUpdateDilogComponent implements OnInit {
    status = new FormControl('');
-
+   loading = false;
   statusLookup:basicLookupModel[] = [
     {id:0, name: 'Deactivated'},
-    {id:1, name: 'Active'},
-    {id:2, name: 'Blocked'}
+    {id:1, name: 'Active'}
   ]
   constructor(
     public dialogRef: MatDialogRef<UserStatusUpdateDilogComponent>,
@@ -53,15 +54,18 @@ export class UserStatusUpdateDilogComponent implements OnInit {
       id:this.data?.id,
       status:Number(this.status.value)
     }
+      this.loading = true;
      this.loadingService.show();
     this.userService.updateUserStatus(payload).subscribe({
       next: (data) => {
         this.loadingService.hide();
         this.dialogRef.close('refresh');
+          this.loading = false;
       },
       error: (err) => {
         console.error('Error fetching users:', err);
         this.loadingService.hide();
+          this.loading = false;
         this.dialogRef.close('refresh');
       }
     });

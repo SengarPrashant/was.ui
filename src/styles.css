@@ -213,21 +213,27 @@ mat-radio-button {
 /* style-input in styles.scss or component SCSS */
 
 .custom-select,.custom-input {
-  border: 1px solid #ccc;
+  border: 1px solid #d9d9d9;
+  color:#262626;
   padding: 8px;
   border-radius: 4px;
   outline: none;
   font-size: 14px;
-  background-color: white;
-  transition: border 0.3s, box-shadow 0.3s;
-  height: 42px;
+  margin-top:5px;
+  height: 40px;
   width: 100%;
+  outline: 0;
+  transition: border-color 0.25s;
 }
 
-/* On focus */
-.custom-input:focus {
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+.custom-select:hover:not(:disabled),.custom-input:hover:not(:disabled){
+  border:1px solid #1A0F92;
+}
+
+
+.custom-select:focus,.custom-input:focus{
+  border:1px solid #1A0F92;
+  outline: 0;
 }
 
 /* Placeholder style */
@@ -279,5 +285,63 @@ mat-radio-button {
   border-color: #1976d2;
 }
 
+
+/* Main picker container */
+.ngx-mat-timepicker {
+  background-color: #3f51b5 !important;
+  color: white !important;
+}
+
+/* Header text */
+.ngx-mat-timepicker-header {
+  background-color: #3f51b5 !important;
+  color: white !important;
+}
+
+/* Clock face */
+.ngx-mat-timepicker-clock {
+  background-color: #e8eaf6 !important; /* light indigo background */
+}
+
+/* Hour and minute numbers */
+.ngx-mat-timepicker-number {
+  color: #3f51b5 !important;
+}
+
+/* Selected hour/minute */
+.ngx-mat-timepicker-number.selected {
+  background-color: #3f51b5 !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+/* Action buttons (OK, Cancel) */
+.ngx-mat-timepicker-button {
+  color: #3f51b5 !important;
+  font-weight: bold;
+}
+
+/* AM/PM toggle */
+.ngx-mat-timepicker-meridian button {
+  background-color: #3f51b5 !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+mat-label{
+  font-size: 14px;
+}
+
+.model-footer-custom{
+  display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding-inline: 18px;
+}
+
+  .custom-loader .mat-mdc-progress-spinner {
+      --mdc-circular-progress-active-indicator-color: #ffffff; /* Your custom color */
+    }
 
 

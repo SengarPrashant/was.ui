@@ -15,3 +15,9 @@ export interface User {
   createdAt: string
   name:string
 }
+
+export interface resetPasswordPayloadModel{
+  email:string,
+  otp:number,
+  password:string
+}

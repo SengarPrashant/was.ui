@@ -6,6 +6,7 @@ import { TextareaFieldComponent } from './field-components/textarea-field.compon
 import { CheckboxGroupComponent } from './field-components/checkbox-group.component';
 import { RadioGroupComponent } from './field-components/radio-group.component';
 import { CheckboxComponent } from './field-components/checkbox.component';
+import { TimeFieldComponent } from './field-components/time-field.component';
 
 @Injectable({ providedIn: 'root' })
 export class FieldFactoryService {
@@ -18,6 +19,7 @@ export class FieldFactoryService {
       case 'textarea': return TextareaFieldComponent;
       case 'checkboxGroup': return CheckboxGroupComponent;
       case 'radio': return RadioGroupComponent;
+      case 'time' : return TimeFieldComponent;
       default:  return TextFieldComponent;
     }
   }

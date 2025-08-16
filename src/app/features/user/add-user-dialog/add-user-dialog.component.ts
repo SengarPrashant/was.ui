@@ -10,7 +10,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { LookupService } from '../../../shared/services/lookup.service';
 import { MatSelectModule } from '@angular/material/select';
 import { LoadingService } from '../../../shared/services/loading.service';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -23,7 +23,8 @@ import { LoadingService } from '../../../shared/services/loading.service';
     MatInputModule,
     MatButtonModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './add-user-dialog.component.html',
   styleUrls: ['./add-user-dialog.component.scss']
@@ -31,7 +32,9 @@ import { LoadingService } from '../../../shared/services/loading.service';
 export class AddUserDialogComponent {
   userForm: FormGroup;
   isEditMode: boolean = false;
-   lookupService = inject(LookupService);
+  errorMsg:string = '';
+  lookupService = inject(LookupService);
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -47,7 +50,7 @@ export class AddUserDialogComponent {
       employeeId: [data?.employeeId || '', Validators.required],
       firstName: [data?.firstName || '', Validators.required],
       lastName: [data?.lastName || '', Validators.required],
-      email: [data?.email || '', [Validators.required, Validators.email]],
+      email: [data?.email || '', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       mobile: [data?.mobile || '', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       roleId: [data?.roleId || '', Validators.required],
       facilityZoneLocation:[data?.facilityZoneLocation || '', Validators.required],
@@ -62,6 +65,7 @@ export class AddUserDialogComponent {
   }
 
   createAndUpdateUser():void{
+  this.loading = true;
    const formData = this.userForm.value;
    formData.password = `indiqube@${formData?.employeeId}`
    this.loadingService.show();
@@ -69,10 +73,15 @@ export class AddUserDialogComponent {
       next: (data) => {
         this.loadingService.hide();
         this.dialogRef.close('refresh');
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error fetching users:', err);
+        if(err.status === 400){
+          this.errorMsg = `User with same email/mobile already exists!`
+        }
         this.loadingService.hide();
+        this.loading = false;
       }
     });
   }

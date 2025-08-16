@@ -14,7 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   template: `
     <div [formGroup]="form">
       <mat-label>{{ config.label }}</mat-label>
-       <mat-radio-group [formControlName]="config.fieldKey">
+       <mat-radio-group [formControlName]="config.fieldKey" color="primary">
         <mat-radio-button
           *ngFor="let option of options()"
           [value]="option.id"
@@ -23,6 +23,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
           {{ option.name }}
         </mat-radio-button>
       </mat-radio-group>
+       <mat-error *ngIf="hasError('required')">
+        {{ config.label }} is required
+      </mat-error>
     </div>
   `
 })
@@ -37,4 +40,13 @@ export class RadioGroupComponent {
     if (!type) return [];
     return this.lookupService.getOptionsByType(type)();
   });
+
+    get control() {
+    return this.form.get(this.config.fieldKey);
+  }
+     hasError(error: string): boolean {
+    const control = this.control;
+    if (!control) return false;
+    return control?.hasError(error) && control.touched;
+  }
 }

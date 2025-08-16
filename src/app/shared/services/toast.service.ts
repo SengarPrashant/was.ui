@@ -11,7 +11,7 @@ export class ToastService {
   showToast(title: string, message: string, type: 'success' | 'error'): void {
     this.snackBar.openFromComponent(CustomToastComponent, {
       data: { title, message, type },
-      duration: 400,
+      duration: 2000,
       panelClass: ['custom-snackbar-success'],
     });
   }

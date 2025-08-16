@@ -5,6 +5,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MenuInterface } from '../../user.interface';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,23 +22,28 @@ filteredMenuItems:MenuInterface[] = []
       icon: 'home',
       route: '/dashboard',
       type: 'item'
+    },
+
+     {
+      label: 'Users',
+      icon: 'admin',
+      route: '/users',
+      type: 'item',
+      roles: ['Admin']
     }
-    // {
-    //   label: 'Vehicles',
-    //   icon: 'message',
-    //   type: 'submenu',
-    //   children: [
-    //     { label: 'Manage vehicles', route: '/vehicles/manage' }
-    //   ]
-    // },
   ];
   
 
   constructor(
     private router: Router,
     private eRef: ElementRef,
+    private authService:AuthService
   ) { 
-
+     const user = this.authService.getUser();
+    const userRole = user?.roleName || ''
+    this.filteredMenuItems = this.menu.filter(item =>
+      !item.roles || item.roles.includes(userRole)
+    );
   }
   selectedLink: string = '';
   isSidebarOpen: boolean = true; // Controls sidebar collapse/uncollapse state

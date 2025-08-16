@@ -19,7 +19,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <!-- Email Input -->
           <div class="relative w-full">
-            <mat-form-field class="custom-field" [hideRequiredMarker]="true" 
+            <mat-form-field class="custom-field"
             [ngStyle]="{'padding-bottom':loginForm.get('email')?.invalid && loginForm.get('email')?.touched ? '14px':''}"
              appearance="outline" class="w-full">
               <mat-label>Email</mat-label>
@@ -38,7 +38,7 @@
             </mat-form-field>
 
             <mat-form-field 
-              class="custom-field" [hideRequiredMarker]="true"
+              class="custom-field"
               [ngStyle]="{'padding-bottom':loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ? '14px':''}"
                 appearance="outline" class="w-full"
              >
@@ -81,10 +81,9 @@
             Continue
           </button>
 
-          <!-- <div class="text-center">
-            <a href="/resetPassword" class="text-sm color-green underline hover:cursor-pointer">Forgot password?</a> &nbsp; | &nbsp;
-            <a href="/signup" class="text-sm color-green underline hover:cursor-pointer">Create account</a>
-          </div> -->
+          <div class="text-center">
+            <a href="/forgotPassword" class="text-sm color-green underline hover:cursor-pointer">Forgot password?</a>
+          </div>
         </form>
       </div>
     </div>

@@ -3,94 +3,96 @@
 <mat-dialog-content [formGroup]="userForm">
   <div class="form-grid" style="margin-top:12px;">
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>First Name</mat-label>
-        <input matInput formControlName="firstName" />
-      </mat-form-field>
+       <mat-label>First Name</mat-label><span>*</span>
+        <input matInput formControlName="firstName" class="custom-input" />
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Last Name</mat-label>
-        <input matInput formControlName="lastName" />
-      </mat-form-field>
+      <mat-label>Last Name</mat-label><span>*</span>
+        <input matInput formControlName="lastName" class="custom-input" />
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Employee ID</mat-label>
-        <input matInput formControlName="employeeId" />
-      </mat-form-field>
+      <mat-label>Employee ID</mat-label><span>*</span>
+        <input matInput formControlName="employeeId" class="custom-input" />
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-      </mat-form-field>
+        <mat-label>Email</mat-label><span>*</span>
+        <input matInput formControlName="email" class="custom-input" />
+        <mat-error *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">
+        Email is required
+        </mat-error>
+
+        <mat-error *ngIf="userForm.get('email')?.hasError('pattern') && userForm.get('email')?.touched && !userForm.get('email')?.hasError('required')">
+        Valid email required
+        </mat-error>
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Mobile</mat-label>
-        <input matInput formControlName="mobile" maxlength="10" inputmode="numeric"  (keypress)="allowOnlyNumbers($event)"/>
-      </mat-form-field>
+        <mat-label>Mobile</mat-label><span>*</span>
+        <input matInput formControlName="mobile" maxlength="10" inputmode="numeric" class="custom-input" 
+          (keypress)="allowOnlyNumbers($event)"/>
       <mat-error *ngIf="userForm.get('mobile')?.hasError('pattern')">
         <span style="font-size: 12px;">Enter a valid 10-digit number</span>
       </mat-error>
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Role ID</mat-label>
-        <mat-select formControlName="roleId">
+        <mat-label>Role ID</mat-label><span>*</span>
+        <mat-select formControlName="roleId" class="custom-select" >
           <mat-option *ngFor="let role of lookupService.roles()" [value]="role.id">
             {{ role.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Location</mat-label>
-        <mat-select formControlName="facilityZoneLocation">
+        <mat-label>Location</mat-label><span>*</span>
+        <mat-select formControlName="facilityZoneLocation" class="custom-select" >
           <mat-option *ngFor="let loc of lookupService.facilityZoneLocation()" [value]="loc.id">
             {{ loc.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Zone</mat-label>
-        <mat-select formControlName="zone" (selectionChange)="onZoneChange($event.value)">
+        <mat-label>Zone</mat-label><span>*</span>
+        <mat-select formControlName="zone" (selectionChange)="onZoneChange($event.value)" class="custom-select" >
           <mat-option *ngFor="let zone of lookupService.zones()" [value]="zone.id">
             {{ zone.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
     </div>
 
     <div class="form-field">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Facility</mat-label>
-        <mat-select formControlName="facility">
+        <mat-label>Facility</mat-label><span>*</span>
+        <mat-select formControlName="facility" class="custom-select" >
           <mat-option *ngFor="let facility of lookupService.zoneFacility()" [value]="facility.id">
             {{ facility.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
     </div>
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <div class="mr-[16px]">
+<mat-dialog-actions>
+  <div class="model-footer-custom">
+  <p class="text-red-500">
+    {{errorMsg}}
+  </p>
+  <div class="mr-[16px]" >
     <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-flat-button color="primary" [disabled]="userForm.invalid" (click)="onSubmit()" style="color:#fff;">
+    <button *ngIf="!loading" mat-flat-button color="primary" [disabled]="userForm.invalid" (click)="onSubmit()" style="color:#fff;">
       {{ isEditMode ? 'Update' : 'Create' }}
     </button>
+    <button mat-flat-button color="primary" *ngIf="loading">
+      <div class="flex gap-2">
+        <div class="custom-loader"><mat-spinner diameter="20"></mat-spinner></div>
+      <div>Please wait...</div>
+      </div>
+      
+    </button>
+  </div>
   </div>
 </mat-dialog-actions>

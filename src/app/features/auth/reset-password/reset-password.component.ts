@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatInputModule} from '@angular/material/input';
@@ -6,9 +6,12 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatIconModule} from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core';     
 import {MatSelectModule} from '@angular/material/select';
+import { AuthService } from '../../../shared/services/auth.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -26,122 +29,85 @@ import {MatSelectModule} from '@angular/material/select';
   styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent implements OnInit {
+   router = inject(Router);
   userType = 'default'
   color: ThemePalette = "primary";
-  currentStep = 2;
   passwordForm: FormGroup;
-  personalForm: FormGroup;
-  businessForm: FormGroup;
-
-
-  showErrors = false;
-
-  rules = {
-    minLength: false,
-    uppercase: false,
-    number: false,
-    symbol: false,
-  };
-
-  states: any = [
-    {
-      full: "Great Britain",
-      short: "GB"
-    },
-    {
-      full: "United States",
-      short: "US"
-    },
-    {
-      full: "Canada",
-      short: "CA"
-    }
-  ];
   selectedState: string = "GB";
+  otpRequested = false;
 
-  constructor(private fb: FormBuilder, private route:ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      if(params['userType']){
-        this.userType =params['userType']
-      }
-    });
+  constructor(private fb: FormBuilder, private route:ActivatedRoute,
+     private auth: AuthService, private loadingService: LoadingService,
+     private toastService:ToastService
+    ) {
 
     this.passwordForm = this.fb.group({
-      password: ['', Validators.required],
+      email:['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      password: [''],
+      otp:['']
     });
 
-    this.personalForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-    });
-
-    this.businessForm = this.getBusinessForm(this.userType);
   }
 
-  getBusinessForm(userType:string){
-    switch(userType){
-      case 'parking':
-      return this.fb.group({
-        businessName: ['', Validators.required],
-        streetAddress: ['', Validators.required],
-        city: ['', Validators.required],
-        state: ['', Validators.required],
-        zipcode: ['', Validators.required],
-        country: ['USA', Validators.required],
-      });
-      case 'driving':
-      return this.fb.group({
-        businessName: ['', Validators.required],
-      });
-      default:
-      return this.fb.group({});  
-    }
-    
-  }
 
   ngOnInit(): void {
     
   }
 
-  get password() {
-    return this.passwordForm.get('password')?.value || '';
+  get email() {
+    return this.passwordForm.get('email')!;
   }
 
-  onPasswordChange() {
-    const val = this.password;
-    this.rules.minLength = val.length >= 8;
-    this.rules.uppercase = /[A-Z]/.test(val);
-    this.rules.number = /\d/.test(val);
-    this.rules.symbol = /[!@#\$%\^\&*\)\(+=._-]/.test(val);
+   get otp() {
+    return this.passwordForm.get('otp')!;
   }
 
-  shouldShowRed(key: keyof typeof this.rules): boolean {
-    return !this.rules[key] && this.showErrors;
+  get newPassword() {
+    return this.passwordForm.get('password')!;
   }
 
-  goToStep2() {
-    const val = this.password;
-    const passControl = this.passwordForm.get('password')
-    this.showErrors = true;
-    const allRulesPassed = Object.values(this.rules).every(Boolean);
+  
+  getOtp() {
+    if (this.email.invalid) return;
+    this.loadingService.show();
+    this.auth.getOtp(this.email.value).subscribe({
+      next: () => {
+       this.toastService.showToast('Success', 'The otp sent on your email' , 'success'); 
+       //this.email.disable();  
+      this.otp.setValidators([Validators.required]);
+      this.newPassword.setValidators([Validators.required, Validators.minLength(6)]);
+      this.otp.updateValueAndValidity();
+      this.newPassword.updateValueAndValidity();
+      this.otpRequested = true;
+        this.loadingService.hide();
+      },
+      error: (error) => {
+          this.loadingService.hide();
+        }
+      });
+  }
 
-    // if(val.length > 0 && !allRulesPassed){
-    //   passControl?.setErrors({passwordRules:true})
-    // } else{
-    //   passControl?.setErrors(null)
-    // }
-    if (this.passwordForm.valid && allRulesPassed) {
-      this.currentStep = 2;
+    onSubmit() {
+    if (this.passwordForm.valid) {
+      this.loadingService.show();
+      this.auth.resetPassword(this.passwordForm.value).subscribe({
+        next: () => {
+          this.loadingService.hide();
+          this.toastService.showToast('Success', 'Password reset successfully' , 'success');
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1000);
+        },
+        error: (error) => {
+          this.loadingService.hide();
+        }
+      });
+      console.log('Reset request:', this.passwordForm.value);
+      
+       
+      // Call API to reset password here
     }
   }
 
-  onBackClick() {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-    }
-  }
 
-  onNextClick() {
-      this.currentStep++;
-  }
 }

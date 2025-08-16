@@ -17,6 +17,9 @@ import { MatSelectModule } from '@angular/material/select';
           {{ option}}
         </mat-option>
     </mat-select>
+        <mat-error *ngIf="hasError('required')">
+        {{ config.label }} is required
+      </mat-error>
     </div>
   `
 })
@@ -25,4 +28,14 @@ export class SelectFieldComponent {
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
+
+    get control() {
+    return this.form.get(this.config.fieldKey);
+  }
+  
+    hasError(error: string): boolean {
+    const control = this.control;
+    if (!control) return false;
+    return control?.hasError(error) && control.touched;
+  }
 }

@@ -8,6 +8,7 @@ import { authGuard } from './shared/guards/auth.guard';
 import { UserListComponent } from './features/user/user-list/user-list.component';
 import { MyProfileComponent } from './features/user/my-profile/my-profile.component';
 import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/add-work-permit.component';
+import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 
 // Replace with your component
 
@@ -24,7 +25,7 @@ import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
-      //{ path: 'resetPassword', component: ResetPasswordComponent },
+      { path: 'forgotPassword', component: ResetPasswordComponent },
       { path: 'signup', component: SignupComponent},
 
     ]
@@ -35,7 +36,7 @@ import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/
     canActivateChild:[authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'users', component: UserListComponent },
+      { path: 'users', component: UserListComponent, data: { roles: ['admin'] }},
       { path: 'add-work-permit', component: AddWorkPermitComponent },
       { path:'my-profile', component:MyProfileComponent}
     ]

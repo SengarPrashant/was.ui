@@ -1,7 +1,7 @@
 
 <div class="add-work-permit">
-    <h1>Create a work permit</h1>
-<div class="card" [formGroup]="userForm" style="margin-bottom: 15px;">
+    <h1 style="padding-bottom: 10px;">Create a work permit</h1>
+<div class="card" [formGroup]="mainForm" style="margin-bottom: 15px;">
     <div class="grid-layout">
         <div class="grid-col col-3">
             <mat-label>Location</mat-label>
@@ -10,6 +10,9 @@
                     {{ loc.name }}
                 </mat-option>
             </mat-select>
+            <mat-error *ngIf="mainForm.get('facilityZoneLocation')?.hasError('required') && mainForm.get('facilityZoneLocation')?.touched">
+            Location is required
+            </mat-error>
         </div>
         <div class="grid-col col-3">
             <mat-label>Zone</mat-label>
@@ -43,6 +46,12 @@
 
 </div>
 <div class="card" *ngIf="formConfig" style="padding-top: 0px;">
-<app-dynamic-form [config]="formConfig"></app-dynamic-form>
+<app-dynamic-form [config]="formConfig"  (formReady)="onDynamicFormReady($event)"></app-dynamic-form>
+<div class="flex justify-end">
+      <button mat-raised-button color="primary" type="submit" (click)="onSave()">
+      Submit
+    </button>
+</div>
+  
 </div>
 </div>

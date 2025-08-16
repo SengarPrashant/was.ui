@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { FormBuilderService } from './form-builder.service';
@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class DynamicFormComponent implements OnInit {
   @Input() config: any;
+  @Output() formReady = new EventEmitter<FormGroup>();
 
   form!: FormGroup;
 
@@ -30,6 +31,7 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {
       this.form = this.formBuilderService.createForm(this.config?.formDetails);
+       this.formReady.emit(this.form); 
   }
 
 

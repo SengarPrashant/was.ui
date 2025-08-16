@@ -1,8 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
+import { resetPasswordPayloadModel, User } from '../models/user.model';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 
@@ -83,4 +83,14 @@ export class AuthService {
    isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
+
+  getOtp(emailId: string):Observable<any>{
+    const data = { email: emailId }
+    return this.http.post<any>(`${this.baseUrl}/Auth/getOtp`, data);
+  }
+
+   resetPassword(data:resetPasswordPayloadModel):Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/Auth/resetPassword`, data);
+  }
+
 }

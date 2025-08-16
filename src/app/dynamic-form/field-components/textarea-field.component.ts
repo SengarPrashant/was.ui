@@ -14,10 +14,24 @@ import { MatInputModule } from '@angular/material/input';
      <mat-label>{{ config.label }}</mat-label>
     <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea">
     </textarea>
+     <mat-error *ngIf="hasError('required')">
+        {{ config.label }} is required
+      </mat-error>
     </div>
   `
 })
 export class TextareaFieldComponent {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
+
+    get control() {
+    return this.form.get(this.config.fieldKey);
+  }
+
+  hasError(error: string): boolean {
+    const control = this.control;
+    if (!control) return false;
+    return control?.hasError(error) && control.touched;
+  }
+  
 }

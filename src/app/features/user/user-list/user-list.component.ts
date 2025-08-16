@@ -63,6 +63,7 @@ export class UserListComponent implements OnInit {
   }
 
   openAddUserPopup(userData?: any) {
+  this.toastService.showToast('Success', 'User staus updated' , 'success');
   const dialogRef = this.dialog.open(AddUserDialogComponent, {
     width: '600px',
     data: userData || null // ← null for create, userData for edit
