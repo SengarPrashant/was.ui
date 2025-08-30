@@ -9,6 +9,8 @@
     <!-- Simple Menu Item -->
     <a *ngIf="item.type === 'item'" 
      [routerLink]="item.route"
+     routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
      class="flex items-center gap-4 cursor-pointer pl-4 mb-2 hover:bg-[#E5E7EB] text-[#4B5563] transition-all duration-300 ease-in-out rounded-md py-2">
       <img class="text-xl" [src]="'./assets/icons/' + item.icon + '.svg'" />
       <span class="font-medium">{{ item.label }}</span>

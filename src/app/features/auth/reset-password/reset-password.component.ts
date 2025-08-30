@@ -73,11 +73,13 @@ export class ResetPasswordComponent implements OnInit {
     this.auth.getOtp(this.email.value).subscribe({
       next: () => {
        this.toastService.showToast('Success', 'The otp sent on your email' , 'success'); 
-       //this.email.disable();  
+       this.email.disable();  
       this.otp.setValidators([Validators.required]);
       this.newPassword.setValidators([Validators.required, Validators.minLength(6)]);
       this.otp.updateValueAndValidity();
       this.newPassword.updateValueAndValidity();
+      this.otp.reset();
+      this.newPassword.reset();
       this.otpRequested = true;
         this.loadingService.hide();
       },
@@ -90,7 +92,8 @@ export class ResetPasswordComponent implements OnInit {
     onSubmit() {
     if (this.passwordForm.valid) {
       this.loadingService.show();
-      this.auth.resetPassword(this.passwordForm.value).subscribe({
+      const payload = this.passwordForm.getRawValue()
+      this.auth.resetPassword(payload).subscribe({
         next: () => {
           this.loadingService.hide();
           this.toastService.showToast('Success', 'Password reset successfully' , 'success');
@@ -102,10 +105,6 @@ export class ResetPasswordComponent implements OnInit {
           this.loadingService.hide();
         }
       });
-      console.log('Reset request:', this.passwordForm.value);
-      
-       
-      // Call API to reset password here
     }
   }
 

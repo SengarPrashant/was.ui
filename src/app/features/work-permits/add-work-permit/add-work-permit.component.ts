@@ -8,6 +8,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { GlobalService } from '../../../shared/services/global.service';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { of, switchMap } from 'rxjs';
+import { ToastService } from '../../../shared/services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-work-permit',
@@ -17,12 +20,17 @@ import { LoadingService } from '../../../shared/services/loading.service';
   styleUrl: './add-work-permit.component.css'
 })
 export class AddWorkPermitComponent {
+   router = inject(Router);
   mainForm: FormGroup;
   lookupService = inject(LookupService);
   formConfig:any;
   dynamicForm: FormGroup | null = null;
 
-  constructor(private fb: FormBuilder, private globalService: GlobalService, private loadingService:LoadingService) {
+  constructor(private fb: FormBuilder,
+     private globalService: GlobalService,
+     private loadingService:LoadingService,
+    private toastService:ToastService
+    ) {
     this.mainForm = this.fb.group({
       id: [0],
       facilityZoneLocation: ['', Validators.required],
@@ -36,43 +44,54 @@ export class AddWorkPermitComponent {
     this.lookupService.setSelectedZoneKey(selectedZoneKey);
   }
 
-  onWorkPermitChange(value:number){
-    this.globalService.getFormConfig().subscribe(config =>{
-      if(config){
-       this.formConfig = config;
+  onWorkPermitChange(value: number) {
+    this.globalService.preValidateWorkPermit('work_permit', value).pipe(
+      switchMap((result:{allowed:boolean}) => {
+        if (true) { // Check if the first API call returned true result.allowed === true
+          return this.globalService.getFormConfig(); // If true, call the second API
+        } else {
+          return of(null); // If false, return an observable of null (or handle as needed)
+        }
+      })
+    ).subscribe(config => {
+      if (config) {
+        this.formConfig = config;
+      } else{
+         this.toastService.showToast('Error', 'You can not create a new request' , 'error');
       }
     })
   }
 
   onSave() {
-    console.log('hi', this.dynamicForm?.value)
-  if (this.mainForm.valid && this.dynamicForm?.valid) {
-    const fullPayload = {
-      ...this.dynamicForm.value
-    };
-     this.loadingService.show();
-     const formData = new FormData();
-     formData.append('FormData', JSON.stringify({fullPayload}));
-         // ⿣ Add other text fields
-    formData.append('FacilityZoneLocation', '1');
-    formData.append('Zone', '1');
-    formData.append('ZoneFacility', '1');
-    formData.append('FormId', '1');
+  if (this.mainForm.valid && this.dynamicForm?.invalid) {
+    this.loadingService.show();
+    const formDetails = {...this.dynamicForm.value};
+    delete formDetails.documents;
+    const formValue = this.mainForm.value;
+    const files = this.dynamicForm?.value?.documents || [];
+    const formData = new FormData();
+    formData.append('FormData', JSON.stringify({formDetails}));
+    formData.append('FacilityZoneLocation', formValue.facilityZoneLocation);
+    formData.append('Zone', formValue.zone);
+    formData.append('ZoneFacility', formValue.facility);
+    formData.append('FormId', formValue.workPermit);
+    formData.append('FormType', 'work_permit');
+    formData.append('Files', files);
+    // append each file as Files[]
+    // files.forEach((file: File) => {
+    //   formData.append('Files', file);
+    // });
     
     this.globalService.workPermitFormSubmit(formData).subscribe({
       next: (data) => {
         this.loadingService.hide();
+         this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Error fetching users:', err);
         this.loadingService.hide();
       }
     });
-
-    console.log('Save Data:', fullPayload);
-
-    // Call API to save
-    // this.api.save(fullPayload).subscribe(...)
   } else {
     this.mainForm.markAllAsTouched();
     this.dynamicForm?.markAllAsTouched();

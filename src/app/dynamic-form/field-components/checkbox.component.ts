@@ -33,4 +33,10 @@ export class CheckboxComponent {
     if (!control) return false;
     return control?.hasError(error) && control.touched;
   }
+
+  isRequired(): boolean {
+    if (!this.config?.validations) return false;
+    return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
+  }
+
 }

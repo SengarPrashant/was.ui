@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
   template: `
     <div [formGroup]="form">
      <mat-label>{{ config.label }}</mat-label>
+     <span class="text-red-500" *ngIf="isRequired()">*</span>
     <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea">
     </textarea>
      <mat-error *ngIf="hasError('required')">
@@ -32,6 +33,11 @@ export class TextareaFieldComponent {
     const control = this.control;
     if (!control) return false;
     return control?.hasError(error) && control.touched;
+  }
+
+  isRequired(): boolean {
+    if (!this.config?.validations) return false;
+    return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
   }
   
 }

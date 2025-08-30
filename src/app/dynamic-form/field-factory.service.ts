@@ -7,12 +7,15 @@ import { CheckboxGroupComponent } from './field-components/checkbox-group.compon
 import { RadioGroupComponent } from './field-components/radio-group.component';
 import { CheckboxComponent } from './field-components/checkbox.component';
 import { TimeFieldComponent } from './field-components/time-field.component';
+import { labelFieldComponent } from './field-components/only-label.component';
+import { DocumentUploadFieldComponent } from './field-components/document-upload-field.component';
 
 @Injectable({ providedIn: 'root' })
 export class FieldFactoryService {
   getComponentType(type: string): Type<any> {
     switch (type) {
       case 'text': return TextFieldComponent;
+      case 'number': return TextFieldComponent;
       case 'select': return SelectFieldComponent;
       case 'checkbox': return CheckboxComponent;
       case 'datetime': return DateTimeFieldComponent;
@@ -20,7 +23,9 @@ export class FieldFactoryService {
       case 'checkboxGroup': return CheckboxGroupComponent;
       case 'radio': return RadioGroupComponent;
       case 'time' : return TimeFieldComponent;
-      default:  return TextFieldComponent;
+      case 'note': return labelFieldComponent;
+      case 'file': return DocumentUploadFieldComponent;
+      default:  return labelFieldComponent;
     }
   }
 }

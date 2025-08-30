@@ -8,3 +8,44 @@
     justify-content: center;
     color:#fff;
 }
+
+
+  .welcome-msg {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+.welcome-msg .greeting {
+color: #1976d2; /* blue accent */
+font-weight: 600;
+}
+
+.welcome-msg .username {
+font-weight: 600;
+}
+
+.welcome-msg .welcome {
+color: #555;
+font-weight: 400;
+}
+
+.welcome-msg strong {
+color: #1A0F92; /* highlight app name */
+}
+
+.help{
+  margin-right: 15px;
+}
+
+.help mat-icon{
+  width: 34px;
+    height: 34px;
+    font-size: 34px;
+    color: #6a6969;
+    padding-top: 3px;
+}

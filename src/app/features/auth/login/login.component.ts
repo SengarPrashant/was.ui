@@ -14,6 +14,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AuthService } from '../../../shared/services/auth.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,11 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isPasswordVisible: boolean = false;
 
-  constructor(private titleService: Title, private loadingService: LoadingService, private auth: AuthService,) {}
+  constructor(private titleService: Title,
+     private loadingService: LoadingService,
+     private auth: AuthService,
+     private dialog: MatDialog
+    ) {}
 
   ngOnInit(): void {
     // Initialize the form with form controls, including "Remember Me"
@@ -51,7 +56,7 @@ export class LoginComponent implements OnInit {
     this.loadingService.show();
     this.auth.login(this.loginForm.value).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home']);
         this.loadingService.hide();
       },
       error: (error) => {
@@ -71,5 +76,10 @@ export class LoginComponent implements OnInit {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
+
+  onClickTerms() {
+    const pdfUrl = 'assets/docs/Qubesafe_App_Terms_Conditions.pdf'
+    window.open(pdfUrl, '_blank');
+  }
 
 }

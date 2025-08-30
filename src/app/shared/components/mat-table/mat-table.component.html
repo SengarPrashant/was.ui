@@ -3,7 +3,7 @@
   <div class="header-title">
     <h1>{{title}}</h1>
   </div>
-  <div class="header-search" [ngStyle]="{'margin-right':requiredRightSpace? '124px': ''}">
+  <div class="header-search" [ngStyle]="{'margin-right':requiredRightSpace? marginRightSpace: ''}">
     <mat-form-field appearance="outline">
       <mat-label>Search</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Filter..." />

@@ -19,14 +19,17 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
   ],
   template: `
     <div [formGroup]="form" class="main-content-date">
-      <mat-label style="display:block;">{{ config.label }}</mat-label>
-      
+    <div style="display:block;">
+      <mat-label>{{ config.label }}</mat-label>
+      <span class="text-red-500" *ngIf="isRequired()">*</span>
+     </div> 
       <mat-form-field appearance="outline" class="full-width" style="width:100%;">
         <input
           matInput
           [ngxTimepicker]="timepicker"
           readonly
           [value]="selectedTime"
+          placeholder="HH:MM"
           (timeSet)="onTimeChange($event)"
         />
         <ngx-material-timepicker #timepicker></ngx-material-timepicker>
@@ -77,5 +80,10 @@ export class TimeFieldComponent implements OnInit {
     const control = this.control;
     if (!control) return false;
     return control?.hasError(error) && control.touched;
+  }
+
+  isRequired(): boolean {
+    if (!this.config?.validations) return false;
+    return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
   }
 }

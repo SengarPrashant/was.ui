@@ -18,19 +18,33 @@ export class SidebarComponent {
 filteredMenuItems:MenuInterface[] = []
   menu:MenuInterface[] = [
     {
-      label: 'Dashboard',
+      label: 'Home',
       icon: 'home',
-      route: '/dashboard',
+      route: '/home',
       type: 'item'
     },
 
      {
-      label: 'Users',
-      icon: 'admin',
-      route: '/users',
-      type: 'item',
-      roles: ['Admin']
-    }
+      label: 'Work permit',
+      icon: 'create',
+      route: '/work-permit',
+      type: 'item'
+    },
+
+     {
+      label: 'Incident',
+      icon: 'create',
+      route: '/work-permitt',
+      type: 'item'
+    },
+
+    {
+    label: 'Users',
+    icon: 'admin',
+    route: '/users',
+    type: 'item',
+    roles: ['Admin']
+    },
   ];
   
 

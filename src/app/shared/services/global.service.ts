@@ -825,13 +825,18 @@ export class GlobalService {
 }
      getFormConfig(): Observable<any> {
       const apiUrl = `${this.baseUrl}/Forms/work_permit/1`
-       //return this.http.get<any>(apiUrl);
-        return of(this.formData)
+       return this.http.get<any>(apiUrl);
+       // return of(this.formData)
     }
 
     workPermitFormSubmit(formData:any){
        const apiUrl = `${this.baseUrl}/Forms/submit`
       return this.http.post<any>(apiUrl, formData);
+    }
+
+    preValidateWorkPermit(type:string, key:number){
+    const apiUrl = `${this.baseUrl}/Forms/prevalidate/${type}/${key}`
+    return this.http.get<any>(apiUrl);      
     }
   
     

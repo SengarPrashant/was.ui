@@ -33,6 +33,7 @@ export class MatTableComponent implements OnChanges {
   @Output() action = new EventEmitter<{ type: 'view' | 'edit' | 'status', row: any }>();
   @Input() title:string = '';
   @Input() requiredRightSpace = false;
+  @Input() marginRightSpace = '124px'
 
   dataSource = new MatTableDataSource<any>();
 

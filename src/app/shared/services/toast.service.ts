@@ -11,7 +11,9 @@ export class ToastService {
   showToast(title: string, message: string, type: 'success' | 'error'): void {
     this.snackBar.openFromComponent(CustomToastComponent, {
       data: { title, message, type },
-      duration: 2000,
+      duration: 6000,
+       horizontalPosition: 'right',   // 👈 Added
+      verticalPosition: 'bottom',
       panelClass: ['custom-snackbar-success'],
     });
   }

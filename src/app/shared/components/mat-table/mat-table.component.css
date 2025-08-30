@@ -15,5 +15,21 @@ mat-form-field {
     --mat-form-field-container-height: 32px;
   --mat-form-field-container-vertical-padding:6px;
 }
+.header-title{
+  flex: 1 1 100%;
+}
+.header-search{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+}
 
+@media (min-width:768px){
+  .header-title{
+    flex: 0 0 auto;
+  }
+  .header-search{
+    flex: 0 0 auto;
+  }
+}
 

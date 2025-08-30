@@ -9,6 +9,7 @@ import { UserListComponent } from './features/user/user-list/user-list.component
 import { MyProfileComponent } from './features/user/my-profile/my-profile.component';
 import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/add-work-permit.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { WorkPermitWrapperComponent } from './features/work-permits/work-permit-wrapper/work-permit-wrapper.component';
 
 // Replace with your component
 
@@ -35,10 +36,10 @@ import { ResetPasswordComponent } from './features/auth/reset-password/reset-pas
     component: MainLayoutComponent,
     canActivateChild:[authGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'home', component: DashboardComponent },
       { path: 'users', component: UserListComponent, data: { roles: ['admin'] }},
-      { path: 'add-work-permit', component: AddWorkPermitComponent },
-      { path:'my-profile', component:MyProfileComponent}
+      { path: 'work-permit', component: AddWorkPermitComponent },
+      { path:'my-profile', component:MyProfileComponent},
     ]
   },
  

@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   template: `
     <div [formGroup]="form">
       <mat-label>{{ config.label }}</mat-label>
+       <span class="text-red-500" *ngIf="isRequired()">*</span>
        <mat-radio-group [formControlName]="config.fieldKey" color="primary">
         <mat-radio-button
           *ngFor="let option of options()"
@@ -48,5 +49,10 @@ export class RadioGroupComponent {
     const control = this.control;
     if (!control) return false;
     return control?.hasError(error) && control.touched;
+  }
+
+  isRequired(): boolean {
+  if (!this.config?.validations) return false;
+  return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
   }
 }

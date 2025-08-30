@@ -4,7 +4,7 @@
 <div class="card" [formGroup]="mainForm" style="margin-bottom: 15px;">
     <div class="grid-layout">
         <div class="grid-col col-3">
-            <mat-label>Location</mat-label>
+            <mat-label>Location</mat-label><span class="text-red-500">*</span>
             <mat-select formControlName="facilityZoneLocation" class="custom-select" placeholder="Select location">
                 <mat-option *ngFor="let loc of lookupService.facilityZoneLocation()" [value]="loc.id">
                     {{ loc.name }}
@@ -15,32 +15,41 @@
             </mat-error>
         </div>
         <div class="grid-col col-3">
-            <mat-label>Zone</mat-label>
+            <mat-label>Zone</mat-label> <span class="text-red-500">*</span>
             <mat-select formControlName="zone" class="custom-select" placeholder="Select zone"
                 (selectionChange)="onZoneChange($event.value)">
                 <mat-option *ngFor="let zone of lookupService.zones()" [value]="zone.id">
                     {{ zone.name }}
                 </mat-option>
             </mat-select>
+             <mat-error *ngIf="mainForm.get('zone')?.hasError('required') && mainForm.get('zone')?.touched">
+            Zone is required
+            </mat-error>
         </div>
 
         <div class="grid-col col-3">
-            <mat-label>Facility</mat-label>
+            <mat-label>Facility</mat-label><span class="text-red-500">*</span>
             <mat-select formControlName="facility" placeholder="Select facility" class="custom-select">
                 <mat-option *ngFor="let facility of lookupService.zoneFacility()" [value]="facility.id">
                     {{ facility.name }}
                 </mat-option>
             </mat-select>
+             <mat-error *ngIf="mainForm.get('facility')?.hasError('required') && mainForm.get('facility')?.touched">
+            Facility is required
+            </mat-error>
         </div>
 
         <div class="grid-col col-3">
-            <mat-label>Work permit type</mat-label>
+            <mat-label>Work permit type</mat-label><span class="text-red-500">*</span>
             <mat-select formControlName="workPermit" placeholder="Select work permit type" class="custom-select"
                 (selectionChange)="onWorkPermitChange($event.value)">
                 <mat-option *ngFor="let permit of lookupService.workPermit()" [value]="permit.id">
                     {{ permit.name }}
                 </mat-option>
             </mat-select>
+             <mat-error *ngIf="mainForm.get('workPermit')?.hasError('required') && mainForm.get('workPermit')?.touched">
+            WorkPermit is required
+            </mat-error>
         </div>
     </div>
 

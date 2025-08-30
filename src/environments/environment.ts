@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://was-api-vhkk.onrender.com/api'
+  apiBaseUrl: 'http://172.16.10.90:5000/api'
 };

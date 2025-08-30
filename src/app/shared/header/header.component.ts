@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
   isMobile = false;
   user:User | null = this.auth.getUser();
+  greetingMessage: string = '';
   constructor(private auth:AuthService, private router:Router){
 
   }
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.onResize();
+     this.setGreeting();
   }
 
   logout(){
@@ -40,6 +42,23 @@ export class HeaderComponent implements OnInit {
 
     userProfile(){
     this.router.navigate(['/my-profile'])
+  }
+
+    setGreeting() {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) {
+      this.greetingMessage = 'Good Morning!!';
+    } else if (hour >= 12 && hour < 17) {
+      this.greetingMessage = 'Good Afternoon!!';
+    } else {
+      this.greetingMessage = 'Good Evening!!';
+    }
+  }
+
+  openPdfInNewTab(type:number): void {
+    const pdfUrl = type === 1 ? 'assets/docs/Work_Permit_Procedure.pdf':
+    'assets/docs/Incident_Report_Procedure.pdf'
+    window.open(pdfUrl, '_blank');
   }
 
 }
