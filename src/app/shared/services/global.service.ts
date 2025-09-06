@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { wpListModel } from '../models/work-permit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -838,6 +839,12 @@ export class GlobalService {
     const apiUrl = `${this.baseUrl}/Forms/prevalidate/${type}/${key}`
     return this.http.get<any>(apiUrl);      
     }
+
+     getAllWorkPermitAndIncident():Observable<wpListModel>{
+       const apiUrl = `${this.baseUrl}/Forms/inbox`
+      return this.http.post<wpListModel>(apiUrl, {});
+    }
+
   
     
 }

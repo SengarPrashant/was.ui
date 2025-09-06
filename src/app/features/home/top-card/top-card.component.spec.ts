@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { TopCardComponent } from './top-card.component';
 
-describe('ConfirmDialogComponent', () => {
-  let component: ConfirmDialogComponent;
-  let fixture: ComponentFixture<ConfirmDialogComponent>;
+describe('TopCardComponent', () => {
+  let component: TopCardComponent;
+  let fixture: ComponentFixture<TopCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmDialogComponent]
+      imports: [TopCardComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ConfirmDialogComponent);
+    fixture = TestBed.createComponent(TopCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

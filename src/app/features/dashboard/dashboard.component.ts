@@ -8,7 +8,6 @@ import {
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { ShareComponent } from './share/share.component';
 import { Title } from '@angular/platform-browser';
 import { LoadingService } from '../../shared/services/loading.service';
 
@@ -68,19 +67,6 @@ export class DashboardComponent implements OnInit {
 
   // Inject the MatDialog service
   dialog = inject(MatDialog);
-
-  // Method to open the Create New Grou9p Chat dialog
-  openModal(): void {
-    const dialogRef = this.dialog.open(ShareComponent, {
-      width: '500px',
-      height: '320px',
-      panelClass: 'custom-dialog',
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      this.ngOnInit(); // Refresh the grid after the popup is closed
-    });
-  }
 
   isDialogOpen = false; // Controls whether the dialog is visible
 

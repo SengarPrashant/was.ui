@@ -32,7 +32,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
           placeholder="HH:MM"
           (timeSet)="onTimeChange($event)"
         />
-        <ngx-material-timepicker #timepicker></ngx-material-timepicker>
+        <ngx-material-timepicker #timepicker  (timeSet)="onTimeChange($event)"></ngx-material-timepicker>
       </mat-form-field>
            <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required
@@ -55,22 +55,22 @@ export class TimeFieldComponent implements OnInit {
   selectedTime: string = '';
 
   ngOnInit() {
-    const existing = this.form.get(this.config.fieldKey)?.value;
-    this.selectedTime = existing ? existing : this.getCurrentTime();
-    this.form.get(this.config.fieldKey)?.setValue(this.selectedTime);
+    // const existing = this.form.get(this.config.fieldKey)?.value;
+    // this.selectedTime = existing ? existing : this.getCurrentTime();
+    // this.form.get(this.config.fieldKey)?.setValue(this.selectedTime);
   }
 
   onTimeChange(event: any) {
-   this.selectedTime = event.target?.value || event.detail || '';
+   this.selectedTime = event;
     this.form.get(this.config.fieldKey)?.setValue(this.selectedTime);
   }
 
-  private getCurrentTime(): string {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
+  // private getCurrentTime(): string {
+  //   const now = new Date();
+  //   const hours = String(now.getHours()).padStart(2, '0');
+  //   const minutes = String(now.getMinutes()).padStart(2, '0');
+  //   return `${hours}:${minutes}`;
+  // }
 
     get control() {
     return this.form.get(this.config.fieldKey);

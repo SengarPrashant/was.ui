@@ -43,7 +43,7 @@ filteredMenuItems:MenuInterface[] = []
     icon: 'admin',
     route: '/users',
     type: 'item',
-    roles: ['Admin']
+    roles: ['admin']
     },
   ];
   

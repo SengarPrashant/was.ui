@@ -20,7 +20,10 @@ export class FormBuilderService {
             group[field.fieldKey] = this.fb.control([], validators);
             break;
           case 'checkbox':
-            group[field.fieldKey] = this.fb.control(false, validators);
+          const checkboxValidators = field.validations?.some((v:any) => v.type === 'required' && v.value === 'true')
+          ? [Validators.requiredTrue]
+          : [];
+          group[field.fieldKey] = this.fb.control(false, checkboxValidators);
             break;
           default:
             group[field.fieldKey] = this.fb.control('', validators);

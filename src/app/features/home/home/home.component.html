@@ -1,0 +1,26 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
+  <mat-tab label="Work Permits">
+    <app-top-card
+    [topStatus]="wpStatus"
+    (cardClick)="onStatusClick($event)">
+    </app-top-card>
+   <app-mat-table
+    [data]="tableData"
+    [columns]="columns"
+    [displayedColumns]="displayedColumns"
+    [requiredRightSpace]="false"
+></app-mat-table>
+  </mat-tab>
+  <mat-tab label="Incident">
+    <app-top-card
+    [topStatus]="wpStatus"
+    (cardClick)="onStatusClick($event)">
+    </app-top-card>
+   <app-mat-table
+    [data]="[]"
+    [columns]="columns"
+    [displayedColumns]="displayedColumns"
+    [requiredRightSpace]="false"
+></app-mat-table>
+  </mat-tab>
+</mat-tab-group>

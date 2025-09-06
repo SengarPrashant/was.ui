@@ -1,0 +1,70 @@
+.stats-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 180px;
+  padding:0 16px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-left: 4px solid transparent;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+  cursor: pointer;
+  margin:10px 0;
+}
+
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-icon {
+  font-size: 18px;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+.stat-count {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 8px 0;
+  color: #222;
+}
+
+.stat-hint {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Dynamic colors */
+.stat-card.pending {
+  border-left-color: #f6c23e;
+}
+
+.stat-card.approved {
+  border-left-color: #1cc88a;
+}
+
+.stat-card.rejected {
+  border-left-color: #e74a3b;
+}
+
+.stat-card.closed {
+  border-left-color: #e74a3b;
+}
+
+.stat-card.inprogress {
+  border-left-color: #36b9cc;
+}

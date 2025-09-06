@@ -10,6 +10,7 @@ import { MyProfileComponent } from './features/user/my-profile/my-profile.compon
 import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/add-work-permit.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { WorkPermitWrapperComponent } from './features/work-permits/work-permit-wrapper/work-permit-wrapper.component';
+import { HomeComponent } from './features/home/home/home.component';
 
 // Replace with your component
 
@@ -36,7 +37,7 @@ import { WorkPermitWrapperComponent } from './features/work-permits/work-permit-
     component: MainLayoutComponent,
     canActivateChild:[authGuard],
     children: [
-      { path: 'home', component: DashboardComponent },
+      { path: 'home', component: HomeComponent },
       { path: 'users', component: UserListComponent, data: { roles: ['admin'] }},
       { path: 'work-permit', component: AddWorkPermitComponent },
       { path:'my-profile', component:MyProfileComponent},

@@ -10,7 +10,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { provideNgxMask, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import moment from 'moment';
 import { ToastService } from '../../shared/services/toast.service';
-
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export class AppDateAdapter extends NativeDateAdapter {
   override parse(value: any): Date | null {
     if ((typeof value === 'string') && value.includes('/')) {
@@ -66,7 +67,9 @@ export const APP_DATE_FORMATS = {
     MatNativeDateModule,
     NgxMaterialTimepickerModule,
     NgxMaskDirective,
-    NgxMaskPipe
+    NgxMaskPipe,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ],
   template: `
     <div [formGroup]="form" class="main-content-date">
@@ -103,6 +106,9 @@ export const APP_DATE_FORMATS = {
           (timeSet)="onTimeChange($event)">
         </ngx-material-timepicker>
       </mat-form-field>
+       <mat-error *ngIf="hasError('required')">
+        {{ config.label }} is required
+      </mat-error>
     </div>
   `,
    styles: [`
@@ -125,7 +131,7 @@ export class DateTimeFieldComponent implements OnInit {
 
   today: Date = new Date();
   selectedDate: Date | null = null;
-  selectedTime: string = '12:30';
+  selectedTime: string = '';
 
   constructor(private toastService:ToastService){
 
@@ -154,10 +160,14 @@ export class DateTimeFieldComponent implements OnInit {
 
   onTimeChange(event: any) {
     this.selectedTime = event;
-    if (this.selectedDate) {
+    this.updateDateTime();
+  }
+
+private updateDateTime() {
+      if (this.selectedDate) {
       const selected = moment(this.selectedDate)
-        .hour(+event.split(':')[0])
-        .minute(+event.split(':')[1])
+        .hour(+this.selectedTime.split(':')[0])
+        .minute(+this.selectedTime.split(':')[1])
         .toDate();
       if (!this.pastDateAllowed && selected < this.today) {
          this.selectedTime = ''
@@ -167,10 +177,7 @@ export class DateTimeFieldComponent implements OnInit {
         return;
       }
     }
-    this.updateDateTime();
-  }
 
-private updateDateTime() {
   if (this.selectedDate && this.selectedTime) {
     // Parse time with AM/PM into 24h format
     const time24 = moment(this.selectedTime, ["h:mm A"]).format("HH:mm");
@@ -185,16 +192,20 @@ private updateDateTime() {
 
     finalDate.setHours(hours);
     finalDate.setMinutes(minutes);
-
-    // Save to API in MM/DD/YYYY HH:mm (24h)
-    const apiFormat = moment(finalDate).format("MM/DD/YYYY HH:mm");
-    this.form.get(this.config.fieldKey)?.setValue(apiFormat);
-
-    console.log("API date:", apiFormat);
+    this.form.get(this.config.fieldKey)?.setValue(finalDate);
+    console.log("API date:", finalDate);
   }
 }
 
+   get control() {
+    return this.form.get(this.config.fieldKey);
+  }
 
+ hasError(error: string): boolean {
+    const control = this.control;
+    if (!control) return false;
+    return control?.hasError(error) && control.touched;
+  }
 
   isRequired(): boolean {
     return this.config?.validations?.some(v => v.type === 'required' && v.value === 'true') ?? false;

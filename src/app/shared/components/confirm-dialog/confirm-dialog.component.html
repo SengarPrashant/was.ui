@@ -2,25 +2,29 @@
   class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
 >
   <div class="bg-white rounded-lg shadow-lg w-96">
-    <div class="p-4 border-b">
-      <h2 class="text-lg font-bold text-center text-gray-800">{{ title }}</h2>
+    <!-- Center the title in the middle -->
+    <div class="p-4 border-b flex items-center justify-center">
+      <h2 class="text-lg font-bold text-gray-800">{{ data.title }}</h2>
     </div>
+    <!-- Message section -->
     <div class="p-4">
-      <p class="text-gray-600">{{ message }}</p>
+      <p class="text-gray-600">{{ data.message }}</p>
     </div>
-    <div class="p-4 flex justify-end space-x-4">
+    <!-- Buttons section -->
+    <div class="p-4 flex justify-end gap-4">
       <button
-        class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+        class="text-sm text-gray-600 px-4 py-2" style="color:#034B48; border: 0px;"
         (click)="cancel()"
       >
-        {{ cancelText }}
+        {{ data.cancelText }}
       </button>
       <button
         class="bg-pl8 text-white px-4 py-2 rounded hover:bg-red-600"
         (click)="confirm()"
       >
-        {{ confirmText }}
+        {{ data.confirmText }}
       </button>
     </div>
   </div>
 </div>
+  

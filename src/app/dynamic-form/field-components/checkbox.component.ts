@@ -14,8 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
       <mat-checkbox [formControlName]="config.fieldKey" class="custom-checkbox" color="primary">
         {{ config.label }}
       </mat-checkbox>
-          <mat-error *ngIf="hasError('required')">
-        {{ config.label }} is required
+          <mat-error *ngIf="hasError()">
+        You must accept the terms before continuing.
       </mat-error>
     </div>
   `
@@ -24,14 +24,14 @@ export class CheckboxComponent {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
 
-      get control() {
-    return this.form.get(this.config.fieldKey);
+  get control() {
+  return this.form.get(this.config.fieldKey);
   }
 
-  hasError(error: string): boolean {
+  hasError(): boolean {
     const control = this.control;
     if (!control) return false;
-    return control?.hasError(error) && control.touched;
+   return (control.hasError('requiredTrue') || control.hasError('required')) && control.touched;
   }
 
   isRequired(): boolean {
