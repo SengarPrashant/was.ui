@@ -55,10 +55,15 @@
 
 </div>
 <div class="card" *ngIf="formConfig" style="padding-top: 0px;">
-<app-dynamic-form [config]="formConfig"  (formReady)="onDynamicFormReady($event)"></app-dynamic-form>
-<div class="flex justify-end">
+<app-dynamic-form 
+    [config]="formConfig" 
+   [formData]="dataById"
+  (formReady)="onDynamicFormReady($event)"
+  [selectedAction]="selectedAction"
+  ></app-dynamic-form>
+<div class="flex justify-end" *ngIf="selectedAction !== 'view'">
       <button mat-raised-button color="primary" type="submit" (click)="onSave()">
-      Submit
+      {{id === 0 ? 'Create': 'Update'}}
     </button>
 </div>
   

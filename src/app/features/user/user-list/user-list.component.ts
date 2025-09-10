@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserStatusUpdateDilogComponent } from '../user-status-update-dilog/user-status-update-dilog.component';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ToastService } from '../../../shared/services/toast.service';
+import { actionMenuModel } from '../../../shared/models/global.model';
 
 @Component({
   selector: 'app-user-list',
@@ -19,6 +20,10 @@ import { ToastService } from '../../../shared/services/toast.service';
 })
 export class UserListComponent implements OnInit {
   users: User[] = [];
+  actionMenu:actionMenuModel[] = [
+    {name:'edit', label:'Edit', icon:'edit', enable:true},
+     {name:'status', label:'Update user status', icon:'update', enable:true},
+  ]
   columns = [
     {key:'employeeId', label:'Employee Id'},
     { key: 'name', label: 'Name' },

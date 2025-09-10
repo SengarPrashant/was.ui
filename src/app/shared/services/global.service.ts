@@ -830,8 +830,9 @@ export class GlobalService {
        // return of(this.formData)
     }
 
-    workPermitFormSubmit(formData:any){
-       const apiUrl = `${this.baseUrl}/Forms/submit`
+    workPermitFormSubmit(formData:any, id:number){
+       const key = id > 0 ? 'update' : 'submit';
+       const apiUrl = `${this.baseUrl}/Forms/${key}`
       return this.http.post<any>(apiUrl, formData);
     }
 
@@ -845,6 +846,13 @@ export class GlobalService {
       return this.http.post<wpListModel>(apiUrl, {});
     }
 
-  
+    getFormDataById(id:number):Observable<any>{
+         const apiUrl = `${this.baseUrl}/Forms/request/${id}`
+       return this.http.get<any>(apiUrl);   
+    }
     
+    postWPUpdateStatus(payload:{id:number, status:string, remarks:string}){
+       const apiUrl = `${this.baseUrl}/Forms/updateStatus`
+      return this.http.post<any>(apiUrl, payload);
+    }
 }

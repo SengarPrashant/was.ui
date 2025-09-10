@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject, Input, OnInit, Optional } from '@angular/core';
 import { DynamicFormComponent } from '../../../dynamic-form/dynamic-form.component';
 import { LookupService } from '../../../shared/services/lookup.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,8 +11,9 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { of, switchMap } from 'rxjs';
 import { ToastService } from '../../../shared/services/toast.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { actionMenuModel } from '../../../shared/models/global.model';
 
 @Component({
   selector: 'app-add-work-permit',
@@ -21,18 +22,20 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirm-
   templateUrl: './add-work-permit.component.html',
   styleUrl: './add-work-permit.component.css'
 })
-export class AddWorkPermitComponent {
+export class AddWorkPermitComponent implements OnInit {
   router = inject(Router);
   dialog = inject(MatDialog);
   mainForm: FormGroup;
   lookupService = inject(LookupService);
   formConfig:any;
   dynamicForm: FormGroup | null = null;
+  @Input() dataById:any;
+  @Input() selectedAction:string = 'none';
 
   constructor(private fb: FormBuilder,
      private globalService: GlobalService,
      private loadingService:LoadingService,
-    private toastService:ToastService
+    private toastService:ToastService,
     ) {
     this.mainForm = this.fb.group({
       id: [0],
@@ -41,6 +44,25 @@ export class AddWorkPermitComponent {
       facility: ['', Validators.required],
       workPermit: ['', Validators.required]
     });
+  }
+
+  ngOnInit(): void {
+    if(this.dataById){
+      const data = this.dataById;
+      const obj = {
+        facilityZoneLocation:data?.facilityZoneLocation?.key,
+        zone:data?.zone?.key,
+        facility:data?.zoneFacility?.key,
+        workPermit:data?.formTypeKey,
+        id:data?.id
+      }
+     this.onWorkPermitChange(obj.workPermit);
+     this.onZoneChange(obj.zone);
+    this.mainForm.patchValue(obj);
+    if(this.selectedAction === 'view'){
+      this.mainForm.disable();
+    }
+    }
   }
 
   onZoneChange(selectedZoneKey: string) {
@@ -78,6 +100,9 @@ export class AddWorkPermitComponent {
 
 onDynamicFormReady(form: FormGroup) {
   this.dynamicForm = form;
+    if(this.selectedAction === 'view'){
+    this.dynamicForm.disable();
+    }
 }
 
 
@@ -95,11 +120,12 @@ onDynamicFormReady(form: FormGroup) {
     formData.append('FormId', formValue.workPermit);
     formData.append('FormType', 'work_permit');
     formData.append('Files', files);
+    formData.append('Id', formValue.id);
     // append each file as Files[]
     // files.forEach((file: File) => {
     //   formData.append('Files', file);
     // });
-    this.globalService.workPermitFormSubmit(formData).subscribe({
+    this.globalService.workPermitFormSubmit(formData, formValue.id).subscribe({
       next: (data) => {
         this.loadingService.hide();
         this.router.navigate(['/home']);
@@ -111,6 +137,10 @@ onDynamicFormReady(form: FormGroup) {
     });
   }
 
+
+  get id():number{
+    return this.mainForm.get('id')?.value
+  }
 
   confirmSubmit(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

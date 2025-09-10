@@ -40,18 +40,12 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <!-- <button mat-menu-item (click)="action.emit({ type: 'view', row })">
-            <mat-icon>visibility</mat-icon>
-            <span>View</span>
-          </button> -->
-          <button mat-menu-item (click)="action.emit({ type: 'edit', row })">
-            <mat-icon>edit</mat-icon>
-            <span>Edit</span>
+          <ng-container *ngFor="let action of actionMenu">
+          <button mat-menu-item (click)="onClickMatMenu(action.name, row)" [disabled]="isDisable(action.name, row)">
+            <mat-icon>{{action.icon}}</mat-icon>
+            <span>{{action.label}}</span>
           </button>
-          <button mat-menu-item (click)="action.emit({ type: 'status', row })">
-            <mat-icon>delete</mat-icon>
-            <span>Update user status</span>
-          </button>
+          </ng-container>
         </mat-menu>
       </td>
     </ng-container>

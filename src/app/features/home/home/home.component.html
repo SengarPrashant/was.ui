@@ -9,6 +9,8 @@
     [columns]="columns"
     [displayedColumns]="displayedColumns"
     [requiredRightSpace]="false"
+    (action)="onAction($event)"
+    [actionMenu]="actionMenu"
 ></app-mat-table>
   </mat-tab>
   <mat-tab label="Incident">
@@ -24,3 +26,12 @@
 ></app-mat-table>
   </mat-tab>
 </mat-tab-group>
+
+<div class="custom-popup" *ngIf="openDilog">
+  <div class="custom-popup-content">
+  <button (click)="openDilog = false" class="close-popup">X</button>
+  <app-add-work-permit [dataById]="dataById" 
+  [selectedAction]="selectedAction">
+  </app-add-work-permit>
+  </div>
+</div>

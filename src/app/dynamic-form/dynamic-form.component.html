@@ -8,8 +8,10 @@
          [ngClass]="'col-' + field.colSpan">
             <ng-template 
               appDynamicField
-              [field]="field"
-                [form]="form">
+                [field]="field"
+                [form]="form"
+                [selectedAction]="selectedAction"
+                >
             </ng-template>
         </div>
       </div>

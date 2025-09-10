@@ -1,0 +1,27 @@
+<div class="dialog-container p-4">
+  <!-- Dynamic Header -->
+  <h2 mat-dialog-title class="text-lg font-semibold mb-4 text-gray-800">
+    Approve/Reject Request
+  </h2>
+
+  <!-- Form -->
+  <form [formGroup]="actionForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    
+    <!-- Radio Group -->
+    <mat-radio-group formControlName="status" class="flex gap-4">
+      <mat-radio-button value="1">Approve</mat-radio-button>
+      <mat-radio-button value="4">Reject</mat-radio-button>
+    </mat-radio-group>
+
+    <!-- Remarks -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Remarks</mat-label>
+      <textarea matInput formControlName="remarks" rows="3"></textarea>
+    </mat-form-field>
+
+    <!-- Action Button -->
+    <button mat-raised-button color="primary" [disabled]="actionForm.invalid" type="submit" class="self-end">
+      {{ actionLabel }}
+    </button>
+  </form>
+</div>

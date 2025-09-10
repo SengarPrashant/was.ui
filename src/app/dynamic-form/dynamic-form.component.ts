@@ -19,7 +19,9 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class DynamicFormComponent implements OnInit {
   @Input() config: any;
+  @Input() formData:any
   @Output() formReady = new EventEmitter<FormGroup>();
+  @Input() selectedAction:string = 'none'
 
   form!: FormGroup;
 
@@ -31,6 +33,9 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {
       this.form = this.formBuilderService.createForm(this.config?.formDetails);
+      if(this.formData){
+        this.form.patchValue(this.formData?.formData?.formDetails);
+      }
        this.formReady.emit(this.form); 
   }
 

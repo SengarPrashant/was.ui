@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
+import { actionMenuModel } from '../../models/global.model';
 
 @Component({
   selector: 'app-mat-table',
@@ -30,10 +31,11 @@ export class MatTableComponent implements OnChanges {
   @Input() columns: { key: string; label: string }[] = [];
   @Input() pageSize = 10;
   @Input() filterKey?: string;
-  @Output() action = new EventEmitter<{ type: 'view' | 'edit' | 'status', row: any }>();
+  @Output() action = new EventEmitter<{ type: string, row: any }>();
   @Input() title:string = '';
   @Input() requiredRightSpace = false;
   @Input() marginRightSpace = '124px'
+  @Input() actionMenu:actionMenuModel[] = [];
 
   dataSource = new MatTableDataSource<any>();
 
@@ -74,6 +76,18 @@ export class MatTableComponent implements OnChanges {
       return 'bg-red-500';
     default:
       return 'bg-blue-500';
+  }
+}
+
+onClickMatMenu(action:string, row:any){
+  this.action.emit({type:action, row})
+}
+
+isDisable(action:string, row:any){
+  if(action === 'move' && row?.statusId !== '1'){
+    return true;
+  } else{
+    return false;
   }
 }
 

@@ -4,7 +4,9 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FieldConfig } from './field-base';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-time-field',
@@ -15,64 +17,67 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgxMaterialTimepickerModule,
+    MatIconModule,
+    MatButtonModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ],
   template: `
-    <div [formGroup]="form" class="main-content-date">
-    <div style="display:block;">
-      <mat-label>{{ config.label }}</mat-label>
-      <span class="text-red-500" *ngIf="isRequired()">*</span>
-     </div> 
-      <mat-form-field appearance="outline" class="full-width" style="width:100%;">
+    <div [formGroup]="form" class="main-content-time">
+      <div style="display:block;">
+        <mat-label>{{ config.label }}</mat-label>
+        <span class="text-red-500" *ngIf="isRequired()">*</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
         <input
           matInput
-          [ngxTimepicker]="timepicker"
-          readonly
-          [value]="selectedTime"
-          placeholder="HH:MM"
-          (timeSet)="onTimeChange($event)"
+          [owlDateTime]="timePicker"
+          [owlDateTimeTrigger]="timePicker" 
+          placeholder="HH:mm"
+          formControlName="{{ config.fieldKey }}"
         />
-        <ngx-material-timepicker #timepicker  (timeSet)="onTimeChange($event)"></ngx-material-timepicker>
+
+        <!-- our custom icon -->
+      <mat-icon 
+        class="custom-picker-icon" 
+        (click)="timePicker.open()">
+        access_time
+      </mat-icon>
+
+        <owl-date-time #timePicker [pickerType]="'timer'"></owl-date-time>
       </mat-form-field>
-           <mat-error *ngIf="hasError('required')">
+
+      <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required
       </mat-error>
     </div>
   `,
   styles: [`
-
-  .main-content-date{
-  --mdc-outlined-text-field-container-shape:4px;
-  --mdc-outlined-text-field-outline-color:#d9d9d9;
-  width:100%;
-  }
+     .custom-picker-icon{
+    position: absolute;
+    z-index: 10;
+    right: -10px;
+    }
+    .main-content-time {
+      --mdc-outlined-text-field-container-shape:4px;
+      --mdc-outlined-text-field-outline-color:#d9d9d9;
+      width: 100%;
+    }
   `]
 })
 export class TimeFieldComponent implements OnInit {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
 
-  selectedTime: string = '';
-
   ngOnInit() {
-    // const existing = this.form.get(this.config.fieldKey)?.value;
-    // this.selectedTime = existing ? existing : this.getCurrentTime();
-    // this.form.get(this.config.fieldKey)?.setValue(this.selectedTime);
+    // start empty by default
+    if (this.form.get(this.config.fieldKey)?.value === undefined) {
+      this.form.get(this.config.fieldKey)?.setValue(null);
+    }
   }
 
-  onTimeChange(event: any) {
-   this.selectedTime = event;
-    this.form.get(this.config.fieldKey)?.setValue(this.selectedTime);
-  }
-
-  // private getCurrentTime(): string {
-  //   const now = new Date();
-  //   const hours = String(now.getHours()).padStart(2, '0');
-  //   const minutes = String(now.getMinutes()).padStart(2, '0');
-  //   return `${hours}:${minutes}`;
-  // }
-
-    get control() {
+  get control() {
     return this.form.get(this.config.fieldKey);
   }
 
