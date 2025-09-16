@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { actionMenuModel } from '../../models/global.model';
 import { wpStatusEnum } from '../../enums/global.enum';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mat-table',
@@ -37,11 +38,12 @@ export class MatTableComponent implements OnChanges {
   @Input() requiredRightSpace = false;
   @Input() marginRightSpace = '124px'
   @Input() actionMenu:actionMenuModel[] = [];
-
   dataSource = new MatTableDataSource<any>();
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @Input() sticky = false;
+
+  constructor(private router: Router){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
@@ -69,16 +71,19 @@ onClickMatMenu(action:string, row:any){
   this.action.emit({type:action, row})
 }
 
-isDisable(action:string, row:any){
-  if(action === 'move' && !(row?.statusId === wpStatusEnum.Approved || row?.statusId === wpStatusEnum.Work_in_progress)){
-    return true;
-  } else if(action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending){
-    return true;
-  } else if(action === 'edit' && row?.statusId === wpStatusEnum.Closed){
-    return true;
-  } else{
+  isDisable(action: string, row: any) {
+    if (this.router.url.includes('/home')) {
+      if (action === 'move' && !(row?.statusId === wpStatusEnum.Approved || row?.statusId === wpStatusEnum.Work_in_progress)) {
+        return true;
+      } else if (action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending) {
+        return true;
+      } else if (action === 'edit' && row?.statusId !== wpStatusEnum.Pending) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     return false;
   }
-}
 
 }

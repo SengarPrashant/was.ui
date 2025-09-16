@@ -48,15 +48,15 @@ export class HomeComponent implements OnInit {
     actionMenu:actionMenuModel[] = [
       ]
     columns = [
-    {key:'requestId', label:'Id'},
-    {key:'formTitle', label:'Work Permit Type'}, 
-    {key:'facilityZoneLocation', label:'Location'},
-    { key: 'zone', label: 'Zone' },
-    { key: 'zoneFacility', label: 'Facility' },
-    { key: 'submittedBy', label: 'Submitted by' },
-    { key: 'submittedDate', label: 'Submitted date' },
-    { key: 'pendingWith', label: 'Pending with' },
-    { key: 'statusName', label: 'Status'},
+    {key:'requestId', label:'Id', colWidth:"160px"},
+    {key:'formTitle', label:'Work Permit Type', colWidth:"160px"}, 
+    {key:'facilityZoneLocation', label:'Location', colWidth:"160px"},
+    { key: 'zone', label: 'Zone', colWidth:"160px"},
+    { key: 'zoneFacility', label: 'Facility', colWidth:"160px" },
+    { key: 'submittedBy', label: 'Submitted by', colWidth:"160px" },
+    { key: 'submittedDate', label: 'Submitted date', colWidth:"160px"},
+    { key: 'pendingWith', label: 'Pending with', colWidth:"160px"},
+    { key: 'statusName', label: 'Status', colWidth:"160px" },
   ];
 
   displayedColumns = ['requestId', 'formTitle', 'facilityZoneLocation', 'zone', 'zoneFacility', 'submittedBy', 'submittedDate', 'pendingWith', 'statusName',  'actions']
