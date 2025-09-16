@@ -1,0 +1,42 @@
+<div class="flex items-center justify-between w-full max-w-4xl mx-auto mb-6 relative">
+  <ng-container *ngFor="let step of workflow; let i = index">
+    
+    <!-- Step -->
+    <div class="flex flex-col items-center flex-1 relative">
+      
+      <!-- Circle -->
+      <div
+        class="w-8 h-8 rounded-full flex items-center justify-center z-10"
+        [ngClass]="{
+          'bg-green-500': step.action === 'Approved',
+          'bg-red-500': step.action === 'Rejected',
+          'bg-gray-300': step.action === 'Pending',
+          'bg-gray-400': step.action === 'Work in progress'
+        }"
+      >
+        <mat-icon class="text-sm text-white">
+          {{ step.action === 'Approved' ? 'check' : step.action === 'Rejected' ? 'close' : 'hourglass_empty' }}
+        </mat-icon>
+      </div>
+
+      <!-- Labels -->
+      <div class="text-center mt-2">
+        <p class="font-semibold">{{ step.actionBy }}</p>
+        <p class="text-sm text-gray-500">"{{ step.level }} {{ step.action }}"</p>
+        <p *ngIf="step.remarks" class="italic text-xs text-gray-400">"{{ step.remarks }}"</p>
+        <p class="italic text-xs text-gray-400">"{{ step.actionDate }}"</p>
+      </div>
+    </div>
+
+    <!-- Connector Line -->
+    <div
+      *ngIf="i < workflow.length - 1"
+      class="absolute top-4 left-[15.5%] w-[68%]" style="height: 2px;"
+      [ngClass]="{
+        'bg-green-500': step.action === 'Approved',
+        'bg-gray-300': step.action !== 'Approved'
+      }"
+    ></div>
+    
+  </ng-container>
+</div>

@@ -8,6 +8,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { FieldConfig } from './field-components/field-base';
 import { FieldFactoryService } from './field-factory.service';
+import { formDataByIDModel } from '../shared/models/work-permit.model';
 
 @Directive({
   standalone:true,
@@ -17,6 +18,7 @@ export class DynamicFieldDirective implements OnInit {
   @Input() field!: FieldConfig;
   @Input() form!: FormGroup;
   @Input() selectedAction:string = 'none';
+  @Input() formData!:formDataByIDModel;
 
   constructor(
     private vcRef: ViewContainerRef,
@@ -28,6 +30,9 @@ export class DynamicFieldDirective implements OnInit {
     const componentRef: ComponentRef<any> = this.vcRef.createComponent(componentType);
     if(this.field.type === 'datetime'){
       componentRef.instance.viewType = this.selectedAction;
+    }
+    if(this.field.type === 'file'){
+      componentRef.instance.documents = this.formData?.documents
     }
     componentRef.instance.config = this.field;
     componentRef.instance.form = this.form;

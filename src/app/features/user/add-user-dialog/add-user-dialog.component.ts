@@ -57,6 +57,11 @@ export class AddUserDialogComponent {
       zone:[data?.facilityZoneLocation || '', Validators.required],
       facility:[data?.facilityZoneLocation || '', Validators.required]
     });
+
+    if(this.isEditMode){
+      this.onZoneChange(data?.facilityZoneLocation);
+      this.userForm.patchValue({facility:data?.facilityZoneLocation})
+    }
   }
 
   onSubmit() {

@@ -824,8 +824,8 @@ export class GlobalService {
         ]
     }
 }
-     getFormConfig(): Observable<any> {
-      const apiUrl = `${this.baseUrl}/Forms/work_permit/1`
+     getFormConfig(id:string): Observable<any> {
+      const apiUrl = `${this.baseUrl}/Forms/work_permit/${id}`
        return this.http.get<any>(apiUrl);
        // return of(this.formData)
     }
@@ -836,7 +836,7 @@ export class GlobalService {
       return this.http.post<any>(apiUrl, formData);
     }
 
-    preValidateWorkPermit(type:string, key:number){
+    preValidateWorkPermit(type:string, key:string){
     const apiUrl = `${this.baseUrl}/Forms/prevalidate/${type}/${key}`
     return this.http.get<any>(apiUrl);      
     }
@@ -855,4 +855,11 @@ export class GlobalService {
        const apiUrl = `${this.baseUrl}/Forms/updateStatus`
       return this.http.post<any>(apiUrl, payload);
     }
+
+     getDocumentById(id:number){
+         const apiUrl = `${this.baseUrl}/Forms/document/${id}`
+       return this.http.get(apiUrl, {responseType:'blob'});   
+    }
+
+    
 }

@@ -61,14 +61,30 @@ export class UserListComponent implements OnInit {
   transformedUsers(data: User[]) {
     const updatedUsers = data.map(user => ({
       ...user,
-      name: `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()
+      name: `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim(),
+      statusClass:this.getStatusClass(user.statusName)
     }));
 
     return updatedUsers;
   }
 
+
+    getStatusClass(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'active':
+        return 'bg-green-500';
+      case 'inactive':
+        return 'bg-gray-500';
+      case 'pending':
+        return 'bg-yellow-500 text-black';
+      case 'suspended':
+        return 'bg-red-500';
+      default:
+        return 'bg-blue-500';
+    }
+  }
+
   openAddUserPopup(userData?: any) {
-  this.toastService.showToast('Success', 'User staus updated' , 'success');
   const dialogRef = this.dialog.open(AddUserDialogComponent, {
     width: '600px',
     data: userData || null // ← null for create, userData for edit

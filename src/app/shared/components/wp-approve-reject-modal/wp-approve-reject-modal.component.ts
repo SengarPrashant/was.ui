@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { GlobalService } from '../../services/global.service';
+
 
 @Component({
   selector: 'app-wp-approve-reject-modal',
@@ -24,6 +25,7 @@ import { GlobalService } from '../../services/global.service';
   styleUrl: './wp-approve-reject-modal.component.css'
 })
 export class WpApproveRejectModalComponent {
+  Validators = Validators;
    actionForm: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -57,6 +59,18 @@ export class WpApproveRejectModalComponent {
     });
     }
   }
+
+  onStatusChange(event: MatRadioChange): void {
+  const remarksControl = this.actionForm.get('remarks');
+
+  if (event.value === '4') {
+    remarksControl?.setValidators([Validators.required]);
+  } else {
+    remarksControl?.clearValidators();
+  }
+
+  remarksControl?.updateValueAndValidity();
+}
 
 
 }

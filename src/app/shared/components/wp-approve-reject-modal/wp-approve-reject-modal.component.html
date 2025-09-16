@@ -8,7 +8,7 @@
   <form [formGroup]="actionForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
     
     <!-- Radio Group -->
-    <mat-radio-group formControlName="status" class="flex gap-4">
+    <mat-radio-group formControlName="status" class="flex gap-4" (change)="onStatusChange($event)">
       <mat-radio-button value="1">Approve</mat-radio-button>
       <mat-radio-button value="4">Reject</mat-radio-button>
     </mat-radio-group>
@@ -17,6 +17,9 @@
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Remarks</mat-label>
       <textarea matInput formControlName="remarks" rows="3"></textarea>
+      <mat-error *ngIf="actionForm.get('remarks')?.hasError('required') && actionForm.get('remarks')?.touched">
+      Remarks are required when rejecting
+      </mat-error>
     </mat-form-field>
 
     <!-- Action Button -->

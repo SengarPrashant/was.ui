@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { MAT_SNACK_BAR_DATA, MatSnackBarRef  } from '@angular/material/snack-bar';
 
 @Component({
     standalone: true,
@@ -15,6 +15,9 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
       <div class="custom-snackbar-message">
         {{ data.message }}
       </div>
+      <button mat-icon-button class="toast-close" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   `,
     styles: [],
@@ -24,8 +27,14 @@ export class CustomToastComponent {
     typeClass = '';
     typeIcon = '';
 
-    constructor(@Inject(MAT_SNACK_BAR_DATA) public data: { title: string; message: string; type: 'success' | 'error' }) {
+    constructor(@Inject(MAT_SNACK_BAR_DATA) public data: { title: string; message: string; type: 'success' | 'error' },
+    private snackBarRef: MatSnackBarRef<CustomToastComponent>
+  ) {
         this.typeClass = data.type === 'success' ? 'custom-snackbar-success' : 'custom-snackbar-error';
         this.typeIcon = data.type === 'success' ? 'check_circle' : 'error';
     }
+
+    close(): void {
+    this.snackBarRef.dismiss();
+  }
 }

@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { actionMenuModel } from '../../models/global.model';
+import { wpStatusEnum } from '../../enums/global.enum';
 
 @Component({
   selector: 'app-mat-table',
@@ -64,27 +65,16 @@ export class MatTableComponent implements OnChanges {
     }
   }
 
-  getStatusClass(status: string): string {
-  switch (status?.toLowerCase()) {
-    case 'active':
-      return 'bg-green-500';
-    case 'inactive':
-      return 'bg-gray-500';
-    case 'pending':
-      return 'bg-yellow-500 text-black';
-    case 'suspended':
-      return 'bg-red-500';
-    default:
-      return 'bg-blue-500';
-  }
-}
-
 onClickMatMenu(action:string, row:any){
   this.action.emit({type:action, row})
 }
 
 isDisable(action:string, row:any){
-  if(action === 'move' && row?.statusId !== '1'){
+  if(action === 'move' && !(row?.statusId === wpStatusEnum.Approved || row?.statusId === wpStatusEnum.Work_in_progress)){
+    return true;
+  } else if(action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending){
+    return true;
+  } else if(action === 'edit' && row?.statusId === wpStatusEnum.Closed){
     return true;
   } else{
     return false;

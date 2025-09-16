@@ -1,6 +1,6 @@
 
 <div class="add-work-permit">
-    <h1 style="padding-bottom: 10px;">Create a work permit</h1>
+    <h1 style="padding-bottom: 10px;" *ngIf="id === 0">Create work permit</h1>
 <div class="card" [formGroup]="mainForm" style="margin-bottom: 15px;">
     <div class="grid-layout">
         <div class="grid-col col-3">
@@ -25,6 +25,11 @@
              <mat-error *ngIf="mainForm.get('zone')?.hasError('required') && mainForm.get('zone')?.touched">
             Zone is required
             </mat-error>
+        </div>
+
+         <div class="grid-col col-3" *ngIf="showProject">
+            <mat-label>Project</mat-label>
+            <input matInput type="text" formControlName="project" class="custom-input" placeholder="Project">
         </div>
 
         <div class="grid-col col-3">
@@ -57,9 +62,9 @@
 <div class="card" *ngIf="formConfig" style="padding-top: 0px;">
 <app-dynamic-form 
     [config]="formConfig" 
-   [formData]="dataById"
-  (formReady)="onDynamicFormReady($event)"
-  [selectedAction]="selectedAction"
+    [formData]="dataById"
+    (formReady)="onDynamicFormReady($event)"
+    [selectedAction]="selectedAction"
   ></app-dynamic-form>
 <div class="flex justify-end" *ngIf="selectedAction !== 'view'">
       <button mat-raised-button color="primary" type="submit" (click)="onSave()">

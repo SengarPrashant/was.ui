@@ -4,11 +4,14 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FieldConfig } from './field-base';
+import { DocumentModel } from '../../shared/models/work-permit.model';
+import { GlobalService } from '../../shared/services/global.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-document-upload-field',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule],
   template: `
     <div [formGroup]="form" class="doc-upload">
       <mat-label>{{ config.label }}</mat-label>
@@ -26,6 +29,16 @@ import { FieldConfig } from './field-base';
         <div *ngFor="let file of files; let i = index" class="file-item">
           {{ file.name }} ({{ formatSize(file.size) }})
           <button type="button" class="remove-btn" (click)="removeFile(i)">x</button>
+        </div>
+      </div>
+
+      <!-- saved files list -->
+      <div *ngIf="documents?.length" class="file-list">
+        <div *ngFor="let file of documents; let i = index" class="file-item" >
+          {{ file.fileName }}
+            <button type="button" class="download" (click)="downloadDoc(file)">
+            <mat-icon>download</mat-icon>
+            </button>
         </div>
       </div>
 
@@ -51,7 +64,7 @@ import { FieldConfig } from './field-base';
     .file-list {
       margin-top: 8px;
       background: #f9f9f9;
-      padding: 6px;
+      padding: 12px;
       border-radius: 4px;
     }
     .file-item {
@@ -59,7 +72,7 @@ import { FieldConfig } from './field-base';
       justify-content: space-between;
       align-items: center;
       font-size: 14px;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
     }
     .remove-btn {
       background: transparent;
@@ -68,14 +81,24 @@ import { FieldConfig } from './field-base';
       cursor: pointer;
       font-weight: bold;
     }
+      .download{
+        background: transparent;
+      border: none;
+      color: #6f6f6f;
+      cursor: pointer;
+      font-weight: bold;
+      }
   `]
 })
 export class DocumentUploadFieldComponent {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
+  @Input() documents:DocumentModel[] = []
 
   files: File[] = [];
   error: string | null = null;
+
+  constructor(private globalService:GlobalService){}
 
   get control() {
     return this.form.get(this.config.fieldKey);
@@ -127,4 +150,22 @@ export class DocumentUploadFieldComponent {
   formatSize(size: number): string {
     return (size / (1024 * 1024)).toFixed(2) + ' MB';
   }
+
+  downloadDoc(file:DocumentModel){
+    this.globalService.getDocumentById(file.id).subscribe((blob:Blob) => {
+      const url = window.URL.createObjectURL(blob);
+
+      // create link and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${file.fileName}`;
+      document.body.appendChild(a);
+      a.click();
+
+      // cleanup
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    })
+}
+
 }

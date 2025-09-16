@@ -1,6 +1,7 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
-  <mat-tab label="Work Permits">
+  <mat-tab label="Work Permits ({{tableData.length || 0 }})">
     <app-top-card
+    *ngIf="user?.roleId !== 3"
     [topStatus]="wpStatus"
     (cardClick)="onStatusClick($event)">
     </app-top-card>
@@ -13,9 +14,10 @@
     [actionMenu]="actionMenu"
 ></app-mat-table>
   </mat-tab>
-  <mat-tab label="Incident">
+  <mat-tab label="Incident ({{tableData.length || 0 }})">
     <app-top-card
-    [topStatus]="wpStatus"
+    [topStatus]="inStatus"
+    *ngIf="user?.roleId !== 3"
     (cardClick)="onStatusClick($event)">
     </app-top-card>
    <app-mat-table
@@ -29,9 +31,19 @@
 
 <div class="custom-popup" *ngIf="openDilog">
   <div class="custom-popup-content">
-  <button (click)="openDilog = false" class="close-popup">X</button>
-  <app-add-work-permit [dataById]="dataById" 
-  [selectedAction]="selectedAction">
-  </app-add-work-permit>
+    <div class="popup-header">
+      <h1>{{selectedAction === 'view'? 'View' : 'Edit'}} work permit</h1>
+       <button (click)="openDilog = false" class="close-popup">X</button>
+    </div>
+    <div class="popup-body">
+      <app-requst-workflow 
+       [workflow]="dataById.workflow || []">
+       </app-requst-workflow>
+      <app-add-work-permit 
+        [dataById]="dataById" 
+        [selectedAction]="selectedAction" 
+        (CloseEvent)="onClose($event)">
+      </app-add-work-permit>
+    </div>
   </div>
 </div>

@@ -18,7 +18,7 @@ class="flex items-center justify-between py-2 px-4 bg-white text-black border-b 
 <span>{{user?.firstName?.charAt(0) || ''}}</span>
 </div>
 <div [matMenuTriggerFor]="menu" class="flex ml-[10px] cursor-pointer">
-  <span>{{user?.roleName}}</span>
+  <!-- <span>{{user?.roleDisplay}}</span> -->
   <mat-icon>keyboard_arrow_down</mat-icon>
 </div>
 <mat-menu #menu="matMenu">

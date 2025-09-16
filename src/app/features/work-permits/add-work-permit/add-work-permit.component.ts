@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject, Input, OnInit, Optional } from '@angular/core';
+import { Component, EventEmitter, Inject, inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { DynamicFormComponent } from '../../../dynamic-form/dynamic-form.component';
 import { LookupService } from '../../../shared/services/lookup.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { actionMenuModel } from '../../../shared/models/global.model';
+import { formDataByIDModel } from '../../../shared/models/work-permit.model';
 
 @Component({
   selector: 'app-add-work-permit',
@@ -29,8 +30,10 @@ export class AddWorkPermitComponent implements OnInit {
   lookupService = inject(LookupService);
   formConfig:any;
   dynamicForm: FormGroup | null = null;
-  @Input() dataById:any;
+  @Input() dataById!:formDataByIDModel;
   @Input() selectedAction:string = 'none';
+  @Output() CloseEvent = new EventEmitter<boolean>(false);
+  showProject = false;
 
   constructor(private fb: FormBuilder,
      private globalService: GlobalService,
@@ -42,7 +45,8 @@ export class AddWorkPermitComponent implements OnInit {
       facilityZoneLocation: ['', Validators.required],
       zone: ['', Validators.required],
       facility: ['', Validators.required],
-      workPermit: ['', Validators.required]
+      workPermit: ['', Validators.required],
+      project:['']
     });
   }
 
@@ -67,13 +71,19 @@ export class AddWorkPermitComponent implements OnInit {
 
   onZoneChange(selectedZoneKey: string) {
     this.lookupService.setSelectedZoneKey(selectedZoneKey);
+    if(['10','11', '12', '13'].includes(selectedZoneKey)){
+      this.showProject = true;
+    } else{
+      this.showProject = false;
+    }
   }
 
-  onWorkPermitChange(value: number) {
+  onWorkPermitChange(value: string) {
+    this.formConfig = null;
     this.globalService.preValidateWorkPermit('work_permit', value).pipe(
       switchMap((result:{allowed:boolean}) => {
-        if (true) { // Check if the first API call returned true result.allowed === true
-          return this.globalService.getFormConfig(); // If true, call the second API
+        if (result.allowed === true) { // Check if the first API call returned true result.allowed === true
+          return this.globalService.getFormConfig(value); // If true, call the second API
         } else {
           return of(null); // If false, return an observable of null (or handle as needed)
         }
@@ -83,6 +93,7 @@ export class AddWorkPermitComponent implements OnInit {
         this.formConfig = config;
       } else{
          this.toastService.showToast('Error', 'You can not create a new request' , 'error');
+         this.formConfig = null;
       }
     })
   }
@@ -94,8 +105,20 @@ export class AddWorkPermitComponent implements OnInit {
   } else {
     this.mainForm.markAllAsTouched();
     this.dynamicForm?.markAllAsTouched();
-    console.warn('Form invalid');
+    const invalidControls = this.getInvalidControls(this.dynamicForm!)
+    console.warn('Form invalid', invalidControls);
   }
+}
+
+getInvalidControls(form: FormGroup): string[] {
+  const invalid = [];
+  const controls = form.controls;
+  for (const name in controls) {
+    if (controls[name].invalid) {
+      invalid.push(name);
+    }
+  }
+  return invalid;
 }
 
 onDynamicFormReady(form: FormGroup) {
@@ -119,15 +142,17 @@ onDynamicFormReady(form: FormGroup) {
     formData.append('ZoneFacility', formValue.facility);
     formData.append('FormId', formValue.workPermit);
     formData.append('FormType', 'work_permit');
-    formData.append('Files', files);
+     formData.append('Project', formValue.project);
+    //formData.append('Files', files);
     formData.append('Id', formValue.id);
-    // append each file as Files[]
-    // files.forEach((file: File) => {
-    //   formData.append('Files', file);
-    // });
+   // append each file as Files[]
+    files.forEach((file: File) => {
+      formData.append('Files', file);
+    });
     this.globalService.workPermitFormSubmit(formData, formValue.id).subscribe({
       next: (data) => {
         this.loadingService.hide();
+        this.CloseEvent.emit(true);
         this.router.navigate(['/home']);
       },
       error: (err) => {

@@ -1,35 +1,45 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import { GlobalService } from '../../../shared/services/global.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableComponent } from '../../../shared/components/mat-table/mat-table.component';
 import { TopCardComponent } from '../top-card/top-card.component';
-import { metaDataModel, wpList } from '../../../shared/models/work-permit.model';
+import { formDataByIDModel, metaDataModel, wpList } from '../../../shared/models/work-permit.model';
 import { AddWorkPermitComponent } from '../../work-permits/add-work-permit/add-work-permit.component';
 import { firstValueFrom } from 'rxjs';
 import { actionMenuModel } from '../../../shared/models/global.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/models/user.model';
-import { roleTypeEnum } from '../../../shared/enums/global.enum';
+import { roleTypeEnum, wpStatusEnum } from '../../../shared/enums/global.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { WpApproveRejectModalComponent } from '../../../shared/components/wp-approve-reject-modal/wp-approve-reject-modal.component';
 import { ToastService } from '../../../shared/services/toast.service';
 import { WpProgressModalComponent } from '../../../shared/components/wp-move-to-progress/wp-move-to-progress-modal.component';
+import { MatIconModule } from '@angular/material/icon';
+import { RequstWorkflowComponent } from '../../../shared/components/requst-workflow/requst-workflow.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatTableComponent, MatButtonModule, 
+  imports: [
+    CommonModule, 
+    MatTabsModule, 
+    MatTableComponent, 
+    MatButtonModule, 
     TopCardComponent,
     AddWorkPermitComponent,
+    MatIconModule,
+    RequstWorkflowComponent
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  providers:[DatePipe]
 })
 export class HomeComponent implements OnInit {
+
   dialog = inject(MatDialog);
   openDilog = false;
-  dataById:any;
+  dataById!:formDataByIDModel;
   selectedAction:string = '';
   user:User | null = null;
     tableData:wpList[] = [];
@@ -46,10 +56,10 @@ export class HomeComponent implements OnInit {
     { key: 'submittedBy', label: 'Submitted by' },
     { key: 'submittedDate', label: 'Submitted date' },
     { key: 'pendingWith', label: 'Pending with' },
-    { key: 'status', label: 'Status'},
+    { key: 'statusName', label: 'Status'},
   ];
 
-  displayedColumns = ['requestId', 'formTitle', 'facilityZoneLocation', 'zone', 'zoneFacility', 'submittedBy', 'submittedDate', 'pendingWith', 'status',  'actions']
+  displayedColumns = ['requestId', 'formTitle', 'facilityZoneLocation', 'zone', 'zoneFacility', 'submittedBy', 'submittedDate', 'pendingWith', 'statusName',  'actions']
 
   statusConfig: Record<string, { icon: string; kind: string }> = {
     'Pending':          { icon: 'hourglass_empty', kind: 'pending' },
@@ -58,13 +68,16 @@ export class HomeComponent implements OnInit {
     'Work in progress': { icon: 'autorenew',       kind: 'inprogress' },
     'Closed':           { icon: 'done_all',        kind: 'closed' },
   };
-  constructor(private globalService: GlobalService, private authService:AuthService, private toastService: ToastService){
+  constructor(private globalService: GlobalService,
+     private authService:AuthService,
+      private toastService: ToastService,
+      private datePipe:DatePipe
+    ){
     this.user = this.authService.getUser();
   };
 
 
   ngOnInit(): void {
-
     if(this.user?.roleId){
       this.setActionByRole(this.user.roleId);
     }
@@ -81,8 +94,10 @@ export class HomeComponent implements OnInit {
           zoneFacility: item.zoneFacility?.value,
           submittedBy: item.submittedBy?.value,
           pendingWith: item.pendingWith?.value,
-          status: item.status?.value,
-          statusId:item.status?.key
+          statusName: item.status?.value,
+          statusId:item.status?.key,
+          submittedDate:this.datePipe.transform(item.submittedDate, 'dd/MM/yyy, hh:mm a'),
+          statusClass:this.getClassName(item.status?.key)
         }));
 
         this.wpStatus = res.meta
@@ -109,6 +124,31 @@ export class HomeComponent implements OnInit {
   onStatusClick(name:string) {
   // e.g., filter table by status
 }
+
+  getClassName(key: string):string {
+    let className = ''
+    switch (key) {
+      case wpStatusEnum.Pending:
+        className = 'pending'
+        break;
+      case wpStatusEnum.Approved:
+        className = 'approved'
+        break;
+      case wpStatusEnum.Work_in_progress:
+        className = 'inprogress'
+        break;
+      case wpStatusEnum.Closed:
+        className = 'closed'
+        break;
+      case wpStatusEnum.Rejected:
+        className = 'rejected'
+        break;
+      default:
+        className = 'pending'
+        break;
+    }
+    return className;
+  }
 
 setActionByRole(roleId:number){
   this.actionMenu = []
@@ -199,6 +239,13 @@ onAction(event: { type: string; row: wpList }) {
         //this.loadingService.hide()
       }
     });
+  }
+
+
+  onClose(clicked:boolean){
+    if(clicked){
+      this.openDilog = false;
+    }
   }
 
 }

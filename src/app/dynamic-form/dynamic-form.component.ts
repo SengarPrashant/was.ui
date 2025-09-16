@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { FormBuilderService } from './form-builder.service';
 import { DynamicFieldDirective } from './dynamic-field.directive';
 import { MatButtonModule } from '@angular/material/button';
+import { formDataByIDModel } from '../shared/models/work-permit.model';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -19,7 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class DynamicFormComponent implements OnInit {
   @Input() config: any;
-  @Input() formData:any
+  @Input() formData!:formDataByIDModel
   @Output() formReady = new EventEmitter<FormGroup>();
   @Input() selectedAction:string = 'none'
 

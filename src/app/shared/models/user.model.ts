@@ -14,6 +14,7 @@ export interface User {
   statusName: string
   createdAt: string
   name:string
+  roleDisplay:string
 }
 
 export interface resetPasswordPayloadModel{

@@ -346,15 +346,20 @@ mat-label{
       --mdc-circular-progress-active-indicator-color: #ffffff; /* Your custom color */
     }
 
+.mat-mdc-header-cell {
+  background-color:#eaeaea !important; /* Replace with your desired color */
+  color: #333; /* Optional: Set text color for better contrast */
+}
 
+.toast-close {
+  position: absolute;
+  color: #363535;
+  right: 5px;
+  top: 6px;
+}
 
-/* Always reserve space for scrollbar so page doesn't jump */
-/* html {
-  overflow-y: hidden !important;
-} */
-
-.cdk-overlay-container{
-  z-index: 2000 !important;
+.toast-close .mat-icon{
+  font-size: 18px;
 }
 
 

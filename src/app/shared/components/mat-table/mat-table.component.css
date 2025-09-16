@@ -24,6 +24,27 @@ mat-form-field {
   justify-content: flex-end;
 }
 
+/* Dynamic background-colors */
+.status.pending {
+  background-color: #f6c23e;
+}
+
+.status.approved {
+  background-color: #1cc88a;
+}
+
+.status.rejected {
+  background-color: #e74a3b;
+}
+
+.status.closed {
+  background-color: #7b56dc;
+}
+
+.status.inprogress {
+  background-color: #36b9cc;
+}
+
 @media (min-width:768px){
   .header-title{
     flex: 0 0 auto;
@@ -32,4 +53,7 @@ mat-form-field {
     flex: 0 0 auto;
   }
 }
+
+
+
 
