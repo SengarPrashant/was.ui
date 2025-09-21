@@ -32,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
         <input
           matInput
           [owlDateTime]="picker"
+          readonly
           [owlDateTimeTrigger]="picker"
           placeholder="DD/MM/YYYY HH:mm"
           formControlName="{{ config.fieldKey }}"
@@ -59,7 +60,7 @@ import { MatIconModule } from '@angular/material/icon';
   `,
   styles: [`
     html, body {
-  overflow-y: scroll !important;   // always reserve scrollbar
+  overflow-y: auto !important;   // always reserve scrollbar
 }
     .custom-picker-icon{
     position: absolute;

@@ -8,9 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { actionMenuModel } from '../../models/global.model';
-import { wpStatusEnum } from '../../enums/global.enum';
+import { roleTypeEnum, wpStatusEnum } from '../../enums/global.enum';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-mat-table',
@@ -46,8 +48,11 @@ export class MatTableComponent implements OnChanges {
   @Input() sticky = false;
   @Input() clickedTopStatus:string = '';
   filterValue:string = '';
+  user:User | null = null;
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private authService:AuthService){
+    this.user = this.authService.getUser();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
@@ -92,8 +97,14 @@ clearValue(){
         return true;
       } else if (action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending) {
         return true;
-      } else if (action === 'edit' && row?.statusId !== wpStatusEnum.Pending) {
-        return true;
+      } else if (action === 'edit') {
+        if(this.user?.roleId === roleTypeEnum.EHS_Manager && row?.statusId !== wpStatusEnum.Pending){
+          return true;
+        }
+        if(this.user?.roleId === roleTypeEnum.PM_FM && row?.pendingWithId !== '3'){
+          return true;
+        }
+        return false;
       } else {
         return false;
       }

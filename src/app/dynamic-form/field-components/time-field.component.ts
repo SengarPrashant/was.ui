@@ -35,6 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
           [owlDateTime]="timePicker"
           [owlDateTimeTrigger]="timePicker" 
           placeholder="HH:mm"
+          readonly
           formControlName="{{ config.fieldKey }}"
         />
 

@@ -112,6 +112,7 @@ export class HomeComponent implements OnInit {
 
   fetchListData(val?:{fromDate:Date | null, toDate?:Date | null}){
     const payload = {
+      formType:'work_permit',
       fromDate: val?.fromDate? val?.fromDate : null,
       toDate: val?.toDate? val?.toDate : null
     }
@@ -127,7 +128,8 @@ export class HomeComponent implements OnInit {
           statusName: item.status?.value,
           statusId:item.status?.key,
           submittedDate:this.datePipe.transform(item.submittedDate, 'dd/MM/yyy, hh:mm a'),
-          statusClass:this.getClassName(item.status?.key)
+          statusClass:this.getClassName(item.status?.key),
+          pendingWithId:item.pendingWith?.key,
         }));
 
         this.wpStatus = res.meta
@@ -185,6 +187,7 @@ setActionByRole(roleId:number){
   if(roleId === roleTypeEnum.PM_FM){
      this.actionMenu.push(
         {name:'view', label:'View', icon:'visibility', enable:true},
+         {name:'edit', label:'Edit', icon:'edit', enable:true},
         {name:'move', label:'Move', icon:'edit', enable:true}
       )
   }
