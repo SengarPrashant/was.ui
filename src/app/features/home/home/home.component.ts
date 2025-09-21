@@ -18,6 +18,11 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { WpProgressModalComponent } from '../../../shared/components/wp-move-to-progress/wp-move-to-progress-modal.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RequstWorkflowComponent } from '../../../shared/components/requst-workflow/requst-workflow.component';
+import {FormGroup, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -29,11 +34,15 @@ import { RequstWorkflowComponent } from '../../../shared/components/requst-workf
     TopCardComponent,
     AddWorkPermitComponent,
     MatIconModule,
-    RequstWorkflowComponent
+    RequstWorkflowComponent,
+    MatFormFieldModule,
+     MatDatepickerModule, 
+     FormsModule, 
+     ReactiveFormsModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  providers:[DatePipe]
+  providers:[DatePipe, provideNativeDateAdapter()]
 })
 export class HomeComponent implements OnInit {
 
@@ -68,12 +77,23 @@ export class HomeComponent implements OnInit {
     'Work in progress': { icon: 'autorenew',       kind: 'inprogress' },
     'Closed':           { icon: 'done_all',        kind: 'closed' },
   };
+
+  clickedTopStatus:string = '';
+   range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(private globalService: GlobalService,
      private authService:AuthService,
       private toastService: ToastService,
       private datePipe:DatePipe
     ){
     this.user = this.authService.getUser();
+     // Subscribe to changes
+    this.range.valueChanges.subscribe(val => {
+      this.onDateRangeChange(val);
+    });
   };
 
 
@@ -84,8 +104,18 @@ export class HomeComponent implements OnInit {
     this.fetchListData();
   }
 
-  fetchListData(){
-     this.globalService.getAllWorkPermitAndIncident().subscribe(res => {
+    onDateRangeChange(val: { start?: Date | null; end?: Date | null }) {
+    const start = val.start ? val.start : null;
+    const end = val.end ? val.end : null;
+    this.fetchListData({fromDate:start, toDate:end})
+  }
+
+  fetchListData(val?:{fromDate:Date | null, toDate?:Date | null}){
+    const payload = {
+      fromDate: val?.fromDate? val?.fromDate : null,
+      toDate: val?.toDate? val?.toDate : null
+    }
+     this.globalService.getAllWorkPermitAndIncident(payload).subscribe(res => {
       if (res) {
         this.tableData = res.data.map((item: any) => ({
           ...item,
@@ -121,8 +151,8 @@ export class HomeComponent implements OnInit {
   }
 
 
-  onStatusClick(name:string) {
-  // e.g., filter table by status
+  onStatusClick(status:any) {
+    this.clickedTopStatus = status;
 }
 
   getClassName(key: string):string {
@@ -247,5 +277,7 @@ onAction(event: { type: string; row: wpList }) {
       this.openDilog = false;
     }
   }
+
+  
 
 }

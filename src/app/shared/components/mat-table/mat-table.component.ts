@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { actionMenuModel } from '../../models/global.model';
 import { wpStatusEnum } from '../../enums/global.enum';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mat-table',
@@ -22,7 +23,8 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
-    MatIcon
+    MatIcon,
+    FormsModule
   ],
   templateUrl: './mat-table.component.html',
   styleUrls: ['./mat-table.component.scss']
@@ -42,6 +44,8 @@ export class MatTableComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @Input() sticky = false;
+  @Input() clickedTopStatus:string = '';
+  filterValue:string = '';
 
   constructor(private router: Router){}
 
@@ -56,6 +60,11 @@ export class MatTableComponent implements OnChanges {
       //     (data[this.filterKey!] ?? '').toString().toLowerCase().includes(filter.toLowerCase());
       // }
     }
+
+    if (changes['clickedTopStatus'] && this.clickedTopStatus){
+       this.dataSource.filter = this.clickedTopStatus.toLowerCase();
+       this.filterValue = this.clickedTopStatus;
+    }
   }
 
    applyFilter(event: Event) {
@@ -69,6 +78,12 @@ export class MatTableComponent implements OnChanges {
 
 onClickMatMenu(action:string, row:any){
   this.action.emit({type:action, row})
+}
+
+clearValue(){
+  this.filterValue = '';
+  this.dataSource.filter = '';
+  this.clickedTopStatus = '';
 }
 
   isDisable(action: string, row: any) {

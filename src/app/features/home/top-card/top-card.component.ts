@@ -12,11 +12,11 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class TopCardComponent {
   @Input() topStatus: metaDataModel[] = [];
-  @Input() loading = false;
-  @Output() cardClick = new EventEmitter<string>();
+  @Input() loading = false
+  @Output() clickedStatus = new EventEmitter<string>();
 
-  onClick(name: string) {
-    this.cardClick.emit(name);
+  onClickStatus(status:string){
+    this.clickedStatus.emit(status);
   }
 
   getClassName(val:string){

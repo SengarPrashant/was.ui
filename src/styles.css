@@ -362,4 +362,24 @@ mat-label{
   font-size: 18px;
 }
 
+.pending {
+  background-color: #f6c23e;
+}
+
+.approved {
+  background-color: #1cc88a;
+}
+
+.rejected {
+  background-color: #e74a3b;
+}
+
+.closed {
+  background-color: #7b56dc;
+}
+
+.inprogress {
+  background-color: #36b9cc;
+}
+
 

@@ -841,9 +841,9 @@ export class GlobalService {
     return this.http.get<any>(apiUrl);      
     }
 
-     getAllWorkPermitAndIncident():Observable<wpListModel>{
+     getAllWorkPermitAndIncident(payload?:{fromDate:Date | null, toDate?:Date | null}):Observable<wpListModel>{
        const apiUrl = `${this.baseUrl}/Forms/inbox`
-      return this.http.post<wpListModel>(apiUrl, {});
+      return this.http.post<wpListModel>(apiUrl, payload);
     }
 
     getFormDataById(id:number):Observable<any>{

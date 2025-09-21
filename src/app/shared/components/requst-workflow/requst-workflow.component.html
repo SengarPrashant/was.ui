@@ -8,14 +8,15 @@
       <div
         class="w-8 h-8 rounded-full flex items-center justify-center z-10"
         [ngClass]="{
-          'bg-green-500': step.action === 'Approved',
-          'bg-red-500': step.action === 'Rejected',
-          'bg-gray-300': step.action === 'Pending',
-          'bg-gray-400': step.action === 'Work in progress'
+          'approved': step.action === 'Approved',
+          'rejected': step.action === 'Rejected',
+          'pending': step.action === 'Pending',
+          'inprogress': step.action === 'Work in progress',
+          'closed': step.action === 'Closed',
         }"
       >
         <mat-icon class="text-sm text-white">
-          {{ step.action === 'Approved' ? 'check' : step.action === 'Rejected' ? 'close' : 'hourglass_empty' }}
+          {{ step.action === 'Approved' ? 'check' : step.action === 'Rejected' ? 'close' :  step.action === 'Closed' ? 'done_all' : 'hourglass_empty' }}
         </mat-icon>
       </div>
 

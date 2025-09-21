@@ -42,7 +42,7 @@ export class WpProgressModalComponent {
 
 
    get actionLabel(): string {
-    return this.actionForm.get('status')?.value === '4' ? 'Reject' : 'Approve';
+    return this.actionForm.get('status')?.value === '3' ? 'Closed' : 'Approve';
   }
 
   onSubmit() {

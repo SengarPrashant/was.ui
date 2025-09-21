@@ -11,7 +11,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { of, switchMap } from 'rxjs';
 import { ToastService } from '../../../shared/services/toast.service';
 import { Router } from '@angular/router';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { actionMenuModel } from '../../../shared/models/global.model';
 import { formDataByIDModel } from '../../../shared/models/work-permit.model';
@@ -85,7 +85,12 @@ export class AddWorkPermitComponent implements OnInit {
         if (result.allowed === true) { // Check if the first API call returned true result.allowed === true
           return this.globalService.getFormConfig(value); // If true, call the second API
         } else {
-          return of(null); // If false, return an observable of null (or handle as needed)
+          if(this.selectedAction === 'none'){
+            return of(null); // If false, return an observable of null (or handle as needed)
+          } else{
+             return this.globalService.getFormConfig(value); // If true, call the second API
+          }
+         
         }
       })
     ).subscribe(config => {
@@ -107,8 +112,21 @@ export class AddWorkPermitComponent implements OnInit {
     this.dynamicForm?.markAllAsTouched();
     const invalidControls = this.getInvalidControls(this.dynamicForm!)
     console.warn('Form invalid', invalidControls);
+    this.scrollToFirstInvalidControl();
   }
 }
+
+private scrollToFirstInvalidControl(): void {
+  // Query the DOM for any control with Angular's ng-invalid + ng-touched classes
+  const firstInvalid: HTMLElement | null =
+    document.querySelector('.ng-invalid.ng-touched');
+
+  if (firstInvalid) {
+    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    firstInvalid.focus({ preventScroll: true }); // optional focus
+  }
+}
+
 
 getInvalidControls(form: FormGroup): string[] {
   const invalid = [];

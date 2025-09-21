@@ -3,6 +3,7 @@
     class="stat-card" 
     *ngFor="let item of topStatus" 
     [ngClass]="getClassName(item.status)"
+    (click)="onClickStatus(item.status)"
   >
     <div class="stat-header">
       <!-- <span class="stat-icon">{{ item.icon }}</span> -->

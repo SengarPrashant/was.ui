@@ -6,7 +6,12 @@
   <div class="header-search" [ngStyle]="{'margin-right':requiredRightSpace? marginRightSpace: ''}">
     <mat-form-field appearance="outline">
       <mat-label>Search</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Filter..." />
+      <input matInput type="text" [(ngModel)]="filterValue" (keyup)="applyFilter($event)" placeholder="Filter..." />
+        @if (filterValue) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearValue()" style="padding-right: 5px;">
+        <mat-icon>close</mat-icon>
+        </button>
+        }
     </mat-form-field>
   </div>
 </div>
