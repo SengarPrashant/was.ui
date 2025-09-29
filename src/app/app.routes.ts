@@ -39,8 +39,8 @@ import { HomeComponent } from './features/home/home/home.component';
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'users', component: UserListComponent, data: { roles: ['admin'] }},
-      { path: 'work-permit', component: AddWorkPermitComponent },
-      { path:'my-profile', component:MyProfileComponent},
+      { path: 'work-permit', component: AddWorkPermitComponent, data: { roles: ['pm_fm'] } },
+      { path:'my-profile', component:MyProfileComponent, data: { roles: ['pm_fm'] }},
     ]
   },
  

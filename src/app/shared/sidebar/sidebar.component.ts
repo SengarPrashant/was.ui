@@ -28,14 +28,16 @@ filteredMenuItems:MenuInterface[] = []
       label: 'Work permit',
       icon: 'create',
       route: '/work-permit',
-      type: 'item'
+      type: 'item',
+      roles:['pm_fm']
     },
 
      {
       label: 'Incident',
       icon: 'create',
       route: '/work-permitt',
-      type: 'item'
+      type: 'item',
+      roles:['pm_fm']
     },
 
     {
