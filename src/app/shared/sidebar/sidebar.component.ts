@@ -35,7 +35,7 @@ filteredMenuItems:MenuInterface[] = []
      {
       label: 'Incident',
       icon: 'create',
-      route: '/work-permitt',
+      route: '/incident',
       type: 'item',
       roles:['pm_fm']
     },

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,11 +7,15 @@ import { FieldConfig } from './field-base';
 import { DocumentModel } from '../../shared/models/work-permit.model';
 import { GlobalService } from '../../shared/services/global.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { DocumentPreviewModalComponent } from '../../shared/components/document-preview-modal/document-preview-modal.component';
 
 @Component({
   selector: 'app-document-upload-field',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, 
+    MatFormFieldModule, MatInputModule, MatIconModule
+  ],
   template: `
     <div [formGroup]="form" class="doc-upload">
       <mat-label>{{ config.label }}</mat-label>
@@ -36,9 +40,14 @@ import { MatIconModule } from '@angular/material/icon';
       <div *ngIf="documents?.length" class="file-list">
         <div *ngFor="let file of documents; let i = index" class="file-item" >
           {{ file.fileName }}
+           <div>
             <button type="button" class="download" (click)="downloadDoc(file)">
             <mat-icon>download</mat-icon>
             </button>
+            <button type="button" style="margin-right:10px;" class="download" (click)="openPreviewModal(file)">
+            <mat-icon>preview</mat-icon>
+            </button>
+           </div>
         </div>
       </div>
 
@@ -73,6 +82,7 @@ import { MatIconModule } from '@angular/material/icon';
       align-items: center;
       font-size: 14px;
       margin-bottom: 10px;
+      gap:10px;
     }
     .remove-btn {
       background: transparent;
@@ -93,10 +103,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class DocumentUploadFieldComponent {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
-  @Input() documents:DocumentModel[] = []
-
+  @Input() documents:DocumentModel[] = [];
   files: File[] = [];
   error: string | null = null;
+  dialog = inject(MatDialog);
 
   constructor(private globalService:GlobalService){}
 
@@ -154,7 +164,6 @@ export class DocumentUploadFieldComponent {
   downloadDoc(file:DocumentModel){
     this.globalService.getDocumentById(file.id).subscribe((blob:Blob) => {
       const url = window.URL.createObjectURL(blob);
-
       // create link and trigger download
       const a = document.createElement('a');
       a.href = url;
@@ -167,5 +176,27 @@ export class DocumentUploadFieldComponent {
       window.URL.revokeObjectURL(url);
     })
 }
+
+
+
+ openPreviewModal(file:DocumentModel) {
+    const dialogRef = this.dialog.open(DocumentPreviewModalComponent, {
+      width: '950px',
+      height:'580px',
+      data: {
+        id: file.id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        //this.toastService.showToast('Success', 'Status updated successfully', 'success');
+        //.fetchListData();
+      } else {
+        //this.loadingService.hide()
+      }
+    });
+  }
+
 
 }

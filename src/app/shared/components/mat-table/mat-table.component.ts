@@ -98,7 +98,8 @@ clearValue(){
       } else if (action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending) {
         return true;
       } else if (action === 'edit') {
-        if(this.user?.roleId === roleTypeEnum.EHS_Manager && row?.statusId !== wpStatusEnum.Pending){
+        if((this.user?.roleId === roleTypeEnum.EHS_Manager || this.user?.roleId === roleTypeEnum.Admin) 
+          && row?.statusId !== wpStatusEnum.Pending){
           return true;
         }
         if(this.user?.roleId === roleTypeEnum.PM_FM && row?.pendingWithId !== '3'){

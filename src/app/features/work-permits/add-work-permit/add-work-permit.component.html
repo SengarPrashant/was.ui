@@ -67,8 +67,15 @@
     [selectedAction]="selectedAction"
   ></app-dynamic-form>
 <div class="flex justify-end" *ngIf="selectedAction !== 'view'">
-      <button mat-raised-button color="primary" type="submit" (click)="onSave()">
+      <button mat-raised-button  *ngIf="!loading" color="primary" type="submit" (click)="onSave()">
       {{id === 0 ? 'Create': 'Update'}}
+    </button>
+    <button mat-flat-button color="primary" *ngIf="loading">
+      <div class="flex gap-2">
+        <div class="custom-loader"><mat-spinner diameter="20"></mat-spinner></div>
+      <div>Please wait...</div>
+      </div>
+      
     </button>
 </div>
   

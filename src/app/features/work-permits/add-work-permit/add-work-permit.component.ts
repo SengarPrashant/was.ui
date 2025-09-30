@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, inject, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { DynamicFormComponent } from '../../../dynamic-form/dynamic-form.component';
 import { LookupService } from '../../../shared/services/lookup.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,11 +15,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { actionMenuModel } from '../../../shared/models/global.model';
 import { formDataByIDModel } from '../../../shared/models/work-permit.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-work-permit',
   standalone: true,
-  imports: [CommonModule, DynamicFormComponent, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatButtonModule],
+  imports: [CommonModule, DynamicFormComponent, ReactiveFormsModule, MatFormFieldModule, 
+    MatSelectModule, 
+    MatButtonModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './add-work-permit.component.html',
   styleUrl: './add-work-permit.component.css'
 })
@@ -34,6 +39,7 @@ export class AddWorkPermitComponent implements OnInit {
   @Input() selectedAction:string = 'none';
   @Output() CloseEvent = new EventEmitter<boolean>(false);
   showProject = false;
+  loading = false;
 
   constructor(private fb: FormBuilder,
      private globalService: GlobalService,
@@ -78,30 +84,37 @@ export class AddWorkPermitComponent implements OnInit {
     }
   }
 
-  onWorkPermitChange(value: string) {
-    this.formConfig = null;
-    this.globalService.preValidateWorkPermit('work_permit', value).pipe(
-      switchMap((result:{allowed:boolean}) => {
-        if (result.allowed === true) { // Check if the first API call returned true result.allowed === true
-          return this.globalService.getFormConfig(value); // If true, call the second API
+onWorkPermitChange(value: string) {
+  this.formConfig = null;
+
+  let config$;
+
+  if (this.selectedAction !== 'none') {
+    // ✅ Edit/View → skip prevalidate, directly get form config
+    config$ = this.globalService.getFormConfig(value);
+  } else {
+    // ✅ Create → run prevalidate first
+    config$ = this.globalService.preValidateWorkPermit('work_permit', value).pipe(
+      switchMap((result: { allowed: boolean }) => {
+        if (result.allowed === true) {
+          return this.globalService.getFormConfig(value); // allowed → get config
         } else {
-          if(this.selectedAction === 'none'){
-            return of(null); // If false, return an observable of null (or handle as needed)
-          } else{
-             return this.globalService.getFormConfig(value); // If true, call the second API
-          }
-         
+          return of(null); // not allowed
         }
       })
-    ).subscribe(config => {
-      if (config) {
-        this.formConfig = config;
-      } else{
-         this.toastService.showToast('Error', 'You can not create a new request' , 'error');
-         this.formConfig = null;
-      }
-    })
+    );
   }
+
+  config$.subscribe(config => {
+    if (config) {
+      this.formConfig = config;
+    } else {
+      this.toastService.showToast('Error', 'You can not create a new request', 'error');
+      this.formConfig = null;
+    }
+  });
+}
+
 
   onSave() {
   if (this.mainForm.valid && this.dynamicForm?.valid) {
@@ -148,6 +161,7 @@ onDynamicFormReady(form: FormGroup) {
 
 
   callApiToSubmitData() {
+    this.loading = true;
     this.loadingService.show();
     const formDetails = this.dynamicForm?.valid? { ...this.dynamicForm.value }: {};
     delete formDetails.documents;
@@ -170,12 +184,15 @@ onDynamicFormReady(form: FormGroup) {
     this.globalService.workPermitFormSubmit(formData, formValue.id).subscribe({
       next: (data) => {
         this.loadingService.hide();
+        this.loading = false;
+        this.toastService.showToast('Success', 'Request updated sucessfully' , 'success');
         this.CloseEvent.emit(true);
         this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Error fetching users:', err);
         this.loadingService.hide();
+        this.loading = false;
       }
     });
   }

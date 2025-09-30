@@ -11,6 +11,7 @@ import { AddWorkPermitComponent } from './features/work-permits/add-work-permit/
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { WorkPermitWrapperComponent } from './features/work-permits/work-permit-wrapper/work-permit-wrapper.component';
 import { HomeComponent } from './features/home/home/home.component';
+import { CreateIncidentRequestComponent } from './features/incident/create-incident-request/create-incident-request.component';
 
 // Replace with your component
 
@@ -40,6 +41,7 @@ import { HomeComponent } from './features/home/home/home.component';
       { path: 'home', component: HomeComponent },
       { path: 'users', component: UserListComponent, data: { roles: ['admin'] }},
       { path: 'work-permit', component: AddWorkPermitComponent, data: { roles: ['pm_fm'] } },
+      { path: 'incident', component: CreateIncidentRequestComponent, data: { roles: ['pm_fm'] } },
       { path:'my-profile', component:MyProfileComponent, data: { roles: ['pm_fm'] }},
     ]
   },

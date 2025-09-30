@@ -49,3 +49,10 @@ color: #1A0F92; /* highlight app name */
     color: #6a6969;
     padding-top: 3px;
 }
+
+.role-text {
+  max-width: 50px;        /* adjust width as needed */
+  white-space: nowrap;     /* keep text in one line */
+  overflow: hidden;        /* hide extra text */
+  text-overflow: ellipsis; /* add ... at the end */
+}

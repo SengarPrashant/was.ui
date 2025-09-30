@@ -108,7 +108,7 @@ export class UserListComponent implements OnInit {
   dialogRef.afterClosed().subscribe(result => {
     if (result === 'refresh') {
       this.fetchUsers(); // Refresh table
-       this.toastService.showToast('Success', 'User staus updated' , 'success');
+       this.toastService.showToast('Success', 'User status updated' , 'success');
 
     }
   });
