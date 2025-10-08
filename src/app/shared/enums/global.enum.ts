@@ -12,3 +12,8 @@ export enum wpStatusEnum{
  Closed = '3',
  Rejected = '4'
 }
+
+export enum requestTypeEnum{
+Work_permit = 1,
+Incident = 2
+}

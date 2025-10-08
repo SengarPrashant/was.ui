@@ -9,6 +9,9 @@ import { CheckboxComponent } from './field-components/checkbox.component';
 import { TimeFieldComponent } from './field-components/time-field.component';
 import { labelFieldComponent } from './field-components/only-label.component';
 import { DocumentUploadFieldComponent } from './field-components/document-upload-field.component';
+import { CheckboxListFieldComponent } from './field-components/checkbox-list-field.component';
+import { ImageFieldComponent } from './field-components/image-field.component';
+import { TableFieldComponent } from './field-components/table-field.component';
 
 @Injectable({ providedIn: 'root' })
 export class FieldFactoryService {
@@ -19,12 +22,16 @@ export class FieldFactoryService {
       case 'select': return SelectFieldComponent;
       case 'checkbox': return CheckboxComponent;
       case 'datetime': return DateTimeFieldComponent;
+      case 'date': return DateTimeFieldComponent;
       case 'textarea': return TextareaFieldComponent;
       case 'checkboxGroup': return CheckboxGroupComponent;
       case 'radio': return RadioGroupComponent;
       case 'time' : return TimeFieldComponent;
       case 'note': return labelFieldComponent;
       case 'file': return DocumentUploadFieldComponent;
+      case 'checkboxlist': return CheckboxListFieldComponent;
+      case 'img': return ImageFieldComponent;
+      case 'table': return TableFieldComponent;
       default:  return labelFieldComponent;
     }
   }

@@ -28,8 +28,13 @@ export class LookupService {
       .map(opt => ({ id: opt.optionKey, name: opt.optionValue }))
   );
 
-  readonly workPermit = computed(() =>
+  readonly workPermitOptions = computed(() =>
     this.allOptions().filter(opt => opt.optionType === 'work_permit')
+      .map(opt => ({ id: opt.optionKey, name: opt.optionValue }))
+  );
+
+    readonly incidentOptions = computed(() =>
+    this.allOptions().filter(opt => opt.optionType === 'incident')
       .map(opt => ({ id: opt.optionKey, name: opt.optionValue }))
   );
 

@@ -824,8 +824,9 @@ export class GlobalService {
         ]
     }
 }
-     getFormConfig(id:string): Observable<any> {
-      const apiUrl = `${this.baseUrl}/Forms/work_permit/${id}`
+     getFormConfig(id:string, type:number): Observable<any> {
+        const rType = type === 1 ? 'work_permit' : 'incident'
+      const apiUrl = `${this.baseUrl}/Forms/${rType}/${id}`
        return this.http.get<any>(apiUrl);
        // return of(this.formData)
     }

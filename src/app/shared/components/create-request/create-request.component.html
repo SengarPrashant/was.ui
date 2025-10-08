@@ -1,6 +1,13 @@
 
 <div class="add-work-permit">
-    <h1 style="padding-bottom: 10px;" *ngIf="id === 0">Create work permit</h1>
+    <h1 style="padding-bottom: 10px;" *ngIf="id === 0">
+       <ng-container *ngIf="requestType === 1; else incidentType">
+          Create work permit
+       </ng-container> 
+       <ng-template #incidentType>
+        Create a Incident
+       </ng-template>
+    </h1>
 <div class="card" [formGroup]="mainForm" style="margin-bottom: 15px;">
     <div class="grid-layout">
         <div class="grid-col col-3">
@@ -45,15 +52,15 @@
         </div>
 
         <div class="grid-col col-3">
-            <mat-label>Work permit type</mat-label><span class="text-red-500">*</span>
-            <mat-select formControlName="workPermit" placeholder="Select work permit type" class="custom-select"
+            <mat-label>{{labelText}}</mat-label><span class="text-red-500">*</span>
+            <mat-select formControlName="workPermit" [placeholder]="labelText" class="custom-select"
                 (selectionChange)="onWorkPermitChange($event.value)">
-                <mat-option *ngFor="let permit of lookupService.workPermit()" [value]="permit.id">
+                <mat-option *ngFor="let permit of optionsList" [value]="permit.id">
                     {{ permit.name }}
                 </mat-option>
             </mat-select>
              <mat-error *ngIf="mainForm.get('workPermit')?.hasError('required') && mainForm.get('workPermit')?.touched">
-            WorkPermit is required
+            {{labelText}} is required
             </mat-error>
         </div>
     </div>

@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { CreateRequestComponent } from '../../../shared/components/create-request/create-request.component';
 
 @Component({
-  selector: 'app-create-incident-request',
+  selector: 'app-create-work-permit-request',
   standalone: true,
   imports: [CreateRequestComponent],
-  templateUrl: './create-incident-request.component.html',
-  styleUrl: './create-incident-request.component.css'
+  templateUrl: './create-work-permit-request.component.html',
+  styleUrl: './create-work-permit-request.component.css'
 })
-export class CreateIncidentRequestComponent {
+export class CreateWorkPermitRequestComponent {
 
 }

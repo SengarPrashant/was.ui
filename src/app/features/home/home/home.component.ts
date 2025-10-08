@@ -1,12 +1,10 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {MatTabsModule} from '@angular/material/tabs';
+import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs';
 import { GlobalService } from '../../../shared/services/global.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableComponent } from '../../../shared/components/mat-table/mat-table.component';
 import { TopCardComponent } from '../top-card/top-card.component';
-import { formDataByIDModel, metaDataModel, wpList } from '../../../shared/models/work-permit.model';
-import { AddWorkPermitComponent } from '../../work-permits/add-work-permit/add-work-permit.component';
 import { firstValueFrom } from 'rxjs';
 import { actionMenuModel } from '../../../shared/models/global.model';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -22,6 +20,8 @@ import {FormGroup, FormControl, FormsModule, ReactiveFormsModule} from '@angular
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import { CreateRequestComponent } from '../../../shared/components/create-request/create-request.component';
+import { formDataByIDModel, metaDataModel, wpList } from '../../../shared/models/work-permit.model';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +32,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
     MatTableComponent, 
     MatButtonModule, 
     TopCardComponent,
-    AddWorkPermitComponent,
+    CreateRequestComponent,
     MatIconModule,
     RequstWorkflowComponent,
     MatFormFieldModule,
@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit {
   openDilog = false;
   dataById!:formDataByIDModel;
   selectedAction:string = '';
+  activeTabIndex = 0;
   user:User | null = null;
     tableData:wpList[] = [];
     wpStatus:metaDataModel[] = [];
@@ -112,7 +113,7 @@ export class HomeComponent implements OnInit {
 
   fetchListData(val?:{fromDate:Date | null, toDate?:Date | null}){
     const payload = {
-      formType:'work_permit',
+      formType:this.activeTabIndex === 0 ? 'work_permit' : 'incident',
       fromDate: val?.fromDate? val?.fromDate : null,
       toDate: val?.toDate? val?.toDate : null
     }
@@ -156,6 +157,13 @@ export class HomeComponent implements OnInit {
   onStatusClick(status:any) {
     this.clickedTopStatus = status;
 }
+
+onTabChange(event: MatTabChangeEvent): void {
+    // Get the index of the newly selected tab
+    this.activeTabIndex = event.index;
+    this.tableData = [];
+    this.fetchListData();
+  }
 
   getClassName(key: string):string {
     let className = ''

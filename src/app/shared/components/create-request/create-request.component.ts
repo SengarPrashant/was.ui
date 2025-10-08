@@ -1,34 +1,33 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { DynamicFormComponent } from '../../../dynamic-form/dynamic-form.component';
-import { LookupService } from '../../../shared/services/lookup.service';
+import { LookupService } from '../../services/lookup.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { GlobalService } from '../../../shared/services/global.service';
+import { GlobalService } from '../../services/global.service';
 import { MatButtonModule } from '@angular/material/button';
-import { LoadingService } from '../../../shared/services/loading.service';
+import { LoadingService } from '../../services/loading.service';
 import { of, switchMap } from 'rxjs';
-import { ToastService } from '../../../shared/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { actionMenuModel } from '../../../shared/models/global.model';
-import { formDataByIDModel } from '../../../shared/models/work-permit.model';
+import { ConfirmationDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { formDataByIDModel } from '../../models/work-permit.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-add-work-permit',
+  selector: 'app-create-request',
   standalone: true,
   imports: [CommonModule, DynamicFormComponent, ReactiveFormsModule, MatFormFieldModule, 
     MatSelectModule, 
     MatButtonModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './add-work-permit.component.html',
-  styleUrl: './add-work-permit.component.css'
+  templateUrl: './create-request.component.html',
+  styleUrl: './create-request.component.css'
 })
-export class AddWorkPermitComponent implements OnInit {
+export class CreateRequestComponent implements OnInit {
   router = inject(Router);
   dialog = inject(MatDialog);
   mainForm: FormGroup;
@@ -40,6 +39,7 @@ export class AddWorkPermitComponent implements OnInit {
   @Output() CloseEvent = new EventEmitter<boolean>(false);
   showProject = false;
   loading = false;
+  @Input() requestType:number = 0;
 
   constructor(private fb: FormBuilder,
      private globalService: GlobalService,
@@ -75,6 +75,19 @@ export class AddWorkPermitComponent implements OnInit {
     }
   }
 
+  get optionsList() {
+  if (this.requestType === 1) {
+    return this.lookupService.workPermitOptions();
+  } else if (this.requestType === 2) {
+    return this.lookupService.incidentOptions();
+  }
+  return [];
+}
+
+get labelText() {
+  return this.requestType === 1 ? 'Work permit type' : 'Incident type';
+}
+
   onZoneChange(selectedZoneKey: string) {
     this.lookupService.setSelectedZoneKey(selectedZoneKey);
     if(['10','11', '12', '13'].includes(selectedZoneKey)){
@@ -89,15 +102,16 @@ onWorkPermitChange(value: string) {
 
   let config$;
 
-  if (this.selectedAction !== 'none') {
+  if (this.selectedAction !== 'none' || this.requestType === 2) {
     // ✅ Edit/View → skip prevalidate, directly get form config
-    config$ = this.globalService.getFormConfig(value);
+    config$ = this.globalService.getFormConfig(value, this.requestType);
   } else {
     // ✅ Create → run prevalidate first
     config$ = this.globalService.preValidateWorkPermit('work_permit', value).pipe(
       switchMap((result: { allowed: boolean }) => {
-        if (result.allowed === true) {
-          return this.globalService.getFormConfig(value); // allowed → get config
+        //result.allowed === true
+        if (true) {
+          return this.globalService.getFormConfig(value, this.requestType); // allowed → get config
         } else {
           return of(null); // not allowed
         }
@@ -173,7 +187,7 @@ onDynamicFormReady(form: FormGroup) {
     formData.append('Zone', formValue.zone);
     formData.append('ZoneFacility', formValue.facility);
     formData.append('FormId', formValue.workPermit);
-    formData.append('FormType', 'work_permit');
+    formData.append('FormType', this.requestType === 1 ? 'work_permit' : 'incident');
      formData.append('Project', formValue.project);
     //formData.append('Files', files);
     formData.append('Id', formValue.id);

@@ -1,5 +1,5 @@
 
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
   <mat-tab label="Work Permits ({{tableData.length || 0 }})">
     <app-top-card
     *ngIf="user?.roleId !== 3"
@@ -35,17 +35,19 @@
     [sticky]="true"
 ></app-mat-table>
   </mat-tab>
-  <mat-tab label="Incident ({{ 0 }})">
+  <mat-tab label="Incident ({{tableData.length || 0 }})">
     <app-top-card
     [topStatus]="inStatus"
     *ngIf="user?.roleId !== 3"
     (clickedStatus)="onStatusClick($event)">
     </app-top-card>
    <app-mat-table
-    [data]="[]"
+    [data]="tableData"
     [columns]="columns"
     [displayedColumns]="displayedColumns"
     [requiredRightSpace]="false"
+    (action)="onAction($event)"
+    [actionMenu]="actionMenu"
     [sticky]="true"
 ></app-mat-table>
   </mat-tab>
@@ -61,11 +63,13 @@
       <app-requst-workflow 
        [workflow]="dataById.workflow || []">
        </app-requst-workflow>
-      <app-add-work-permit 
+      <app-create-request 
         [dataById]="dataById" 
         [selectedAction]="selectedAction" 
-        (CloseEvent)="onClose($event)">
-      </app-add-work-permit>
+        (CloseEvent)="onClose($event)"
+        [requestType]="activeTabIndex === 0 ? 1 : 2"
+        >
+      </app-create-request>
     </div>
   </div>
 </div>

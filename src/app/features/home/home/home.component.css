@@ -14,8 +14,8 @@
 .custom-popup-content {
   background: #fff;
   border-radius: 12px;
-  width: 950px;
-  max-height: 580px;
+  width: 65%;
+  height: 95vh;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column; /* stack header and body vertically */

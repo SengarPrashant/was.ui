@@ -34,7 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
           [owlDateTime]="picker"
           readonly
           [owlDateTimeTrigger]="picker"
-          placeholder="DD/MM/YYYY HH:mm"
+          [placeholder]="config.type === 'date' ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm'"
           formControlName="{{ config.fieldKey }}"
           [min]="!pastDateAllowed && viewType !== 'edit' ? today : null"
         />
@@ -48,7 +48,7 @@ import { MatIconModule } from '@angular/material/icon';
 
         <owl-date-time
         #picker
-        [pickerType]="'both'"
+        [pickerType]="config.type === 'date' ? 'calendar' : 'both'"
         >
         </owl-date-time>
       </mat-form-field>
@@ -87,7 +87,6 @@ export class DateTimeFieldComponent implements OnInit {
   today: Date = new Date();
 
   ngOnInit() {
-
   }
 
   get control() {
