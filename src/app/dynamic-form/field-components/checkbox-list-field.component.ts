@@ -17,7 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
       <label>{{ config.label }}</label>
       <span class="text-red-500" *ngIf="isRequired()">*</span>
 
-      <div formArrayName="{{ config.fieldKey }}">
+      <div formArrayName="{{ config.fieldKey }}" [ngClass]= "{'checkboxh':config.type === 'checkboxlist-h'}">
         <div *ngFor="let option of options(); let i = index" class="checkbox-item">
           <mat-checkbox color="primary"
             [formControlName]="i"
@@ -39,6 +39,10 @@ import { MatSelectModule } from '@angular/material/select';
         display: flex;
         align-items: center;
         margin-bottom: 4px;
+      }
+
+      .checkboxh{
+      display:flex;
       }
     `,
   ],

@@ -37,6 +37,7 @@ import { MatIconModule } from '@angular/material/icon';
           [placeholder]="config.type === 'date' ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm'"
           formControlName="{{ config.fieldKey }}"
           [min]="pastDateNotAllowed && viewType !== 'edit' ? today : null"
+          [max]="futureDateNotAllowed && viewType !== 'edit' ? today: null"
         />
  
       <!-- our custom icon -->
@@ -107,4 +108,9 @@ export class DateTimeFieldComponent implements OnInit {
   get pastDateNotAllowed(): boolean {
     return this.config?.validations?.some(v => v.type === 'pastDateAllowed' && v.value === 'false') ?? false;
   }
+
+   get futureDateNotAllowed(): boolean {
+    return this.config?.validations?.some(v => v.type === 'futureDateAllowed' && v.value === 'false') ?? false;
+  }
+
 }

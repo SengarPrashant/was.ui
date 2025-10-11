@@ -30,7 +30,9 @@ export class FieldFactoryService {
       case 'note': return labelFieldComponent;
       case 'file': return DocumentUploadFieldComponent;
       case 'checkboxlist': return CheckboxListFieldComponent;
+      case 'checkboxlist-h': return CheckboxListFieldComponent;
       case 'img': return ImageFieldComponent;
+       case 'scrollto': return ImageFieldComponent;
       case 'table': return TableFieldComponent;
       default:  return labelFieldComponent;
     }

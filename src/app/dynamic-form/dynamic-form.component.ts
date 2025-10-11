@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormBuilderService } from './form-builder.service';
@@ -28,11 +28,12 @@ export class DynamicFormComponent implements OnInit {
 
   @ViewChild(DynamicFieldDirective, { static: true }) dynamicField!: DynamicFieldDirective;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder, private el:ElementRef,
     private formBuilderService:FormBuilderService
   ) {}
 
   ngOnInit() {
+    document.addEventListener('click', this.onClickScrollTo)
       this.form = this.formBuilderService.createForm(this.config?.formDetails);
       if(this.formData){
         this.form.patchValue(this.formData?.formData?.formDetails);
@@ -43,7 +44,7 @@ export class DynamicFormComponent implements OnInit {
       if (value) {
         const selectedDate = new Date(value);
         const now = new Date();
-        const diffInHours = (selectedDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+        const diffInHours = (now.getTime() - selectedDate.getTime()) / (1000 * 60 * 60);
 
         if (diffInHours > 24) {
           this.form.get('delay_justification')?.setValidators([Validators.required]);
@@ -56,6 +57,13 @@ export class DynamicFormComponent implements OnInit {
 
   }
 
+  private onClickScrollTo = (event:MouseEvent) =>{
+    const target = event.target as HTMLElement;
+    if(target && target.classList.contains('scrollto')){
+      this.scrollToControl('root_cause')
+    }
+  }
+
 
 
   onSubmit() {
@@ -65,4 +73,15 @@ export class DynamicFormComponent implements OnInit {
       this.form.markAllAsTouched();
     }
   }
+
+    scrollToControl(controlName: string) {
+    const element = this.el.nativeElement.querySelector(
+      `[ng-reflect-name="${controlName}"]`
+    );
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.focus(); // optional
+    }
+  }
+
 }

@@ -14,6 +14,7 @@ import { FieldConfig } from './field-base';
         [src]="imageSrc"
         [alt]="config.label || 'Image'"
         class="preview-image"
+        [ngClass]="{'scrollto':config.type === 'scrollto'}"
       />
       <div *ngIf="!imageSrc" class="no-image">No image available</div>
     </div>
