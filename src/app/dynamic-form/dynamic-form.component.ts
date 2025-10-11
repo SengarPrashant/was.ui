@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormBuilderService } from './form-builder.service';
 import { DynamicFieldDirective } from './dynamic-field.directive';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,6 +38,22 @@ export class DynamicFormComponent implements OnInit {
         this.form.patchValue(this.formData?.formData?.formDetails);
       }
        this.formReady.emit(this.form); 
+
+      this.form.get?.('inc_datetime')?.valueChanges.subscribe(value => {
+      if (value) {
+        const selectedDate = new Date(value);
+        const now = new Date();
+        const diffInHours = (selectedDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+        if (diffInHours > 24) {
+          this.form.get('delay_justification')?.setValidators([Validators.required]);
+        } else {
+          this.form.get('delay_justification')?.clearValidators();
+        }
+        this.form.get('delay_justification')?.updateValueAndValidity();
+      }
+    });
+
   }
 
 

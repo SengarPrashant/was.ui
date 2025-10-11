@@ -18,8 +18,9 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
   ],
   template: `
     <div [formGroup]="form" class="doc-upload">
-      <mat-label>{{ config.label }}</mat-label>
-      <span class="text-red-500" *ngIf="isRequired()">*</span>
+      <mat-label>{{ config.label }} <span class="text-red-500" *ngIf="isRequired()">*</span>
+      </mat-label>
+      
 
       <input
         type="file"

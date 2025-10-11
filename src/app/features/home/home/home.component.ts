@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit {
           zoneFacility: item.zoneFacility?.value,
           submittedBy: item.submittedBy?.value,
           pendingWith: item.pendingWith?.value,
-          statusName: item.status?.value,
+          statusName: this.activeTabIndex === 0 ? item.status?.value : 'Submitted',
           statusId:item.status?.key,
           submittedDate:this.datePipe.transform(item.submittedDate, 'dd/MM/yyy, hh:mm a'),
           statusClass:this.getClassName(item.status?.key),
@@ -162,7 +162,19 @@ onTabChange(event: MatTabChangeEvent): void {
     // Get the index of the newly selected tab
     this.activeTabIndex = event.index;
     this.tableData = [];
+    this.updateColumnLabel(event.index);
     this.fetchListData();
+  }
+
+  updateColumnLabel(tabId:number){
+    const targetColumn = this.columns.find(col => col.key === 'pendingWith');
+    if(targetColumn){
+      if(tabId === 0){
+        targetColumn.label = 'Pending with'
+      } else if(tabId === 1){
+        targetColumn.label = 'Submitted to'
+      }
+    }
   }
 
   getClassName(key: string):string {

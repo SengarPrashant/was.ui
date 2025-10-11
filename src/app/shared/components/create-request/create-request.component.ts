@@ -186,7 +186,7 @@ onDynamicFormReady(form: FormGroup) {
     formData.append('FacilityZoneLocation', formValue.facilityZoneLocation);
     formData.append('Zone', formValue.zone);
     formData.append('ZoneFacility', formValue.facility);
-    formData.append('FormId', formValue.workPermit);
+    formData.append('FormId', this.formConfig?.formDetails?.formId);
     formData.append('FormType', this.requestType === 1 ? 'work_permit' : 'incident');
      formData.append('Project', formValue.project);
     //formData.append('Files', files);

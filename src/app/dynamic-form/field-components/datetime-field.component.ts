@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {  Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FieldConfig } from './field-base';
@@ -36,7 +36,7 @@ import { MatIconModule } from '@angular/material/icon';
           [owlDateTimeTrigger]="picker"
           [placeholder]="config.type === 'date' ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm'"
           formControlName="{{ config.fieldKey }}"
-          [min]="!pastDateAllowed && viewType !== 'edit' ? today : null"
+          [min]="pastDateNotAllowed && viewType !== 'edit' ? today : null"
         />
  
       <!-- our custom icon -->
@@ -87,6 +87,7 @@ export class DateTimeFieldComponent implements OnInit {
   today: Date = new Date();
 
   ngOnInit() {
+    
   }
 
   get control() {
@@ -103,7 +104,7 @@ export class DateTimeFieldComponent implements OnInit {
     return this.config?.validations?.some(v => v.type === 'required' && v.value === 'true') ?? false;
   }
 
-  get pastDateAllowed(): boolean {
-    return this.config?.validations?.some(v => v.type === 'pastDateAllowed' && v.value === 'true') ?? false;
+  get pastDateNotAllowed(): boolean {
+    return this.config?.validations?.some(v => v.type === 'pastDateAllowed' && v.value === 'false') ?? false;
   }
 }

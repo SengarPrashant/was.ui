@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FieldConfig } from './field-base';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
   template: `
     <div [formGroup]="form">
      <mat-label>{{ config.label }}</mat-label>
-     <span class="text-red-500" *ngIf="isRequired()">*</span>
+     <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
     <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea">
     </textarea>
      <mat-error *ngIf="hasError('required')">
@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 export class TextareaFieldComponent {
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
+  validators = Validators
 
     get control() {
     return this.form.get(this.config.fieldKey);

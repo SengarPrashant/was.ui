@@ -36,7 +36,7 @@
 .popup-body {
   padding: 20px;
   overflow-y: auto;
-  max-height: calc(580px - 65px); /* subtract approx header height */
+  height: 100vh; /* subtract approx header height */
 }
 
 
