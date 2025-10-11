@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   template: `
-    <div [formGroup]="form">
+    <div [formGroup]="form" [ngClass]="getClassName()">
      <mat-label>{{ config.label }}</mat-label>
      <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
     <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea">
@@ -19,7 +19,18 @@ import { MatInputModule } from '@angular/material/input';
         {{ config.label }} is required
       </mat-error>
     </div>
-  `
+  `,
+
+  styles: [
+    `
+   .hide{
+    display:none
+    }
+    .show{
+    display:block
+    }
+    `,
+  ]
 })
 export class TextareaFieldComponent {
   @Input() config!: FieldConfig;
@@ -39,6 +50,18 @@ export class TextareaFieldComponent {
   isRequired(): boolean {
     if (!this.config?.validations) return false;
     return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
+  }
+
+  getClassName():string{
+    let className = ''
+    if(this.config.fieldKey === 'delay_justification'){
+      if(this.form.get(this.config.fieldKey)?.hasValidator(Validators.required)){
+        className = 'show'
+      } else {
+        className = 'hide'
+      }
+    }
+    return className;
   }
   
 }
