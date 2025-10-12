@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
     <div [formGroup]="form" [ngClass]="getClassName()">
      <mat-label>{{ config.label }}</mat-label>
      <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
-    <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea">
+    <textarea matInput [formControlName]="config.fieldKey" class="custom-textarea" [attr.data-scroll]="config.fieldKey">
     </textarea>
      <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required

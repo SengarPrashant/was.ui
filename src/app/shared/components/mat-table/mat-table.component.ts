@@ -49,6 +49,7 @@ export class MatTableComponent implements OnChanges {
   @Input() clickedTopStatus:string = '';
   filterValue:string = '';
   user:User | null = null;
+  @Input() activeTabIndex = 0;
 
   constructor(private router: Router, private authService:AuthService){
     this.user = this.authService.getUser();
@@ -92,12 +93,27 @@ clearValue(){
 }
 
   isDisable(action: string, row: any) {
-    if (this.router.url.includes('/home')) {
+    if (this.router.url.includes('/home') && this. activeTabIndex === 0) {
       if (action === 'move' && !(row?.statusId === wpStatusEnum.Approved || row?.statusId === wpStatusEnum.Work_in_progress)) {
         return true;
       } else if (action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending) {
         return true;
       } else if (action === 'edit') {
+        if((this.user?.roleId === roleTypeEnum.EHS_Manager || this.user?.roleId === roleTypeEnum.Admin) 
+          && row?.statusId !== wpStatusEnum.Pending){
+          return true;
+        }
+        if(this.user?.roleId === roleTypeEnum.PM_FM && row?.pendingWithId !== '3'){
+          return true;
+        }
+        return false;
+      } else {
+        return false;
+      }
+    }
+
+     if (this.router.url.includes('/home') && this. activeTabIndex === 1) {
+      if (action === 'edit') {
         if((this.user?.roleId === roleTypeEnum.EHS_Manager || this.user?.roleId === roleTypeEnum.Admin) 
           && row?.statusId !== wpStatusEnum.Pending){
           return true;

@@ -3,11 +3,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalService } from '../../services/global.service';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-document-preview-modal',
   standalone: true,
-  imports: [SafeUrlPipe, CommonModule],
+  imports: [SafeUrlPipe, CommonModule, MatIconModule],
   templateUrl: './document-preview-modal.component.html',
   styleUrl: './document-preview-modal.component.css'
 })
@@ -40,6 +41,10 @@ export class DocumentPreviewModalComponent implements OnInit {
     } else if (mimeType.startsWith('image/')) {
       this.imageUrl = fileURL; // bind to <img>
     }
+  }
+
+  onClickClose(){
+    this.dialogRef.close(true);
   }
 
 }

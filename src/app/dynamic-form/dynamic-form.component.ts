@@ -76,7 +76,7 @@ export class DynamicFormComponent implements OnInit {
 
     scrollToControl(controlName: string) {
     const element = this.el.nativeElement.querySelector(
-      `[ng-reflect-name="${controlName}"]`
+      `[data-scroll="${controlName}"]`
     );
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });

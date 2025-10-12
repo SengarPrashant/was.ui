@@ -78,6 +78,11 @@ import { MatIconModule } from '@angular/material/icon';
     }
     ::ng-deep .mat-mdc-form-field-infix { min-height: 40px; }
     ::ng-deep .mat-mdc-text-field-wrapper { height: 40px !important; }
+    ::ng-deep .mdc-text-field--outlined.mdc-text-field--disabled .mdc-text-field__input {
+    color: #252525;}
+   ::ng-deep .owl-dt-container-disabled, .owl-dt-trigger-disabled{
+   opacity: initial;
+   }
   `]
 })
 export class DateTimeFieldComponent implements OnInit {

@@ -1,19 +1,20 @@
-
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
-  <mat-tab label="Work Permits">
-    <app-top-card
-    *ngIf="user?.roleId !== 3"
-    [topStatus]="wpStatus"
-    (clickedStatus)="onStatusClick($event)">
-    </app-top-card>
-    <div class="date-range-wrapper">
-      <mat-form-field appearance="outline" class="date-time-full">
+<div class="date-range-wrapper">
+      <mat-form-field appearance="outline" class="date-time-full-custom" [ngStyle]="{'top':activeTabIndex === 0 ? '128px': '54px'}">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
           <input matStartDate formControlName="start" placeholder="Start date" readonly>
           <input matEndDate formControlName="end" placeholder="End date" readonly>
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+         <!-- Clear button -->
+  <button
+    *ngIf="range.value.start || range.value.end"
+    mat-icon-button
+    matSuffix
+    aria-label="Clear date range"
+    (click)="clearDateRange($event)">
+    <mat-icon>close</mat-icon>
+  </button>
         <mat-date-range-picker #picker></mat-date-range-picker>
     
         @if (range.controls.start.hasError('matStartDateInvalid')) {
@@ -23,7 +24,15 @@
         <mat-error>Invalid end date</mat-error>
         }
       </mat-form-field>
+
     </div>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
+  <mat-tab label="Work Permits">
+    <app-top-card
+    *ngIf="user?.roleId !== 3"
+    [topStatus]="wpStatus"
+    (clickedStatus)="onStatusClick($event)">
+    </app-top-card>
    <app-mat-table
     [data]="tableData"
     [columns]="columns"
@@ -33,35 +42,19 @@
     [actionMenu]="actionMenu"
     [clickedTopStatus]="clickedTopStatus"
     [sticky]="true"
+    [activeTabIndex]="activeTabIndex"
 ></app-mat-table>
   </mat-tab>
   <mat-tab label="Incident">
-    <div class="date-range-wrapper">
-    <mat-form-field appearance="outline" class="date-time-full">
-    <mat-label>Enter a date range</mat-label>
-    <mat-date-range-input [formGroup]="range" [rangePicker]="picker2">
-      <input matStartDate formControlName="start" placeholder="Start date" readonly>
-      <input matEndDate formControlName="end" placeholder="End date" readonly>
-    </mat-date-range-input>
-    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker2></mat-date-range-picker>
-
-    @if (range.controls.start.hasError('matStartDateInvalid')) {
-    <mat-error>Invalid start date</mat-error>
-    }
-    @if (range.controls.end.hasError('matEndDateInvalid')) {
-    <mat-error>Invalid end date</mat-error>
-    }
-    </mat-form-field>
-    </div>
    <app-mat-table
     [data]="tableData"
     [columns]="columns"
     [displayedColumns]="displayedColumns"
     [requiredRightSpace]="false"
     (action)="onAction($event)"
-    [actionMenu]="actionMenu"
+    [actionMenu]="actionMenuIncident"
     [sticky]="true"
+    [activeTabIndex]="activeTabIndex"
 ></app-mat-table>
   </mat-tab>
 </mat-tab-group>

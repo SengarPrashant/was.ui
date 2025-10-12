@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,7 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
         type="file"
         multiple
         (change)="onFileChange($event)"
+        [attr.accept]="acceptedFormats"
         class="file-input"
       />
 
@@ -101,7 +102,8 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
       }
   `]
 })
-export class DocumentUploadFieldComponent {
+export class DocumentUploadFieldComponent implements OnInit {
+   acceptedFormats: string = ''; // allows all images + pdf
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
   @Input() documents:DocumentModel[] = [];
@@ -111,6 +113,10 @@ export class DocumentUploadFieldComponent {
 
   constructor(private globalService:GlobalService){}
 
+  
+ngOnInit() {
+  this.setAcceptedFormats();
+}
   get control() {
     return this.form.get(this.config.fieldKey);
   }
@@ -138,7 +144,16 @@ export class DocumentUploadFieldComponent {
       return;
     }
 
+    const allowedTypes = this.acceptedFormats.split(',');
+    
     for (const file of selectedFiles) {
+       // check MIME type
+    if (!allowedTypes.includes(file.type)) {
+      const message = this.config.validations?.find(v => v.type === 'allowedTypes')?.message || 'Invalid file type';
+      this.error = `${file.name}: ${message}`;
+      return;
+    }
+
       if (file.size > 10 * 1024 * 1024) { // 10MB
         this.error = `${file.name} exceeds 10MB`;
         return;
@@ -198,6 +213,21 @@ export class DocumentUploadFieldComponent {
       }
     });
   }
+
+setAcceptedFormats() {
+  const allowed = this.config?.validations?.find(v => v.type === 'allowedTypes')?.value;
+  if (allowed) {
+    // convert "jpeg,jpg,png,pdf" -> "image/jpeg,image/jpg,image/png,application/pdf"
+    const types = allowed.split(',').map(ext => {
+      ext = ext.trim().toLowerCase();
+      if (ext === 'pdf') return 'application/pdf';
+      return `image/${ext}`;
+    });
+    this.acceptedFormats = types.join(',');
+  } else {
+    this.acceptedFormats = 'image/*,application/pdf'; // fallback
+  }
+}
 
 
 }

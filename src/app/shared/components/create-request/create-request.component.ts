@@ -110,7 +110,7 @@ onWorkPermitChange(value: string) {
     config$ = this.globalService.preValidateWorkPermit('work_permit', value).pipe(
       switchMap((result: { allowed: boolean }) => {
         //result.allowed === true
-        if (true) {
+        if (result.allowed === true) {
           return this.globalService.getFormConfig(value, this.requestType); // allowed → get config
         } else {
           return of(null); // not allowed
@@ -206,6 +206,7 @@ onDynamicFormReady(form: FormGroup) {
       error: (err) => {
         console.error('Error fetching users:', err);
         this.loadingService.hide();
+        this.toastService.showToast('Error', err?.message , 'error');
         this.loading = false;
       }
     });

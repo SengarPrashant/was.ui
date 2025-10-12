@@ -55,8 +55,10 @@ export class HomeComponent implements OnInit {
     tableData:wpList[] = [];
     wpStatus:metaDataModel[] = [];
     inStatus:metaDataModel[] = [];
-    actionMenu:actionMenuModel[] = [
-      ]
+    startDate:Date | null = null;
+    endDate:Date | null = null;
+    actionMenu:actionMenuModel[] = [];
+    actionMenuIncident:actionMenuModel[] = []
     columns = [
     {key:'requestId', label:'Id', colWidth:"160px"},
     {key:'formTitle', label:'Work Permit Type', colWidth:"160px"}, 
@@ -101,21 +103,29 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     if(this.user?.roleId){
       this.setActionByRole(this.user.roleId);
+      this.setActionByRoleIncident(this.user.roleId);
     }
     this.fetchListData();
   }
 
     onDateRangeChange(val: { start?: Date | null; end?: Date | null }) {
-    const start = val.start ? val.start : null;
-    const end = val.end ? val.end : null;
-    this.fetchListData({fromDate:start, toDate:end})
+    this.startDate = val.start ? val.start : null;
+    this.endDate = val.end ? val.end : null;
+    this.fetchListData()
   }
 
-  fetchListData(val?:{fromDate:Date | null, toDate?:Date | null}){
+// Helper: Convert a Date to IST Date object with custom time
+ toIST(date: Date, hours = 0, minutes = 0, seconds = 0): Date {
+  const d = new Date(date);
+  d.setHours(hours, minutes, seconds, 0);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000); // Adjust for local offset
+}
+
+  fetchListData(){
     const payload = {
       formType:this.activeTabIndex === 0 ? 'work_permit' : 'incident',
-      fromDate: val?.fromDate? val?.fromDate : null,
-      toDate: val?.toDate? val?.toDate : null
+      fromDate: this.startDate? this.toIST(this.startDate!, 0, 0, 0): null,
+      toDate: this.endDate? this.toIST(this.endDate!, 23, 59, 59):null,
     }
      this.globalService.getAllWorkPermitAndIncident(payload).subscribe(res => {
       if (res) {
@@ -202,6 +212,21 @@ onTabChange(event: MatTabChangeEvent): void {
     return className;
   }
 
+  setActionByRoleIncident(roleId: number) {
+    this.actionMenuIncident = [];
+    if (roleId === roleTypeEnum.PM_FM) {
+      this.actionMenuIncident.push(
+        { name: 'view', label: 'View', icon: 'visibility', enable: true },
+      )
+    }
+    if (roleId === roleTypeEnum.Admin || roleId === roleTypeEnum.EHS_Manager) {
+      this.actionMenuIncident.push(
+        { name: 'view', label: 'View', icon: 'visibility', enable: true },
+        { name: 'edit', label: 'Edit', icon: 'edit', enable: true },
+      )
+    }
+  }
+
 setActionByRole(roleId:number){
   this.actionMenu = []
   if(roleId === roleTypeEnum.PM_FM){
@@ -245,6 +270,14 @@ onAction(event: { type: string; row: wpList }) {
       break;
   }
 }
+
+// clearDates() {
+//   this.range.patchValue({ start: null, end: null });
+// }
+ clearDateRange(event: Event) {
+    event.stopPropagation(); // prevent datepicker from opening
+    this.range.patchValue({ start: null, end: null });
+  }
 
   async onEditAndView(row: wpList) {
     try {

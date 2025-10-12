@@ -1,4 +1,4 @@
-import { Component, Input, computed, inject, Signal } from '@angular/core';
+import { Component, Input, computed, inject, Signal, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -68,13 +68,18 @@ export class CheckboxListFieldComponent {
   ngOnInit() {
     this.initializeCheckboxes();
   }
-
   private initializeCheckboxes() {
+     // Keep parent FormControl in sync with FormArray
+    const parentValue: boolean[] = this.form.get(this.config.fieldKey)?.value; 
+    console.log('df', this.form.get(this.config.fieldKey)?.value)
     const options = this.options();
     const formArray = this.fb.array([]);
 
     options.forEach(() => formArray.push(this.fb.control(false)));
     this.form.setControl(this.config.fieldKey, formArray);
+     if (parentValue) {
+        this.formArray.patchValue(parentValue);
+      }
   }
 
   onCheckboxChange(event: any, option: generalOptionModel) {
@@ -100,4 +105,5 @@ export class CheckboxListFieldComponent {
       ) ?? false
     );
   }
+  
 }
