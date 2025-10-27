@@ -72,6 +72,10 @@ export class CreateRequestComponent implements OnInit {
     if(this.selectedAction === 'view'){
       this.mainForm.disable();
     }
+
+    if(this.selectedAction === 'edit'){
+      this.mainForm?.get('workPermit')?.disable();
+    }
     }
   }
 

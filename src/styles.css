@@ -16,6 +16,7 @@
   --mdc-outlined-text-field-focus-label-text-color: #1A0F92;
   --mdc-outlined-text-field-focus-outline-width:1px;
   --mat-form-field-container-text-size:14px;
+   --mdc-outlined-text-field-disabled-outline-color: #d7d7d7;
 }
 
 html,

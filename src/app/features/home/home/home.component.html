@@ -62,7 +62,7 @@
 <div class="custom-popup" *ngIf="openDilog">
   <div class="custom-popup-content">
     <div class="popup-header">
-      <h1>{{selectedAction === 'view'? 'View' : 'Edit'}} work permit</h1>
+      <h1>{{selectedAction === 'view'? 'View' : 'Edit'}} {{activeTabIndex === 0 ? 'work permit':'Incident'}}</h1>
        <button (click)="openDilog = false" class="close-popup">X</button>
     </div>
     <div class="popup-body">

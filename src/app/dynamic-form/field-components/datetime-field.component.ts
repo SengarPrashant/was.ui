@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
       </div>
 
       <!-- Combined DateTime Picker -->
-      <mat-form-field appearance="outline" class="date-time-full">
+      <mat-form-field appearance="outline" class="date-time-full" style="margin-top:5px;">
         <input
           matInput
           [owlDateTime]="picker"
@@ -81,8 +81,16 @@ import { MatIconModule } from '@angular/material/icon';
     ::ng-deep .mdc-text-field--outlined.mdc-text-field--disabled .mdc-text-field__input {
     color: #252525;}
    ::ng-deep .owl-dt-container-disabled, .owl-dt-trigger-disabled{
-   opacity: initial;
+   opacity: 0.8;
    }
+  // ::ng-deep .mdc-text-field--outlined .mdc-notched-outline{
+  // background: rgb(209 209 209 / 13%);
+  // }
+
+  .mat-mdc-form-field-error{
+  margin-top:-20px;
+  }
+
   `]
 })
 export class DateTimeFieldComponent implements OnInit {

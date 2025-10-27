@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FieldConfig } from './field-base';
@@ -12,7 +12,7 @@ import { FieldConfig } from './field-base';
   template: `
     <div [formGroup]="form">
      <mat-label>{{ config.label }}</mat-label>
-     <span class="text-red-500" *ngIf="isRequired()">*</span>
+     <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
     <input matInput [formControlName]="config.fieldKey" class="custom-input" [type]="config.type === 'text'? 'text': 'number'" />
     <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required
@@ -34,6 +34,7 @@ import { FieldConfig } from './field-base';
   `
 })
 export class TextFieldComponent {
+  validators = Validators
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
 

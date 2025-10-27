@@ -26,15 +26,16 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
         type="file"
         multiple
         (change)="onFileChange($event)"
-        [attr.accept]="acceptedFormats"
+        [accept]="acceptedFormats"
         class="file-input"
+        #fileInput
+        [disabled]="viewType === 'view'"
       />
-
       <!-- file list -->
       <div *ngIf="files.length" class="file-list">
         <div *ngFor="let file of files; let i = index" class="file-item">
           {{ file.name }} ({{ formatSize(file.size) }})
-          <button type="button" class="remove-btn" (click)="removeFile(i)">x</button>
+          <button type="button" class="remove-btn" (click)="removeFile(i, fileInput)">x</button>
         </div>
       </div>
 
@@ -66,6 +67,7 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
       flex-direction: column;
       gap: 8px;
       width: 100%;
+      position:relative;
     }
     .file-input {
       padding: 6px;
@@ -100,6 +102,14 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
       cursor: pointer;
       font-weight: bold;
       }
+
+      .clear{
+      position: absolute;
+    top: 39px;
+    right: 17px;
+    z-index: 100;
+    cursor: pointer;
+      }
   `]
 })
 export class DocumentUploadFieldComponent implements OnInit {
@@ -110,6 +120,7 @@ export class DocumentUploadFieldComponent implements OnInit {
   files: File[] = [];
   error: string | null = null;
   dialog = inject(MatDialog);
+   @Input() viewType:string = 'none';
 
   constructor(private globalService:GlobalService){}
 
@@ -168,9 +179,12 @@ ngOnInit() {
     this.control?.markAsTouched();
   }
 
-  removeFile(index: number): void {
+  removeFile(index: number, fileInput: HTMLInputElement): void {
     this.files.splice(index, 1);
     this.control?.setValue(this.files);
+    if(this.files?.length === 0){
+      this.clearFile(fileInput)
+    }
   }
 
   formatSize(size: number): string {
@@ -225,8 +239,13 @@ setAcceptedFormats() {
     });
     this.acceptedFormats = types.join(',');
   } else {
-    this.acceptedFormats = 'image/*,application/pdf'; // fallback
+    this.acceptedFormats = 'image/jpeg,image/jpg,image/png,image/webp,image/gif,application/pdf'; // fallback
   }
+}
+
+clearFile(fileInput: HTMLInputElement) {
+  if(this.files?.length === 0)
+  fileInput.value = ''; // clears the file input
 }
 
 

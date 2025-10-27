@@ -5,6 +5,7 @@ import { FormBuilderService } from './form-builder.service';
 import { DynamicFieldDirective } from './dynamic-field.directive';
 import { MatButtonModule } from '@angular/material/button';
 import { formDataByIDModel } from '../shared/models/work-permit.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -25,11 +26,14 @@ export class DynamicFormComponent implements OnInit {
   @Input() selectedAction:string = 'none'
 
   form!: FormGroup;
+  lastValidStartDate: any = null;
+  lastValidEndDate: any = null;
 
   @ViewChild(DynamicFieldDirective, { static: true }) dynamicField!: DynamicFieldDirective;
 
   constructor(private fb: FormBuilder, private el:ElementRef,
-    private formBuilderService:FormBuilderService
+    private formBuilderService:FormBuilderService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -39,6 +43,8 @@ export class DynamicFormComponent implements OnInit {
         this.form.patchValue(this.formData?.formData?.formDetails);
       }
        this.formReady.emit(this.form); 
+        this.lastValidStartDate = this.form.get('datetime_of_work_from')?.value;
+    this.lastValidEndDate = this.form.get('datetime_of_work_to')?.value;
 
       this.form.get?.('inc_datetime')?.valueChanges.subscribe(value => {
       if (value) {
@@ -54,6 +60,9 @@ export class DynamicFormComponent implements OnInit {
         this.form.get('delay_justification')?.updateValueAndValidity();
       }
     });
+
+    this.form.get('datetime_of_work_from')?.valueChanges.subscribe(() => this.checkDateDifference(1));
+    this.form.get('datetime_of_work_to')?.valueChanges.subscribe(() => this.checkDateDifference(2));
 
   }
 
@@ -80,7 +89,33 @@ export class DynamicFormComponent implements OnInit {
     );
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      element.focus(); // optional
+    }
+  }
+
+
+   private checkDateDifference(dateType:number) {
+    const start = this.form.get('datetime_of_work_from')?.value;
+    const end = this.form.get('datetime_of_work_to')?.value;
+
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const diffDays = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+
+      if (diffDays > 7) {
+        alert('⚠️ The difference between start and end date cannot exceed 7 days.');
+        if(dateType === 1){
+          this.form.get('datetime_of_work_from')?.setValue(this.lastValidStartDate, { emitEvent: false });
+        }
+
+        if(dateType === 2){
+          this.form.get('datetime_of_work_to')?.setValue(this.lastValidEndDate, { emitEvent: false });
+        }
+        // this.snackBar.open('⚠️ Date range cannot exceed 7 days.', 'Close', {
+        //   duration: 4000,
+        //   panelClass: ['warning-snackbar']
+        // });
+      }
     }
   }
 

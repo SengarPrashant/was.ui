@@ -178,11 +178,13 @@ onTabChange(event: MatTabChangeEvent): void {
 
   updateColumnLabel(tabId:number){
     const targetColumn = this.columns.find(col => col.key === 'pendingWith');
-    if(targetColumn){
+    const permitTypeColumn = this.columns.find(col => col.key === 'formTitle');
+    if(targetColumn && permitTypeColumn){
       if(tabId === 0){
         targetColumn.label = 'Pending with'
+        permitTypeColumn.label = 'Work Permit Type'
       } else if(tabId === 1){
-        targetColumn.label = 'Submitted to'
+        permitTypeColumn.label = 'Incidennt Type'
       }
     }
   }

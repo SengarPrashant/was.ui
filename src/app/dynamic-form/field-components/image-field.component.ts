@@ -39,6 +39,7 @@ import { FieldConfig } from './field-base';
         border-radius: 8px;
         border: 1px solid #ccc;
         padding: 4px;
+        cursor:pointer;
         background-color: #f9f9f9;
       }
 

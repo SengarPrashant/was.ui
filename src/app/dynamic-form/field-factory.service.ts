@@ -12,6 +12,7 @@ import { DocumentUploadFieldComponent } from './field-components/document-upload
 import { CheckboxListFieldComponent } from './field-components/checkbox-list-field.component';
 import { ImageFieldComponent } from './field-components/image-field.component';
 import { TableFieldComponent } from './field-components/table-field.component';
+import { CheckboxListFieldFixedComponent } from './field-components/checkbox-list-field-fixed.component';
 
 @Injectable({ providedIn: 'root' })
 export class FieldFactoryService {
@@ -31,6 +32,7 @@ export class FieldFactoryService {
       case 'file': return DocumentUploadFieldComponent;
       case 'checkboxlist': return CheckboxListFieldComponent;
       case 'checkboxlist-h': return CheckboxListFieldComponent;
+       case 'checkboxlist-i': return CheckboxListFieldFixedComponent;
       case 'img': return ImageFieldComponent;
        case 'scrollto': return ImageFieldComponent;
       case 'table': return TableFieldComponent;
