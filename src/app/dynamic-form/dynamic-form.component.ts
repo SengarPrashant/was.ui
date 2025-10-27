@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormBuilderService } from './form-builder.service';
@@ -6,6 +6,8 @@ import { DynamicFieldDirective } from './dynamic-field.directive';
 import { MatButtonModule } from '@angular/material/button';
 import { formDataByIDModel } from '../shared/models/work-permit.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -20,6 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./dynamic-form.component.css'] 
 })
 export class DynamicFormComponent implements OnInit {
+  dialog = inject(MatDialog);
   @Input() config: any;
   @Input() formData!:formDataByIDModel
   @Output() formReady = new EventEmitter<FormGroup>();
@@ -103,7 +106,7 @@ export class DynamicFormComponent implements OnInit {
       const diffDays = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
       if (diffDays > 7) {
-        alert('⚠️ The difference between start and end date cannot exceed 7 days.');
+        this.showToastMessage();
         if(dateType === 1){
           this.form.get('datetime_of_work_from')?.setValue(this.lastValidStartDate, { emitEvent: false });
         }
@@ -118,5 +121,22 @@ export class DynamicFormComponent implements OnInit {
       }
     }
   }
+
+
+  showToastMessage(): void {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Work permit',
+          message: `Work permit date can not be allowed more than 7 days`,
+          confirmText: 'Ok',
+          cancelText: 'Cancel',
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((confirmed) => {
+
+      });
+    }
 
 }
