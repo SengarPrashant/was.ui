@@ -127,11 +127,28 @@ onWorkPermitChange(value: string) {
     if (config) {
       this.formConfig = config;
     } else {
-      this.toastService.showToast('Error', 'You can not create a new request', 'error');
+      this.showToastMessage();
       this.formConfig = null;
     }
   });
 }
+
+
+ showToastMessage(): void {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Work Permit Restriction',
+          message: `You cannot create a new work permit until all previous work permit requests have been closed.`,
+          confirmText: 'Ok',
+          cancelText: 'Cancel',
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((confirmed) => {
+
+      });
+    }
 
 
   onSave() {
