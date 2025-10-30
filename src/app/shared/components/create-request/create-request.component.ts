@@ -101,6 +101,12 @@ get labelText() {
     }
   }
 
+  onLocationChange(selectedLocationKey: string) {
+    this.lookupService.setSelectedLocationKey(selectedLocationKey);
+  }
+
+  
+
 onWorkPermitChange(value: string) {
   this.formConfig = null;
 

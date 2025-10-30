@@ -22,11 +22,15 @@ export class LookupService {
    // Signal to store selected zone
   readonly selectedZoneKey = signal<string | null>(null);
 
+   // Signal to store selected zone
+  readonly selectedLocationKey = signal<string | null>(null);
 
-  readonly zones = computed(() =>
-    this.allOptions().filter(opt => opt.optionType === 'zone')
+
+  readonly zones = computed(() =>{
+    const selectedLocation = this.selectedLocationKey();
+    return this.allOptions().filter(opt => opt.optionType === 'zone' && opt.cascadeKey === selectedLocation)
       .map(opt => ({ id: opt.optionKey, name: opt.optionValue }))
-  );
+});
 
   readonly workPermitOptions = computed(() =>
     this.allOptions().filter(opt => opt.optionType === 'work_permit')
@@ -100,6 +104,11 @@ export class LookupService {
    // Set selected zone key
   setSelectedZoneKey(zoneKey: string | null) {
     this.selectedZoneKey.set(zoneKey);
+  }
+
+   // Set selected zone key
+  setSelectedLocationKey(locaionKey: string | null) {
+    this.selectedLocationKey.set(locaionKey);
   }
 
 }

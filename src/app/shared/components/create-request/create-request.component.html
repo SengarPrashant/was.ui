@@ -12,7 +12,11 @@
     <div class="grid-layout">
         <div class="grid-col col-3">
             <mat-label>Location</mat-label><span class="text-red-500">*</span>
-            <mat-select formControlName="facilityZoneLocation" class="custom-select" placeholder="Select location">
+            <mat-select 
+            formControlName="facilityZoneLocation" 
+            class="custom-select" 
+            (selectionChange)="onLocationChange($event.value)"
+            placeholder="Select location">
                 <mat-option *ngFor="let loc of lookupService.facilityZoneLocation()" [value]="loc.id">
                     {{ loc.name }}
                 </mat-option>
