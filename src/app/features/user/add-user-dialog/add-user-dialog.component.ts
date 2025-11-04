@@ -54,13 +54,15 @@ export class AddUserDialogComponent {
       mobile: [data?.mobile || '', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       roleId: [data?.roleId || '', Validators.required],
       facilityZoneLocation:[data?.facilityZoneLocation || '', Validators.required],
-      zone:[data?.facilityZoneLocation || '', Validators.required],
-      facility:[data?.facilityZoneLocation || '', Validators.required]
+      zone:[data?.zone || '', Validators.required],
+      facility:[data?.facility || '', Validators.required]
     });
 
     if(this.isEditMode){
-      this.onZoneChange(data?.facilityZoneLocation);
-      this.userForm.patchValue({facility:data?.facilityZoneLocation})
+      this.onLocationChange(data?.facilityZoneLocation)
+      this.onZoneChange(data?.zone);
+      this.userForm.patchValue({facility:data?.facility});
+       this.userForm.patchValue({zone:data?.zone})
     }
   }
 
@@ -102,7 +104,13 @@ export class AddUserDialogComponent {
   }
 }
 
+  onLocationChange(selectedLocationKey: string) {
+    this.userForm.get('zone')?.patchValue(null);
+    this.lookupService.setSelectedLocationKey(selectedLocationKey);
+  }
+
 onZoneChange(selectedZoneKey: string) {
+   this.userForm.get('facility')?.patchValue(null);
   this.lookupService.setSelectedZoneKey(selectedZoneKey);
 }
 

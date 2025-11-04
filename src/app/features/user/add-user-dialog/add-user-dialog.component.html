@@ -49,7 +49,9 @@
 
     <div class="form-field">
         <mat-label>Location</mat-label><span>*</span>
-        <mat-select formControlName="facilityZoneLocation" class="custom-select" >
+        <mat-select formControlName="facilityZoneLocation" class="custom-select" 
+        (selectionChange)="onLocationChange($event.value)"
+        >
           <mat-option *ngFor="let loc of lookupService.facilityZoneLocation()" [value]="loc.id">
             {{ loc.name }}
           </mat-option>

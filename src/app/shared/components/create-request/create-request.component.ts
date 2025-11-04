@@ -67,6 +67,7 @@ export class CreateRequestComponent implements OnInit {
         id:data?.id
       }
      this.onWorkPermitChange(obj.workPermit);
+     this.onLocationChange(obj?.facilityZoneLocation)
      this.onZoneChange(obj.zone);
     this.mainForm.patchValue(obj);
     if(this.selectedAction === 'view'){
@@ -93,6 +94,7 @@ get labelText() {
 }
 
   onZoneChange(selectedZoneKey: string) {
+    this.mainForm.get('facility')?.patchValue(null);
     this.lookupService.setSelectedZoneKey(selectedZoneKey);
     if(['10','11', '12', '13'].includes(selectedZoneKey)){
       this.showProject = true;
@@ -102,14 +104,15 @@ get labelText() {
   }
 
   onLocationChange(selectedLocationKey: string) {
+    this.mainForm.get('zone')?.patchValue(null);
     this.lookupService.setSelectedLocationKey(selectedLocationKey);
   }
 
   
 
 onWorkPermitChange(value: string) {
+  this.loadingService.show();
   this.formConfig = null;
-
   let config$;
 
   if (this.selectedAction !== 'none' || this.requestType === 2) {
@@ -132,8 +135,10 @@ onWorkPermitChange(value: string) {
   config$.subscribe(config => {
     if (config) {
       this.formConfig = config;
+      this.loadingService.hide();
     } else {
       this.showToastMessage();
+      this.loadingService.hide();
       this.formConfig = null;
     }
   });
@@ -233,7 +238,7 @@ onDynamicFormReady(form: FormGroup) {
       error: (err) => {
         console.error('Error fetching users:', err);
         this.loadingService.hide();
-        this.toastService.showToast('Error', err?.message , 'error');
+        this.toastService.showToast('Error', err?.error?.message , 'error');
         this.loading = false;
       }
     });
