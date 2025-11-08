@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -49,10 +49,25 @@ export class MatTableComponent implements OnChanges {
   @Input() clickedTopStatus:string = '';
   filterValue:string = '';
   user:User | null = null;
-  @Input() activeTabIndex = 0;
+  @Input() activeTabIndex = 0 
+  isMobile = false;
+
 
   constructor(private router: Router, private authService:AuthService){
     this.user = this.authService.getUser();
+  }
+
+  ngOnInit() {
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

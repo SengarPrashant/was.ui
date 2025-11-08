@@ -203,7 +203,48 @@ mat-radio-button {
   .col-12, .col-10, .col-8, .col-6, .col-4, .col-3, .col-2, .col-1 {
     grid-column: span 12;
   }
+
+  .stat-card{
+    flex: 0 !important;;
+    min-width: 150px !important;
+  }
+
+ .date-time-full-custom{
+    left:0;
+    right:auto;
+    width: 50%;
+    top: 310px!important;;
+  }
+
+  .hide-mobile{
+    display: none!important;
+  }
+
+  .main-content{
+    padding: 10px;
+  }
+
+  .header{
+    display: block !important;
+
+  }
+
+  .header-title{
+    margin-bottom: 20px;
+  }
+
+  .header-search{
+    margin-right: 0 !important;
+  }
+
+  .header-search .mat-form-field{
+    width: 100%!important;
+  }
 }
+
+  .add-row-btn button{
+    height: 45px;
+  }
 
 /* form element css */
 .control-wrapper .label{

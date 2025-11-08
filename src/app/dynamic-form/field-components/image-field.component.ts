@@ -41,6 +41,7 @@ import { FieldConfig } from './field-base';
         padding: 4px;
         cursor:pointer;
         background-color: #f9f9f9;
+        height:445px;
       }
 
       .no-image {

@@ -9,6 +9,7 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
          <!-- Clear button -->
   <button
+  class="hide-mobile"
     *ngIf="range.value.start || range.value.end"
     mat-icon-button
     matSuffix

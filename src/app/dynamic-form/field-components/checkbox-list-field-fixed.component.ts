@@ -61,13 +61,13 @@ import { formDataByIDModel } from '../../shared/models/work-permit.model';
               *ngIf="checkboxArray.at(i).value && form.get(getInputControlName(option))"
               class="ml-3"
             >
-              <mat-form-field appearance="outline" class="extra-input">
-                <input
-                  matInput
+
+              <div class="extra-input">
+                <textarea rows="3" class="custom-textarea" name="option.name "
                   [formControl]="getControl(getInputControlName(option))"
                   placeholder="Enter {{ option.name }} value"
-                />
-              </mat-form-field>
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ import { formDataByIDModel } from '../../shared/models/work-permit.model';
   styles: [
     `
       .checkbox-item {
-        display: flex;
+        display: block;
         align-items: center;
         margin-bottom: 4px;
         justify-content: space-between;

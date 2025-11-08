@@ -37,7 +37,7 @@ filteredMenuItems:MenuInterface[] = []
       icon: 'create',
       route: '/incident',
       type: 'item',
-      roles:['pm_fm']
+      roles:['pm_fm', 'admin']
     },
 
     {

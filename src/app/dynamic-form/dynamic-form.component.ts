@@ -8,6 +8,7 @@ import { formDataByIDModel } from '../shared/models/work-permit.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastService } from '../shared/services/toast.service';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -36,7 +37,8 @@ export class DynamicFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private el:ElementRef,
     private formBuilderService:FormBuilderService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private toastService:ToastService
   ) {}
 
   ngOnInit() {
@@ -64,15 +66,59 @@ export class DynamicFormComponent implements OnInit {
       }
     });
 
-    this.form.get('datetime_of_work_from')?.valueChanges.subscribe(() => this.checkDateDifference(1));
-    this.form.get('datetime_of_work_to')?.valueChanges.subscribe(() => this.checkDateDifference(2));
+    this.form.get('datetime_of_work_from')?.valueChanges.subscribe(() => {
+     this.checkDateDifference(1);
+     this.validateDates();
+    });
+    this.form.get('datetime_of_work_to')?.valueChanges.subscribe(() => {
+      this.checkDateDifference(2);
+      this.validateDates();
+    });
 
+    this.setupConditionalValidation([
+       'fire_response_team_attended',
+       'rescue_service_attended',
+      'fapa_announcement_made'
+    ]);
   }
 
   private onClickScrollTo = (event:MouseEvent) =>{
     const target = event.target as HTMLElement;
     if(target && target.classList.contains('scrollto')){
       this.scrollToControl('root_cause')
+    }
+  }
+
+ setupConditionalValidation(controls: string[]) {
+  controls.forEach(ctrlName => {
+    const mainCtrl = this.form.get(ctrlName);
+    const subCtrl = this.form.get(`${ctrlName}_no`);
+
+    if (mainCtrl && subCtrl) {
+      mainCtrl.valueChanges.subscribe(value => {
+        if (value === '2') {
+          subCtrl.setValidators([Validators.required]);
+        } else {
+          subCtrl.clearValidators();
+        }
+        subCtrl.updateValueAndValidity({ emitEvent: false });
+      });
+    }
+  });
+}
+
+   validateDates() {
+     const start = this.form.get('datetime_of_work_from')?.value;
+    const end = this.form.get('datetime_of_work_to')?.value;
+
+    if (start && end) {
+      if (new Date(end) < new Date(start)) {
+        this.toastService.showToast('Error', 'End date must be after start date' , 'error');
+         this.form.get('datetime_of_work_to')?.setValue(null, { emitEvent: false });
+      } else {
+       
+      }
+    } else {
     }
   }
 

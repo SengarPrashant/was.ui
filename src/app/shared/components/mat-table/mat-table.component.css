@@ -3,9 +3,7 @@
   overflow: auto;
 }
 
-mat-form-field {
-  width: 100%;
-}
+
 .table .mat-mdc-cell, .mat-mdc-header-cell{
   max-width: 200px;
   min-width: 96px;
@@ -52,6 +50,16 @@ mat-form-field {
 }
 
 @media (min-width:768px){
+
+}
+
+
+@media (max-width: 768px) {
+
+  mat-form-field {
+  width: 48%;
+}
+
   .header-title{
     flex: 0 0 auto;
   }

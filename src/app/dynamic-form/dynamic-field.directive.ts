@@ -28,7 +28,7 @@ export class DynamicFieldDirective implements OnInit {
   ngOnInit(): void {
     const componentType = this.fieldFactory.getComponentType(this.field.type);
     const componentRef: ComponentRef<any> = this.vcRef.createComponent(componentType);
-    if(['checkboxlist', 'checkboxlist-h', 'file', 'datetime'].includes(this.field.type)) {
+    if(['checkboxlist', 'checkboxlist-h', 'checkboxlist-i', 'file', 'datetime'].includes(this.field.type)) {
       componentRef.instance.viewType = this.selectedAction;
     }
     if(this.field.type === 'file'){
