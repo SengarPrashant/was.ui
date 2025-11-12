@@ -213,8 +213,16 @@ mat-radio-button {
     left:0;
     right:auto;
     width: 50%;
-    top: 310px!important;;
+   
   }
+
+  .custom-popup-content{
+    width: 95%!important;
+  }
+
+    .margin-top-mobile {
+      top: 310px !important;
+    }
 
   .hide-mobile{
     display: none!important;

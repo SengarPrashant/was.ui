@@ -111,7 +111,13 @@ clearValue(){
     if (this.router.url.includes('/home') && this. activeTabIndex === 0) {
       if (action === 'move' && !(row?.statusId === wpStatusEnum.Approved || row?.statusId === wpStatusEnum.Work_in_progress)) {
         return true;
-      } else if (action === 'approveAndReject' && row?.statusId !== wpStatusEnum.Pending) {
+      } else if (action === 'approveAndReject') {
+        if(this.user?.roleId === roleTypeEnum.Area_Manager && row?.pendingWithId === '3'){
+          return false;
+        }
+        if((this.user?.roleId === roleTypeEnum.EHS_Manager || this.user?.roleId === roleTypeEnum.Admin) && row?.pendingWithId === '4'){
+          return false;
+        }
         return true;
       } else if (action === 'edit') {
         if((this.user?.roleId === roleTypeEnum.EHS_Manager || this.user?.roleId === roleTypeEnum.Admin) 

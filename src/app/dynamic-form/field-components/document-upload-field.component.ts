@@ -31,6 +31,8 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
         #fileInput
         [disabled]="viewType === 'view'"
       />
+
+      <div class="hide-selected"></div>
       <!-- file list -->
       <div *ngIf="files.length" class="file-list">
         <div *ngFor="let file of files; let i = index" class="file-item">
@@ -43,7 +45,7 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
       <div *ngIf="documents?.length" class="file-list">
         <div *ngFor="let file of documents; let i = index" class="file-item" >
           {{ file.fileName }}
-           <div>
+           <div style="padding-top:5px">
             <button type="button" class="download" (click)="downloadDoc(file)">
             <mat-icon>download</mat-icon>
             </button>
@@ -76,17 +78,19 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
     }
     .file-list {
       margin-top: 8px;
-      background: #f9f9f9;
-      padding: 12px;
-      border-radius: 4px;
     }
     .file-item {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      margin-bottom: 10px;
-      gap:10px;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+    gap: 10px;
+    font-weight: 600;
+    background: #f9f9f9;
+    padding: 6px 12px;
+    padding-right: 1px;
+    border-radius: 5px;
+    align-items: center;
     }
     .remove-btn {
       background: transparent;
@@ -109,6 +113,15 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
     right: 17px;
     z-index: 100;
     cursor: pointer;
+      }
+
+      .hide-selected{
+          width: 100px;
+    background: #ffffff;
+    height: 28px;
+    position: absolute;
+    top: 36px;
+    left: 110px;
       }
   `]
 })
@@ -177,6 +190,14 @@ ngOnInit() {
     // ✅ update formControl value
     this.control?.setValue(this.files);
     this.control?.markAsTouched();
+    this.updateValidation();
+  }
+
+  updateValidation(){
+    if(this.files?.length){
+      this.control?.clearValidators();
+    }
+    this.control?.updateValueAndValidity();
   }
 
   removeFile(index: number, fileInput: HTMLInputElement): void {

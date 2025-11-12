@@ -256,15 +256,11 @@ setActionByRole(roleId:number){
 }
 
 getMargin():string{
-  if(this.user?.roleId === roleTypeEnum.Area_Manager){
-    return '54px'
-  } else{
     if(this.activeTabIndex === 0){
       return '128px'
     } else{
       return '54px'
     }
-  }
 }
 
 onAction(event: { type: string; row: wpList }) {

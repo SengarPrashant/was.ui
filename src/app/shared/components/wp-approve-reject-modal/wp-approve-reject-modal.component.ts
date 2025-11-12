@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { GlobalService } from '../../services/global.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { GlobalService } from '../../services/global.service';
     MatRadioModule,
     MatInputModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './wp-approve-reject-modal.component.html',
   styleUrl: './wp-approve-reject-modal.component.css'
@@ -27,6 +29,7 @@ import { GlobalService } from '../../services/global.service';
 export class WpApproveRejectModalComponent {
   Validators = Validators;
    actionForm: FormGroup;
+   loading = false;
   constructor(
     private fb: FormBuilder,
     private globalService:GlobalService,
@@ -49,12 +52,15 @@ export class WpApproveRejectModalComponent {
 
   onSubmit() {
     if (this.actionForm.valid) {
+       this.loading = true;
        this.globalService.postWPUpdateStatus(this.actionForm.value).subscribe({
       next: () => {
+        this.loading = false;
         this.dialogRef.close(true);
       },
       error: (error) => {
-        
+        this.loading = false;
+        alert('status not updated');
       }
     });
     }

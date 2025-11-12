@@ -1,5 +1,5 @@
 <div class="date-range-wrapper">
-      <mat-form-field appearance="outline" class="date-time-full-custom" 
+      <mat-form-field appearance="outline" class="date-time-full-custom"  [ngClass]="{ 'margin-top-mobile': activeTabIndex === 0 }"
       [ngStyle]="{'top':getMargin()}">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -31,7 +31,6 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
   <mat-tab label="Work Permits">
     <app-top-card
-    *ngIf="user?.roleId !== 3"
     [topStatus]="wpStatus"
     (clickedStatus)="onStatusClick($event)">
     </app-top-card>

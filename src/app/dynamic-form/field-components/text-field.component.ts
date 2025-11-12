@@ -13,7 +13,9 @@ import { FieldConfig } from './field-base';
     <div [formGroup]="form">
      <mat-label>{{ config.label }}</mat-label>
      <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
-    <input matInput [formControlName]="config.fieldKey" class="custom-input" [type]="config.type === 'text'? 'text': 'number'" />
+    <input matInput [formControlName]="config.fieldKey" class="custom-input" 
+     (keypress)="config.type === 'number'? blockNegative($event) : null"
+    [type]="config.type === 'text'? 'text': 'number'" />
     <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required
       </mat-error>
@@ -55,6 +57,12 @@ export class TextFieldComponent {
   isRequired(): boolean {
   if (!this.config?.validations) return false;
   return this.config.validations.some(v => v.type === 'required' && v.value === 'true');
+}
+
+blockNegative(event: KeyboardEvent): void {
+  if (event.key === '-') {
+    event.preventDefault();
+  }
 }
   
 }

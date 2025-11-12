@@ -113,7 +113,7 @@ export class DynamicFormComponent implements OnInit {
 
     if (start && end) {
       if (new Date(end) < new Date(start)) {
-        this.toastService.showToast('Error', 'End date must be after start date' , 'error');
+        this.showToastMessage(1);
          this.form.get('datetime_of_work_to')?.setValue(null, { emitEvent: false });
       } else {
        
@@ -152,7 +152,7 @@ export class DynamicFormComponent implements OnInit {
       const diffDays = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
       if (diffDays > 7) {
-        this.showToastMessage();
+        this.showToastMessage(2);
         if(dateType === 1){
           this.form.get('datetime_of_work_from')?.setValue(this.lastValidStartDate, { emitEvent: false });
         }
@@ -169,12 +169,14 @@ export class DynamicFormComponent implements OnInit {
   }
 
 
-  showToastMessage(): void {
+  showToastMessage(val:number): void {
+    const msg2 = `Work permit date can not be allowed more than 7 days`;
+    const msg1 = `End date must be after start date`;
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {
-          title: 'Work permit',
-          message: `Work permit date can not be allowed more than 7 days`,
+          title: val === 1? 'Date issue': `Work permit`,
+          message: val === 1? msg1: msg2,
           confirmText: 'Ok',
           cancelText: 'Cancel',
         },

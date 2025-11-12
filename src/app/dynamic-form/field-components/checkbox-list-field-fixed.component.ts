@@ -93,9 +93,6 @@ import { formDataByIDModel } from '../../shared/models/work-permit.model';
         display: flex;
         flex-wrap: wrap;
       }
-      .extra-input {
-        width: 350px;
-      }
     `,
   ],
 })
