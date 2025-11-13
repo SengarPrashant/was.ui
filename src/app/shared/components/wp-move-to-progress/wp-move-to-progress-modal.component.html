@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <!-- Action Button -->
-    <button mat-raised-button color="primary" [disabled]="actionForm.invalid" type="submit" class="self-end">
+    <button mat-raised-button color="primary" *ngIf="!loading" [disabled]="actionForm.invalid" type="submit" class="self-end">
       {{ actionLabel }}
     </button>
      <button mat-flat-button color="primary" *ngIf="loading" class="self-end">
