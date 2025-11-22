@@ -40,7 +40,7 @@ import { FieldConfig } from './field-base';
         border: 1px solid #ccc;
         padding: 4px;
         cursor:pointer;
-        background-color: #f9f9f9;
+        background-color: #ffffff;
         height:445px;
       }
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,11 @@ import { FieldConfig } from './field-base';
      <span class="text-red-500" *ngIf="isRequired() || form.get(config.fieldKey)?.hasValidator(validators.required)">*</span>
     <input matInput [formControlName]="config.fieldKey" class="custom-input" 
      (keypress)="config.type === 'number'? blockNegative($event) : null"
-    [type]="config.type === 'text'? 'text': 'number'" />
+     [attr.min]="config.type === 'number' ? 0 : null"
+    [type]="config.type === 'text'? 'text': 'number'"
+    (paste)="config.type === 'number'? preventNegativePaste($event):null"
+    
+    />
     <mat-error *ngIf="hasError('required')">
         {{ config.label }} is required
       </mat-error>
@@ -35,10 +39,16 @@ import { FieldConfig } from './field-base';
     </div>
   `
 })
-export class TextFieldComponent {
+export class TextFieldComponent implements OnInit {
   validators = Validators
   @Input() config!: FieldConfig;
   @Input() form!: FormGroup;
+
+  ngOnInit(): void {
+    if(this.config.type === 'number'){
+      this.form.controls[this.config.fieldKey].addValidators(Validators.min(0));
+    }
+  }
 
    get control() {
     return this.form.get(this.config.fieldKey);
@@ -61,6 +71,13 @@ export class TextFieldComponent {
 
 blockNegative(event: KeyboardEvent): void {
   if (event.key === '-') {
+    event.preventDefault();
+  }
+}
+
+preventNegativePaste(event: ClipboardEvent): void {
+  const pasted = event.clipboardData?.getData('text') ?? '';
+  if (pasted.includes('-')) {
     event.preventDefault();
   }
 }

@@ -1,4 +1,4 @@
-<div class="stats-container">
+<div class="stats-container" [ngClass]="activeTabIndex === 0? 'wpCard':'inCard'">
   <div 
     class="stat-card" 
     *ngFor="let item of topStatus" 
@@ -7,8 +7,8 @@
   >
     <div class="stat-header">
       <!-- <span class="stat-icon">{{ item.icon }}</span> -->
-        <mat-icon>{{ item.icon }}</mat-icon>
-      <span class="stat-label">{{ item.status }}</span>
+        <mat-icon *ngIf="activeTabIndex === 0">{{ item.icon }}</mat-icon>
+      <span class="stat-label ellipsis" [title]="item.status">{{ item.status }}</span>
     </div>
     <div class="stat-count">{{ item.count }}</div>
   </div>

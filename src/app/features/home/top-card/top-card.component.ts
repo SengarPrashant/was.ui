@@ -14,6 +14,7 @@ export class TopCardComponent {
   @Input() topStatus: metaDataModel[] = [];
   @Input() loading = false
   @Output() clickedStatus = new EventEmitter<string>();
+  @Input() activeTabIndex = 0;
 
   onClickStatus(status:string){
     this.clickedStatus.emit(status);

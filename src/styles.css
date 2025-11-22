@@ -204,6 +204,9 @@ mat-radio-button {
     grid-column: span 12;
   }
 
+  .ellipsis{
+    width: 69px!important;
+  }
   .stat-card{
     flex: 0 !important;;
     min-width: 150px !important;
@@ -220,8 +223,12 @@ mat-radio-button {
     width: 95%!important;
   }
 
-    .margin-top-mobile {
+    .wmt-top{
       top: 310px !important;
+    }
+
+     .imt-top{
+      top: 400px !important;
     }
 
   .hide-mobile{

@@ -1,5 +1,5 @@
 <div class="date-range-wrapper">
-      <mat-form-field appearance="outline" class="date-time-full-custom"  [ngClass]="{ 'margin-top-mobile': activeTabIndex === 0 }"
+      <mat-form-field appearance="outline" class="date-time-full-custom"  [ngClass]="activeTabIndex === 0 ? 'wmt-top':'imt-top'"
       [ngStyle]="{'top':getMargin()}">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -28,7 +28,8 @@
       </mat-form-field>
 
     </div>
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" 
+[selectedIndex]="activeTabIndex" animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
   <mat-tab label="Work Permits">
     <app-top-card
     [topStatus]="wpStatus"
@@ -47,6 +48,11 @@
 ></app-mat-table>
   </mat-tab>
   <mat-tab label="Incident">
+    <app-top-card
+    [topStatus]="inStatus"
+    [activeTabIndex]="activeTabIndex"
+    (clickedStatus)="onStatusClick($event)">
+    </app-top-card>
    <app-mat-table
     [data]="tableData"
     [columns]="columns"
@@ -54,6 +60,7 @@
     [requiredRightSpace]="false"
     (action)="onAction($event)"
     [actionMenu]="actionMenuIncident"
+    [clickedTopStatus]="clickedTopStatus"
     [sticky]="true"
     [activeTabIndex]="activeTabIndex"
 ></app-mat-table>

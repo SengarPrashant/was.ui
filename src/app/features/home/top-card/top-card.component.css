@@ -8,7 +8,6 @@
   display: flex;
   justify-content: space-between;
   flex: 1;
-  min-width: 180px;
   padding:0 16px;
   border-radius: 8px;
   background: #fff;
@@ -17,6 +16,14 @@
   transition: transform 0.2s ease-in-out, box-shadow 0.2s;
   cursor: pointer;
   margin:10px 0;
+}
+
+.wpCard{
+  min-width: 180px;
+}
+
+.inCard{
+  min-width: 160px;
 }
 
 
@@ -67,4 +74,12 @@
 
 .stat-card.inprogress {
   border-left-color: #36b9cc;
+}
+
+
+.ellipsis {
+  width: 120px;     /* required */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

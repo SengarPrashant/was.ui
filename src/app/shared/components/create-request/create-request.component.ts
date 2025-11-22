@@ -233,7 +233,9 @@ onDynamicFormReady(form: FormGroup) {
         this.loading = false;
         this.toastService.showToast('Success', 'Request updated sucessfully' , 'success');
         this.CloseEvent.emit(true);
-        this.router.navigate(['/home']);
+        setTimeout(() => {
+        this.router.navigate(['/home'], { replaceUrl: true });
+        }, 200);
       },
       error: (err) => {
         console.error('Error fetching users:', err);

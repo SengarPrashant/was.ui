@@ -36,7 +36,7 @@ import { formDataByIDModel } from '../../shared/models/work-permit.model';
     MatInputModule,
   ],
   template: `
-    <div [formGroup]="form">
+    <div [formGroup]="form" class="my-background">
       <label>{{ config.label }}</label>
       <span class="text-red-500" *ngIf="isRequired()">*</span>
 
@@ -93,6 +93,21 @@ import { formDataByIDModel } from '../../shared/models/work-permit.model';
         display: flex;
         flex-wrap: wrap;
       }
+
+      .my-background {
+  position: relative;
+  z-index: 1;
+}
+
+/* Transparent overlay */
+.my-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/assets/images/fishdiagram.png') center/contain no-repeat;
+  opacity: 0.1;     /* faint background */
+  z-index: -1;      /* behind content */
+}
     `,
   ],
 })

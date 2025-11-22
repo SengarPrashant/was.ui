@@ -5,7 +5,7 @@ import { GlobalService } from '../../../shared/services/global.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableComponent } from '../../../shared/components/mat-table/mat-table.component';
 import { TopCardComponent } from '../top-card/top-card.component';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { actionMenuModel } from '../../../shared/models/global.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/models/user.model';
@@ -45,7 +45,7 @@ import { formDataByIDModel, metaDataModel, wpList } from '../../../shared/models
   providers:[DatePipe, provideNativeDateAdapter()]
 })
 export class HomeComponent implements OnInit {
-
+subscriptions: Subscription[] = [];
   dialog = inject(MatDialog);
   openDilog = false;
   dataById!:formDataByIDModel;
@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit {
       fromDate: this.startDate? this.toIST(this.startDate!, 0, 0, 0): null,
       toDate: this.endDate? this.toIST(this.endDate!, 23, 59, 59):null,
     }
-     this.globalService.getAllWorkPermitAndIncident(payload).subscribe(res => {
+     const sub1 = this.globalService.getAllWorkPermitAndIncident(payload).subscribe(res => {
       if (res) {
         this.tableData = res.data.map((item: any) => ({
           ...item,
@@ -155,12 +155,14 @@ export class HomeComponent implements OnInit {
           .filter(d => d.formType === 'incident')
           .map(d => ({
             ...d,
-            icon: this.statusConfig[d.status].icon,
-            kind: this.statusConfig[d.status].kind
+            icon: '',
+            kind: ''
           }));
 
       }
     });
+
+    this.subscriptions.push(sub1);
   }
 
 
@@ -259,7 +261,7 @@ getMargin():string{
     if(this.activeTabIndex === 0){
       return '128px'
     } else{
-      return '54px'
+      return '128px'
     }
 }
 
@@ -344,6 +346,10 @@ onAction(event: { type: string; row: wpList }) {
     }
   }
 
+
+  ngOnDestroy(): void {
+  this.subscriptions.forEach(sub => sub.unsubscribe());
+}
   
 
 }
