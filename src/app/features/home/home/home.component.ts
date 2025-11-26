@@ -16,12 +16,13 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { WpProgressModalComponent } from '../../../shared/components/wp-move-to-progress/wp-move-to-progress-modal.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RequstWorkflowComponent } from '../../../shared/components/requst-workflow/requst-workflow.component';
-import {FormGroup, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { CreateRequestComponent } from '../../../shared/components/create-request/create-request.component';
 import { formDataByIDModel, metaDataModel, wpList } from '../../../shared/models/work-permit.model';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -58,7 +59,8 @@ subscriptions: Subscription[] = [];
     startDate:Date | null = null;
     endDate:Date | null = null;
     actionMenu:actionMenuModel[] = [];
-    actionMenuIncident:actionMenuModel[] = []
+    actionMenuIncident:actionMenuModel[] = [];
+    tabChangeState = false;
     columns = [
     {key:'requestId', label:'Id', colWidth:"160px"},
     {key:'formTitle', label:'Work Permit Type', colWidth:"160px"}, 
@@ -82,21 +84,19 @@ subscriptions: Subscription[] = [];
   };
 
   clickedTopStatus:string = '';
-   range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+
 
   constructor(private globalService: GlobalService,
      private authService:AuthService,
       private toastService: ToastService,
-      private datePipe:DatePipe
+      private datePipe:DatePipe,
+       private loadingService:LoadingService,
     ){
     this.user = this.authService.getUser();
      // Subscribe to changes
-    this.range.valueChanges.subscribe(val => {
-      this.onDateRangeChange(val);
-    });
+    // this.range.valueChanges.subscribe(val => {
+    //   this.onDateRangeChange(val);
+    // });
   };
 
 
@@ -114,6 +114,10 @@ subscriptions: Subscription[] = [];
     this.fetchListData()
   }
 
+  dateChange(val: { start?: Date | null; end?: Date | null }){
+    this.onDateRangeChange(val);
+  }
+
 // Helper: Convert a Date to IST Date object with custom time
  toIST(date: Date, hours = 0, minutes = 0, seconds = 0): Date {
   const d = new Date(date);
@@ -122,43 +126,51 @@ subscriptions: Subscription[] = [];
 }
 
   fetchListData(){
+    this.loadingService.show();
     const payload = {
       formType:this.activeTabIndex === 0 ? 'work_permit' : 'incident',
       fromDate: this.startDate? this.toIST(this.startDate!, 0, 0, 0): null,
       toDate: this.endDate? this.toIST(this.endDate!, 23, 59, 59):null,
     }
-     const sub1 = this.globalService.getAllWorkPermitAndIncident(payload).subscribe(res => {
-      if (res) {
-        this.tableData = res.data.map((item: any) => ({
-          ...item,
-          facilityZoneLocation: item.facilityZoneLocation?.value,
-          zone: item.zone?.value,
-          zoneFacility: item.zoneFacility?.value,
-          submittedBy: item.submittedBy?.value,
-          pendingWith: item.pendingWith?.value,
-          statusName: this.activeTabIndex === 0 ? item.status?.value : 'Submitted',
-          statusId:item.status?.key,
-          submittedDate:this.datePipe.transform(item.submittedDate, 'dd/MM/yyy, hh:mm a'),
-          statusClass:this.getClassName(item.status?.key),
-          pendingWithId:item.pendingWith?.key,
-        }));
 
-        this.wpStatus = res.meta
-          .filter(d => d.formType === 'work_permit')
-          .map(d => ({
-            ...d,
-            icon: this.statusConfig[d.status].icon,
-            kind: this.statusConfig[d.status].kind
-          }));
+     const sub1 = this.globalService.getAllWorkPermitAndIncident(payload).subscribe({
+      next: (res) => {
+         if (res) {
+           this.tableData = res.data.map((item: any) => ({
+             ...item,
+             facilityZoneLocation: item.facilityZoneLocation?.value,
+             zone: item.zone?.value,
+             zoneFacility: item.zoneFacility?.value,
+             submittedBy: item.submittedBy?.value,
+             pendingWith: item.pendingWith?.value,
+             statusName: this.activeTabIndex === 0 ? item.status?.value : 'Submitted',
+             statusId: item.status?.key,
+             submittedDate: this.datePipe.transform(item.submittedDate, 'dd/MM/yyy, hh:mm a'),
+             statusClass: this.getClassName(item.status?.key),
+             pendingWithId: item.pendingWith?.key,
+           }));
 
-        this.inStatus = res.meta
-          .filter(d => d.formType === 'incident')
-          .map(d => ({
-            ...d,
-            icon: '',
-            kind: ''
-          }));
+           this.wpStatus = res.meta
+             .filter(d => d.formType === 'work_permit')
+             .map(d => ({
+               ...d,
+               icon: this.statusConfig[d.status].icon,
+               kind: this.statusConfig[d.status].kind
+             }));
 
+           this.inStatus = res.meta
+             .filter(d => d.formType === 'incident')
+             .map(d => ({
+               ...d,
+               icon: '',
+               kind: ''
+             }));
+
+         }
+        this.loadingService.hide();
+      },
+      error: (error) => {
+        this.loadingService.hide();
       }
     });
 
@@ -172,6 +184,7 @@ subscriptions: Subscription[] = [];
 
 onTabChange(event: MatTabChangeEvent): void {
     // Get the index of the newly selected tab
+    this.tabChangeState = true;
     this.activeTabIndex = event.index;
     this.tableData = [];
     this.updateColumnLabel(event.index);
@@ -282,14 +295,6 @@ onAction(event: { type: string; row: wpList }) {
       break;
   }
 }
-
-// clearDates() {
-//   this.range.patchValue({ start: null, end: null });
-// }
- clearDateRange(event: Event) {
-    event.stopPropagation(); // prevent datepicker from opening
-    this.range.patchValue({ start: null, end: null });
-  }
 
   async onEditAndView(row: wpList) {
     try {

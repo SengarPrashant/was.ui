@@ -2,8 +2,12 @@
   <div 
     class="stat-card" 
     *ngFor="let item of topStatus" 
-    [ngClass]="getClassName(item.status)"
+    [ngClass]="[
+  getClassName(item.status),
+  activeTabIndex === 0 ? 'five-col' : 'seven-col'
+]"
     (click)="onClickStatus(item.status)"
+    [ngStyle]="{}"
   >
     <div class="stat-header">
       <!-- <span class="stat-icon">{{ item.icon }}</span> -->

@@ -5,7 +5,9 @@
       <h2>{{ section.sectionTitle }}</h2>
       <div class="grid-layout">
         <div *ngFor="let field of section.fields" class="grid-col"
-         [ngClass]="'col-' + field.colSpan">
+         [ngClass]="'col-' + field.colSpan" 
+         [ngStyle]="section.sectionStyle === 'border' ? {'border-bottom': '1px solid #ddd'} : {}"
+         >
             <ng-template 
               appDynamicField
                 [field]="field"

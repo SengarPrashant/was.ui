@@ -18,6 +18,14 @@
   margin:10px 0;
 }
 
+.five-col{
+  width:calc(100%/5 - 20px);
+}
+
+.seven-col{
+  width:calc(100%/7 - 20px);
+}
+
 .wpCard{
   min-width: 180px;
 }

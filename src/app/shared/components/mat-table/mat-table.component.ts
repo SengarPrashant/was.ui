@@ -10,9 +10,10 @@ import { MatIcon } from '@angular/material/icon';
 import { actionMenuModel } from '../../models/global.model';
 import { roleTypeEnum, wpStatusEnum } from '../../enums/global.enum';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-mat-table',
@@ -25,8 +26,10 @@ import { User } from '../../models/user.model';
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
+    MatDatepickerModule,
     MatIcon,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './mat-table.component.html',
   styleUrls: ['./mat-table.component.scss']
@@ -51,10 +54,20 @@ export class MatTableComponent implements OnChanges {
   user:User | null = null;
   @Input() activeTabIndex = 0 
   isMobile = false;
+  @Output() DateChange = new EventEmitter<{ start?: Date | null; end?: Date | null }>();
+  @Input() requiredDateRange = false;
+  @Input() tabChangeState = false;
 
-
+   range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+  
   constructor(private router: Router, private authService:AuthService){
     this.user = this.authService.getUser();
+    this.range.valueChanges.subscribe(val => {
+      this.DateChange.emit(val);
+    });
   }
 
   ngOnInit() {
@@ -86,6 +99,18 @@ export class MatTableComponent implements OnChanges {
        this.dataSource.filter = this.clickedTopStatus.toLowerCase();
        this.filterValue = this.clickedTopStatus;
     }
+
+    if(changes['tabChangeState']){
+      if(this.tabChangeState){
+        this.clearValue(); 
+      }
+    }
+  }
+
+
+   clearDateRange(event: Event) {
+    event.stopPropagation(); // prevent datepicker from opening
+    this.range.patchValue({ start: null, end: null });
   }
 
    applyFilter(event: Event) {
