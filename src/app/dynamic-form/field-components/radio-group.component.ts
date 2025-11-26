@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatRadioModule, MatFormFieldModule],
   template: `
-    <div [formGroup]="form">
+    <div [formGroup]="form" style="border-bottom:1px solid #ddd;">
       <mat-label>{{ config.label }}</mat-label>
        <span class="text-red-500" *ngIf="isRequired()">*</span>
        <mat-radio-group [formControlName]="config.fieldKey" color="primary">

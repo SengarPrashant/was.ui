@@ -259,9 +259,9 @@ setActionByRole(roleId:number){
 
 getMargin():string{
     if(this.activeTabIndex === 0){
-      return '128px'
+      return '110px'
     } else{
-      return '128px'
+      return '110px'
     }
 }
 
