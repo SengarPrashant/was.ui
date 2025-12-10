@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs';
 import { GlobalService } from '../../../shared/services/global.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,6 +46,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
   providers:[DatePipe, provideNativeDateAdapter()]
 })
 export class HomeComponent implements OnInit {
+ @ViewChild(MatTableComponent) child!: MatTableComponent;  
 subscriptions: Subscription[] = [];
   dialog = inject(MatDialog);
   openDilog = false;
@@ -59,8 +60,8 @@ subscriptions: Subscription[] = [];
     startDate:Date | null = null;
     endDate:Date | null = null;
     actionMenu:actionMenuModel[] = [];
-    actionMenuIncident:actionMenuModel[] = [];
-    tabChangeState = false;
+   actionMenuIncident:actionMenuModel[] = [];
+  
     columns = [
     {key:'requestId', label:'Id', colWidth:"160px"},
     {key:'formTitle', label:'Work Permit Type', colWidth:"160px"}, 
@@ -84,6 +85,7 @@ subscriptions: Subscription[] = [];
   };
 
   clickedTopStatus:string = '';
+  clearSearchEvent:boolean = false;
 
 
   constructor(private globalService: GlobalService,
@@ -180,15 +182,18 @@ subscriptions: Subscription[] = [];
 
   onStatusClick(status:any) {
     this.clickedTopStatus = status;
+    this.clearSearchEvent = false;
 }
 
 onTabChange(event: MatTabChangeEvent): void {
     // Get the index of the newly selected tab
-    this.tabChangeState = true;
     this.activeTabIndex = event.index;
     this.tableData = [];
     this.updateColumnLabel(event.index);
     this.fetchListData();
+    this.clickedTopStatus = ''
+    this.child.clearValue();
+    this.clearSearchEvent = true;
   }
 
   updateColumnLabel(tabId:number){

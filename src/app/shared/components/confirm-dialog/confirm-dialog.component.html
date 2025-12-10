@@ -15,6 +15,7 @@
       <button
         class="text-sm text-gray-600 px-4 py-2" style="color:#1A0F92; border: 0px;"
         (click)="cancel()"
+        *ngIf="data.cancelText"
       >
         {{ data.cancelText }}
       </button>

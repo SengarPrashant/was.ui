@@ -56,7 +56,7 @@ export class MatTableComponent implements OnChanges {
   isMobile = false;
   @Output() DateChange = new EventEmitter<{ start?: Date | null; end?: Date | null }>();
   @Input() requiredDateRange = false;
-  @Input() tabChangeState = false;
+  @Input() clearSearchEvent = false;
 
    range = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -88,11 +88,6 @@ export class MatTableComponent implements OnChanges {
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
-      // if (this.filterKey) {
-      //   this.dataSource.filterPredicate = (data, filter: string) =>
-      //     (data[this.filterKey!] ?? '').toString().toLowerCase().includes(filter.toLowerCase());
-      // }
     }
 
     if (changes['clickedTopStatus'] && this.clickedTopStatus){
@@ -100,11 +95,10 @@ export class MatTableComponent implements OnChanges {
        this.filterValue = this.clickedTopStatus;
     }
 
-    if(changes['tabChangeState']){
-      if(this.tabChangeState){
-        this.clearValue(); 
-      }
+     if (changes['clearSearchEvent'] && this.clearSearchEvent){
+       this.clearValue();
     }
+
   }
 
 

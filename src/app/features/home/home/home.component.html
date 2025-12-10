@@ -18,7 +18,7 @@
     [sticky]="true"
     [requiredDateRange]="true"
     [activeTabIndex]="activeTabIndex"
-    [tabChangeState]="tabChangeState"
+    [clearSearchEvent]="clearSearchEvent"
 ></app-mat-table>
   </mat-tab>
   <mat-tab label="Incident">
@@ -39,7 +39,7 @@
     [requiredDateRange]="true"
     [activeTabIndex]="activeTabIndex"
     (DateChange)="dateChange($event)"
-    [tabChangeState]="tabChangeState"
+     [clearSearchEvent]="clearSearchEvent"
 ></app-mat-table>
   </mat-tab>
 </mat-tab-group>

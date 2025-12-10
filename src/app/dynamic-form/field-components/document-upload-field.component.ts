@@ -20,7 +20,13 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
     <div [formGroup]="form" class="doc-upload">
       <mat-label>{{ config.label }} <span class="text-red-500" *ngIf="isRequired()">*</span>
       </mat-label>
-      
+      <ul *ngIf="FileUploadInfo.length" style="list-style: disc;
+    padding-left: 20px;
+    line-height: 24px;">
+      <li *ngFor ="let name of FileUploadInfo">
+      {{name}}
+      </li>
+      </ul>
 
       <input
         type="file"
@@ -32,7 +38,7 @@ import { DocumentPreviewModalComponent } from '../../shared/components/document-
         [disabled]="viewType === 'view'"
       />
 
-      <div class="hide-selected"></div>
+      <div class="hide-selected" style="display:none"></div>
       <!-- file list -->
       <div *ngIf="files.length" class="file-list">
         <div *ngFor="let file of files; let i = index" class="file-item">
@@ -267,6 +273,14 @@ setAcceptedFormats() {
 clearFile(fileInput: HTMLInputElement) {
   if(this.files?.length === 0)
   fileInput.value = ''; // clears the file input
+}
+
+get FileUploadInfo():string[]{
+  if(this.config?.optionType){
+   return  this.config?.optionType.split("|").map((s:string) => s.trim());
+  } else {
+    return []
+  }
 }
 
 

@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '../shared/services/toast.service';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -80,6 +81,20 @@ export class DynamicFormComponent implements OnInit {
        'rescue_service_attended',
       'fapa_announcement_made'
     ]);
+
+    const readingCtrl = this.form.get?.('air_monitoring_reading')
+     readingCtrl?.valueChanges
+     .pipe(debounceTime(400))   // waits 400ms after typing stops
+     .subscribe(val => {
+    const value = Number(val);
+    if (!value) {
+      return;
+    }
+
+    if (value < 19.5 || value > 23.5) {
+      this.showOxygenLevelError();
+    }
+  });
   }
 
   private onClickScrollTo = (event:MouseEvent) =>{
@@ -187,4 +202,22 @@ export class DynamicFormComponent implements OnInit {
       });
     }
 
+
+      showOxygenLevelError(): void {
+      const msg = `The oxygen level is beyond the safe range of 19.5% to 23.5% : please follow safety protocols and ensure adequate ventilation before entering the confined space for safe operations.`;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title:`Oxygen level`,
+          message: msg,
+          confirmText: 'Ok',
+          cancelText: '',
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((confirmed) => {
+
+      });
+    }
 }
+
