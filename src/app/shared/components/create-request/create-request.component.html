@@ -57,7 +57,9 @@
 
         <div class="grid-col col-3">
             <mat-label>{{labelText}}</mat-label><span class="text-red-500">*</span>
-            <mat-select formControlName="workPermit" [placeholder]="labelText" class="custom-select"
+            <mat-select formControlName="workPermit" [matTooltip]="isTargetDisabled ? 'Please fill Location, Zone and Facility' : ''"
+    [matTooltipDisabled]="!isTargetDisabled"
+    matTooltipPosition="above" [placeholder]="labelText" class="custom-select"
                 (selectionChange)="onWorkPermitChange($event.value)">
                 <mat-option *ngFor="let permit of optionsList" [value]="permit.id">
                     {{ permit.name }}

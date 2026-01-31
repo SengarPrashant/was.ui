@@ -3,6 +3,14 @@ export interface wpListModel {
   meta: metaDataModel[]
 }
 
+export interface preValidatePayloadModel {
+  formType: string,
+  formKey: string,
+  loactionId: string,
+  zoneId: string,
+  facilityId: string
+}
+
 export interface wpList {
   requestId: string
   id: number

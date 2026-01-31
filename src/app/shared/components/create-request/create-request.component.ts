@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { formDataByIDModel } from '../../models/work-permit.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-create-request',
@@ -22,7 +23,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [CommonModule, DynamicFormComponent, ReactiveFormsModule, MatFormFieldModule, 
     MatSelectModule, 
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule 
   ],
   templateUrl: './create-request.component.html',
   styleUrl: './create-request.component.css'
@@ -48,15 +50,32 @@ export class CreateRequestComponent implements OnInit {
     ) {
     this.mainForm = this.fb.group({
       id: [0],
-      facilityZoneLocation: ['', Validators.required],
-      zone: ['', Validators.required],
-      facility: ['', Validators.required],
-      workPermit: ['', Validators.required],
+      facilityZoneLocation: [null, Validators.required],
+      zone: [null, Validators.required],
+      facility: [null, Validators.required],
+      workPermit: [{value:null, disabled: true}, Validators.required,],
       project:['']
     });
   }
 
+  get isTargetDisabled(): boolean {
+      const { facilityZoneLocation, zone, facility } = this.mainForm.value;
+  return !(facilityZoneLocation && zone && facility);
+}
+
   ngOnInit(): void {
+
+    this.mainForm.valueChanges.subscribe(() => {
+    const { facilityZoneLocation, zone, facility } = this.mainForm.value;
+    const targetCtrl = this.mainForm.get('workPermit');
+
+    if (facilityZoneLocation && zone && facility) {
+      targetCtrl?.enable({ emitEvent: false });
+    } else {
+      targetCtrl?.disable({ emitEvent: false });
+    }
+  });
+
     if(this.dataById){
       const data = this.dataById;
       const obj = {
@@ -120,7 +139,15 @@ onWorkPermitChange(value: string) {
     config$ = this.globalService.getFormConfig(value, this.requestType);
   } else {
     // ✅ Create → run prevalidate first
-    config$ = this.globalService.preValidateWorkPermit('work_permit', value).pipe(
+     const {facilityZoneLocation, zone, facility}  = this.mainForm.value;
+    const payload =  {
+        formType: "work_permit",
+        formKey: value,
+        loactionId: facilityZoneLocation,
+         zoneId: zone,
+         facilityId: facility
+     }
+    config$ = this.globalService.preValidateWorkPermit(payload).pipe(
       switchMap((result: { allowed: boolean }) => {
         //result.allowed === true
         if (result.allowed === true) {

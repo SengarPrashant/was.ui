@@ -837,9 +837,9 @@ export class GlobalService {
       return this.http.post<any>(apiUrl, formData);
     }
 
-    preValidateWorkPermit(type:string, key:string){
-    const apiUrl = `${this.baseUrl}/Forms/prevalidate/${type}/${key}`
-    return this.http.get<any>(apiUrl);      
+    preValidateWorkPermit(payload:any){
+    const apiUrl = `${this.baseUrl}/Forms/prevalidate`
+    return this.http.post<any>(apiUrl,payload);      
     }
 
      getAllWorkPermitAndIncident(payload?:{formType:string | null, fromDate:Date | null, toDate?:Date | null}):Observable<wpListModel>{
