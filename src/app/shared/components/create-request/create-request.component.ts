@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { GlobalService } from '../../services/global.service';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingService } from '../../services/loading.service';
-import { of, switchMap } from 'rxjs';
+import { combineLatest, of, switchMap } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -53,7 +53,7 @@ export class CreateRequestComponent implements OnInit {
       facilityZoneLocation: [null, Validators.required],
       zone: [null, Validators.required],
       facility: [null, Validators.required],
-      workPermit: [{value:null, disabled: true}, Validators.required,],
+      workPermit: [null, Validators.required],
       project:['']
     });
   }
@@ -65,16 +65,34 @@ export class CreateRequestComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.mainForm.valueChanges.subscribe(() => {
-    const { facilityZoneLocation, zone, facility } = this.mainForm.value;
-    const targetCtrl = this.mainForm.get('workPermit');
+  const z1$ = this.mainForm.get('facilityZoneLocation')!.valueChanges;
+  const z2$ = this.mainForm.get('zone')!.valueChanges;
+  const z3$ = this.mainForm.get('facility')!.valueChanges;
 
-    if (facilityZoneLocation && zone && facility) {
+  combineLatest([z1$, z2$, z3$]).subscribe(([z1, z2, z3]) => {
+    const targetCtrl = this.mainForm.get('workPermit');
+    this.formConfig = null;
+    // 🔁 Reset target when any zone changes
+    //targetCtrl?.disable();
+    if(this.selectedAction === 'none'){
+      targetCtrl?.reset({ value: null, disabled: true }, { emitEvent: false });
+    }
+   
+    // ✅ Enable only if all zones selected
+    if (z1 && z2 && z3) {
       targetCtrl?.enable({ emitEvent: false });
-    } else {
-      targetCtrl?.disable({ emitEvent: false });
     }
   });
+  //   this.mainForm.valueChanges.subscribe(() => {
+  //   const { facilityZoneLocation, zone, facility } = this.mainForm.value;
+  //   const targetCtrl = this.mainForm.get('workPermit');
+
+  //   if (facilityZoneLocation && zone && facility) {
+  //     targetCtrl?.enable({ emitEvent: false });
+  //   } else {
+  //     targetCtrl?.disable({ emitEvent: false });
+  //   }
+  // });
 
     if(this.dataById){
       const data = this.dataById;
@@ -97,6 +115,8 @@ export class CreateRequestComponent implements OnInit {
       this.mainForm?.get('workPermit')?.disable();
     }
     }
+
+    this.mainForm?.get('workPermit')?.disable();
   }
 
   get optionsList() {
