@@ -34,3 +34,23 @@
 .error {
   color: red;
 }
+
+.location-header {
+  display: flex;
+  align-items: center;
+  margin: 16px 0 8px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #222;
+}
+
+.location-header span {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.location-header .line {
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+}

@@ -34,6 +34,7 @@ export class AuthService {
   }
 
   logout() {
+    // ✅ stop idle tracking
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
     this.user$.next(null);

@@ -1,5 +1,6 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { IdleService } from './shared/services/idle.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -12,7 +13,28 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  ngOnInit(): void {
+  constructor(private idleService: IdleService, private router: Router) {
 
-}
+  }
+   ngOnInit() {
+    this.router.events.subscribe(event => {
+
+      if (event instanceof NavigationEnd) {
+
+        console.log('Route:', event.url);
+
+        // ❌ Stop on login page
+        if (event.url.includes('/login')) {
+          this.idleService.stopWatching();
+        }
+
+        // ✅ Start on all other pages
+        else {
+          this.idleService.startWatching();
+        }
+      }
+
+    });
+  }
+
 }

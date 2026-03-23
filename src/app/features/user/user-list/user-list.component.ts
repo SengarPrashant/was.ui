@@ -117,7 +117,6 @@ export class UserListComponent implements OnInit {
 
 async onAction(event: { type: string; row: User }) {
   const rowdata = await firstValueFrom(this.userService.getUserById(event?.row.id));
-  console.log('usr', rowdata)
   switch (event.type) {
     case 'view':
       this.onView(rowdata);
