@@ -1,22 +1,36 @@
 .form-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
 }
 
 .form-field {
-  flex: 1 1 45%;
+  flex: 1 1 30%;
   min-width: 200px;
-   --mat-form-field-container-height: 36px;
-  --mat-form-field-container-vertical-padding:8px;
 }
 
-.form-field span{
-  color:#dc0000;
-  font-size: 12px;
+.location-row {
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-.w-100 {
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  margin-bottom: 20px;
+  padding-inline:20px;
 }
 
+.error {
+  color: red;
+}

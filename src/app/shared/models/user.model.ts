@@ -15,6 +15,7 @@ export interface User {
   createdAt: string
   name:string
   roleDisplay:string
+  location?:string[]
 }
 
 export interface resetPasswordPayloadModel{

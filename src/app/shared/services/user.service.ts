@@ -25,6 +25,10 @@ export class UserService {
     return this.http.post<User[]>(apiUrl, { ...defaultFilter, ...filter });
   }
 
+  getUserById(id:number):Observable<User>{
+     const apiUrl = `${this.baseUrl}/User/${id}`; 
+    return this.http.get<User>(apiUrl);
+  }
   addAndUpdateUser(formData: User): Observable<User[]> {
     const apiUrl = formData?.id > 0 ? `${this.baseUrl}/User/update/${formData.id}`:
       `${this.baseUrl}/User`
@@ -34,6 +38,7 @@ export class UserService {
       return this.http.post<User[]>(apiUrl, formData);
     }
   }
+
 
 
 

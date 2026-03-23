@@ -11,6 +11,7 @@ import { UserStatusUpdateDilogComponent } from '../user-status-update-dilog/user
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { actionMenuModel } from '../../../shared/models/global.model';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -86,7 +87,7 @@ export class UserListComponent implements OnInit {
 
   openAddUserPopup(userData?: any) {
   const dialogRef = this.dialog.open(AddUserDialogComponent, {
-    width: '600px',
+    width: '800px',
     data: userData || null // ← null for create, userData for edit
   });
 
@@ -114,16 +115,18 @@ export class UserListComponent implements OnInit {
   });
 }
 
-onAction(event: { type: string; row: User }) {
+async onAction(event: { type: string; row: User }) {
+  const rowdata = await firstValueFrom(this.userService.getUserById(event?.row.id));
+  console.log('usr', rowdata)
   switch (event.type) {
     case 'view':
-      this.onView(event.row);
+      this.onView(rowdata);
       break;
     case 'edit':
-      this.onEdit(event.row);
+      this.onEdit(rowdata);
       break;
        case 'status':
-      this.updateStatus(event.row);
+      this.updateStatus(rowdata);
       break;
   }
 }
