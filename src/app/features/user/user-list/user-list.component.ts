@@ -131,7 +131,7 @@ async onAction(event: { type: string; row: User }) {
 }
 
 onView(row: User) {
-  console.log('View:', row);
+  // console.log('View:', row);
 }
 
 onEdit(row: User) {

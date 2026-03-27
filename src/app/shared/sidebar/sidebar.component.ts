@@ -97,7 +97,6 @@ filteredMenuItems:MenuInterface[] = []
 
   // Methods for dropdown options
   viewProfile() {
-    console.log('Navigating to profile');
     this.closeDropdown();
   }
 

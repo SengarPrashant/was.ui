@@ -21,8 +21,6 @@ export class AppComponent implements OnInit {
 
       if (event instanceof NavigationEnd) {
 
-        console.log('Route:', event.url);
-
         // ❌ Stop on login page
         if (event.url.includes('/login')) {
           this.idleService.stopWatching();

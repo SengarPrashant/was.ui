@@ -16,9 +16,6 @@ export class IdleService {
 
   startWatching() {
     if (this.isWatching) return; // ✅ prevent duplicate
-
-    console.log('IdleService: startWatching');
-
     this.isWatching = true;
 
     this.events.forEach(event => {
@@ -30,9 +27,6 @@ export class IdleService {
 
   stopWatching() {
     if (!this.isWatching) return;
-
-    console.log('IdleService: stopWatching');
-
     this.isWatching = false;
 
     this.events.forEach(event => {
@@ -46,8 +40,6 @@ export class IdleService {
     clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
-      console.log('Idle timeout reached');
-
       this.stopWatching(); // ✅ IMPORTANT
       this.authService.logout(); // call logout
 
