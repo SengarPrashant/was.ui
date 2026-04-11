@@ -204,7 +204,7 @@ onTabChange(event: MatTabChangeEvent): void {
         targetColumn.label = 'Pending with'
         permitTypeColumn.label = 'Work Permit Type'
       } else if(tabId === 1){
-        permitTypeColumn.label = 'Incidennt Type'
+        permitTypeColumn.label = 'Incident Type'
       }
     }
   }
